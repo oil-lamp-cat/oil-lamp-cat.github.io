@@ -1854,3 +1854,512 @@ command = C:\Users\raen0\AppData\Local\Programs\Python\Python311\python.exe -m v
 `C:\Users`에 들어가 확인해 보길 바란다
 
 ![Image](https://github.com/user-attachments/assets/e52cf32a-c945-423b-b9d7-2c49756bf499)
+
+## 2025-03-18, 20시 10분, 전체 구조 리펙토링
+
+최근에 일이 좀 많기도 했고 아무래도 일을 끝내고 오면 거의 뻗어버려 코드를 더 발전시키지 못했었다
+
+는 아니고 사실 내가 기존에 짜둔 코드가 너무 스파게티라... 나도 더 어떻게 건들어야할까 하는생각이 들어 잠시 중단했었다
+
+
+하지만! 내가 누구? 호기심이 생기면 끝까지 파고드는 인간!
+
+마친 사회복무로 보은에 왔겠다 바~로 그냥 6시 끝나고 밥 먹은 후 숙소에 온 뒤로 쭉 노트북을 켜고 기어코 구조를 싹 바꿨다는 사실!
+
+내가 바꾼 구조는 다음과 같다
+
+![Image](https://github.com/user-attachments/assets/a8ef3624-ef6d-491c-93d2-5ba3703d8674)
+
+음.. 하나씩 설명해보자면
+
+![Image](https://github.com/user-attachments/assets/63c25415-b467-4f0f-9552-1cc621678a28)
+
+이렇게 되시겠다
+
+보아하니 `logs`폴더에는 몇가지 빠진 것도 있고 아마 또 기능을 추가하다 보면 파일이 더 많아질 수도 있지만 일단 온 뒤 2일 동안 고심끝에 구현한 구조는 이렇게 된다
+
+그럼 바뀐 코드를 뜯어보자, 실행되는 순서로 살펴보도록 하자
+
+```py
+# main.py
+
+from app.UI.main_window import MainWindow
+
+if __name__ == "__main__":
+    app = MainWindow()
+    app.mainloop()
+```
+
+메인 코드이다. 라고 해도 말이지 그저 앱 실행을 위한 코드일 뿐이다
+
+```py
+# main_window.py
+
+import customtkinter as ctk
+from app.controllers.tcp_controller import TCPController
+from app.UI.settings_window import SettingsWindow
+from app.UI.modules.ctk_listbox import CTkListbox
+from config.config_manager import ConfigManager
+
+class MainWindow(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+
+        # 메인 윈도우 GUI 기본 설정
+        self.title("LTC")
+        self.geometry("800x650")
+
+        # 설정 파일 가져오기
+        self.get_window_config()
+
+        # 메인 윈도우 GUI
+        self._setup_ui()
+
+        # TCPController 초기화할 때 self(MainWindow 객체)를 전달
+        self.tcp_controller = TCPController(self)
+        # self.tcp_controller = TCPController(self)
+
+    def _setup_ui(self):
+        # 메인 프레임 (모니터링 영역)
+        self.main_frame = ctk.CTkFrame(self.master)
+        self.main_frame.pack(fill="both", expand=True)
+
+        # Monitor 구역
+        self.monitor_frame = ctk.CTkFrame(self.main_frame)
+        self.monitor_frame.pack(padx=10, pady=10, fill="x")
+
+        self.monitor_frame.grid_rowconfigure(0, weight=1)  # 한 줄로 크기 비례 조정
+        self.monitor_frame.grid_columnconfigure(0, weight=1)  # 왼쪽 열 비율 조정
+        self.monitor_frame.grid_columnconfigure(1, weight=0)  # 설정 버튼 영역 (고정 크기)
+        self.monitor_frame.grid_columnconfigure(2, weight=1)  # 오른쪽 열 비율 조정
+
+        # 왼쪽 부분 (Device1 to PC)
+        left_frame = ctk.CTkFrame(self.monitor_frame)
+        left_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")  # "nsew"로 네 방향으로 확장
+
+        # Device1 to PC 레이블
+        self.device1_label = ctk.CTkLabel(left_frame, text=f"{self.device1_name} to {self.local_device_name}", font=(f"{self.font}", self.font_size, "bold"))
+        self.device1_label.pack(padx=10)
+
+        # Device1 상태 레이블
+        self.device1_status = ctk.CTkLabel(left_frame, text="Disconnected", text_color="red", font=(f"{self.font}", self.font_size, "bold"))
+        self.device1_status.pack(padx=10)
+
+        # 설정 버튼 부분 (프레임)
+        self.settings_frame = ctk.CTkFrame(self.monitor_frame)
+        self.settings_frame.grid(row=0, column=1)
+
+        # 설정 버튼 (프레임 내 중앙 정렬)
+        self.settings_button = ctk.CTkButton(self.settings_frame, text="menu", command=SettingsWindow , font=(f"{self.font}", self.font_size, "bold"))
+        self.settings_button.pack(expand=True, padx=10, pady=10)
+        
+        # 오른쪽 부분 (Device2 to PC)
+        right_frame = ctk.CTkFrame(self.monitor_frame)
+        right_frame.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")  # "nsew"로 네 방향으로 확장
+
+        # Device2 to PC 레이블
+        self.device2_label = ctk.CTkLabel(right_frame, text=f"{self.local_device_name} to {self.device2_name}", font=(f"{self.font}", self.font_size, "bold"))
+        self.device2_label.pack(padx=10)
+
+        # Device2 상태 레이블
+        self.device2_status = ctk.CTkLabel(right_frame, text="Disconnected", text_color="red", font=(f"{self.font}", self.font_size, "bold"))
+        self.device2_status.pack(padx=10)
+
+        # 로그 출력 구역
+        self.log_frame = ctk.CTkFrame(self.main_frame)
+        self.log_frame.pack(padx=10, pady=10, fill="both", expand=True)
+
+        # 왼쪽과 오른쪽 로그 영역 (동적으로 크기 조정)
+        self.receive_log_grid = CTkListbox(self.log_frame, font=(f"{self.font}", self.font_size, "bold"), multiple_selection=True)
+        self.receive_log_grid.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+
+        self.send_log_grid = CTkListbox(self.log_frame, font=(f"{self.font}", self.font_size, "bold"))
+        self.send_log_grid.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
+
+        # 실패한 로그 모음 구역
+        self.failed_frame = ctk.CTkFrame(self.main_frame)
+        self.failed_frame.pack(padx=10, pady=10, fill="x")
+
+        self.failed_receive_left = CTkListbox(self.failed_frame, font=(f"{self.font}", self.font_size, "bold"))
+        self.failed_receive_left.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+        self.failed_send_right = CTkListbox(self.failed_frame, font=(f"{self.font}", self.font_size, "bold"))
+        self.failed_send_right.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+
+        # 레이아웃 비율 설정 (창 크기 변경 시 위젯 크기 비례적으로 변경)
+        self.main_frame.grid_rowconfigure(0, weight=1)
+        self.main_frame.grid_columnconfigure(0, weight=1)
+        self.main_frame.grid_columnconfigure(1, weight=1)
+
+        self.log_frame.grid_rowconfigure(0, weight=1)
+        self.log_frame.grid_columnconfigure(0, weight=1)
+        self.log_frame.grid_columnconfigure(1, weight=1)
+
+        self.failed_frame.grid_rowconfigure(0, weight=1)
+        self.failed_frame.grid_columnconfigure(0, weight=1)
+        self.failed_frame.grid_columnconfigure(1, weight=1)
+
+    def get_window_config(self):
+        config_manager = ConfigManager()
+        self.resolution = config_manager.get_resolution_config()
+        self.font, self.font_size = config_manager.get_font_config()
+        self.local_device_name, self.device1_name, self.device2_name = config_manager.get_device_name_config()
+```
+
+긴 줄의 코드가 보이지만 사실 원래 코드에서 처음 프로그램이 켜지면 보이는 GUI만 따로 빼낸 것이다
+
+쉽게말해 긴 코드 전부 프레임을 만들고 버튼을 어디 위치에 넣고 하는 작업이라는 의미
+
+```py
+# settings_window.py
+
+import customtkinter as ctk
+from app.controllers.tcp_controller import TCPController
+from config.config_manager import ConfigManager
+
+class SettingsWindow(ctk.CTkToplevel):
+    def __init__(self):
+        super().__init__()
+        self.tcp_controll = TCPController()
+        self.config_manager = ConfigManager()
+        self.get_settings_window_config()
+        self._setup_ui()
+
+    def _setup_ui(self):
+        # 기본 설정
+        self.title("Settings")
+        self.geometry("700x400")
+        self.attributes("-topmost", True)
+
+        # 메뉴바
+        self.menu_bar = ctk.CTkTabview(self)
+        self.menu_bar.pack(pady=10, padx=20, fill="both", expand=True)
+
+        # 메뉴
+        self.menu_bar.add("settings")
+        self.menu_bar.add("TCP test")
+        self.menu_bar.set("settings") # 기본 세팅
+
+        self.settings_menu()
+        # self.tcp_test_menu()
+    
+    def settings_menu(self):
+        # settings_frame을 창 가운데에 배치
+            settings_frame = ctk.CTkFrame(self.menu_bar.tab("settings"))
+            settings_frame.place(relx=0.5, rely=0.5, anchor="center")  # 창의 가운데로 배치
+            
+            # Device 1 레이블
+            device1_label = ctk.CTkLabel(settings_frame, text="Device 1", font=("Helvetica", 20, "bold"))
+            device1_label.grid(row=0, column=0, padx=10, pady=10, columnspan=2, sticky="w")  # Device 1 레이블
+            
+            # IP 입력 (Device 1)
+            ip_label1 = ctk.CTkLabel(settings_frame, text="IP:", font=("Helvetica", 20, "bold"))
+            ip_label1.grid(row=1, column=0, padx=10, pady=10, sticky="w")  # 왼쪽 정렬
+            ip_entry1 = ctk.CTkEntry(settings_frame, font=("Helvetica", 20, "bold"))
+            ip_entry1.grid(row=1, column=1, padx=10, pady=10, sticky="ew")  # 가로로 확장
+            ip_entry1.insert(0, self.tcp_recieve_ip)
+            
+            # Port 입력 (Device 1)
+            port_label1 = ctk.CTkLabel(settings_frame, text="Port:", font=("Helvetica", 20, "bold"))
+            port_label1.grid(row=2, column=0, padx=10, pady=10, sticky="w")  # 왼쪽 정렬
+            port_entry1 = ctk.CTkEntry(settings_frame, font=("Helvetica", 20, "bold"))
+            port_entry1.grid(row=2, column=1, padx=10, pady=10, sticky="ew")  # 가로로 확장
+            port_entry1.insert(0, self.tcp_recieve_port)
+            
+            # Device 1 Connect/Disconnect 버튼
+            self.connect_button1 = ctk.CTkButton(settings_frame, text="Connect", command=self.tcp_controll.connect_device1, font=("Helvetica", 20, "bold"))
+            self.connect_button1.grid(row=3, column=0, pady=10)  # Device 1의 버튼을 하단에 배치
+            self.disconnect_button1 = ctk.CTkButton(settings_frame, text="Disconnect", command=self.tcp_controll.disconnect_device1, state="disabled", font=("Helvetica", 20, "bold"))
+            self.disconnect_button1.grid(row=3, column=1, pady=10)  # Device 1의 Disconnect 버튼
+
+            # Device 2 레이블
+            device2_label = ctk.CTkLabel(settings_frame, text="Device 2", font=("Helvetica", 20, "bold"))
+            device2_label.grid(row=0, column=2, padx=10, pady=10, columnspan=2, sticky="w")  # Device 2 레이블
+            
+            # IP 입력 (Device 2)
+            ip_label2 = ctk.CTkLabel(settings_frame, text="IP:", font=("Helvetica", 20, "bold"))
+            ip_label2.grid(row=1, column=2, padx=10, pady=10, sticky="w")  # 왼쪽 정렬
+            ip_entry2 = ctk.CTkEntry(settings_frame, font=("Helvetica", 20, "bold"))
+            ip_entry2.grid(row=1, column=3, padx=10, pady=10, sticky="ew")  # 가로로 확장
+            ip_entry2.insert(0, self.tcp_send_ip)
+            
+            # Port 입력 (Device 2)
+            port_label2 = ctk.CTkLabel(settings_frame, text="Port:", font=("Helvetica", 20, "bold"))
+            port_label2.grid(row=2, column=2, padx=10, pady=10, sticky="w")  # 왼쪽 정렬
+            port_entry2 = ctk.CTkEntry(settings_frame, font=("Helvetica", 20, "bold"))
+            port_entry2.grid(row=2, column=3, padx=10, pady=10, sticky="ew")  # 가로로 확장
+            port_entry2.insert(0, self.tcp_send_port)
+                    
+            # Device 2 Connect/Disconnect 버튼
+            self.connect_button2 = ctk.CTkButton(settings_frame,text="Connect", command=self.tcp_controll.connect_device2, font=("Helvetica", 20, "bold"))
+            self.connect_button2.grid(row=3, column=2, pady=10)  # Device 2의 버튼을 하단에 배치
+            self.disconnect_button2 = ctk.CTkButton(settings_frame,text="Disconnect", command=self.tcp_controll.disconnect_device2, state="disabled", font=("Helvetica", 20, "bold")) #command=self.disconnect_device2
+            self.disconnect_button2.grid(row=3, column=3, pady=10)  # Device 2의 Disconnect 버튼
+
+    def _save_settings(self):
+        ip = self.ip_entry.get()
+        self.config_manager.update_config("TCP_Receive", "host", ip)
+
+    def get_settings_window_config(self):
+        self.tcp_recieve_ip, self.tcp_recieve_port = self.config_manager.get_tcp_receive_config()
+        self.tcp_send_ip, self.tcp_send_port = self.config_manager.get_tcp_send_config()
+        self.resolution = self.config_manager.get_resolution_config()
+        self.font, self.font_size = self.config_manager.get_font_config()
+        self.local_device_name, self.device1_name, self.device2_name = self.config_manager.get_device_name_config()
+```
+
+여기부터 이제 아직 구현이 덜 된 부분이 존재할 것이다
+
+기본적으로는 설정창으로 `폰트`, `폰트 사이즈`, `해상도`, `tcp 통신에 필요한 ip, port`, `tcp 테스트`까지의 기능이 들어있다만 아직 완성하기엔...
+
+특히 내가 독학으로 공부하는 것이다 보니 스파게티코드로 짜는 것이 아니라 이렇게 구조를 나눠서 구현했을 경우에 스레드 끼리의 충돌이 빈번하게 일어날 것이라 계속해서 찾아보며 구현하는 중이다
+
+```py
+# tcp_controller.py
+
+from app.services.tcp_service import TCPServer, TCPClient
+from app.controllers.log_controller import LogSaver
+from config.config_manager import ConfigManager
+
+class TCPController:
+    def __init__(self, main_window):
+        self.config_manager = ConfigManager()
+        self.main_window = main_window
+
+        self.get_device1_config()
+        self.get_device2_config()
+        
+        self.log_saver = LogSaver()
+
+        self.server = None
+        self.client = None
+        
+        # 연결 상태 추적
+        self.device1_connected = False
+        self.device2_connected = False
+
+    def connect_device1(self):
+        if not self.device1_connected:
+            try:
+                self.server = TCPServer(self.device1_ip, self.device1_port, self._on_data_received)
+                self.server.start()
+                self.device1_connected = True
+                # GUI 업데이트 - 연결 상태 변경
+                self.main_window.after(0, lambda: self.main_window.device1_status.configure(text="Connected", text_color="green"))
+                return True
+            except Exception as e:
+                print(f"Device1 연결 오류: {e}")
+                return False
+        return False
+
+    def disconnect_device1(self):
+        if self.device1_connected and self.server:
+            try:
+                self.server.stop()
+                self.server = None
+                self.device1_connected = False
+                # GUI 업데이트 - 연결 상태 변경
+                self.main_window.after(0, lambda: self.main_window.device1_status.configure(text="Disconnected", text_color="red"))
+                return True
+            except Exception as e:
+                print(f"Device1 연결 종료 오류: {e}")
+                return False
+        return False
+
+    def connect_device2(self):
+        if not self.device2_connected:
+            try:
+                self.client = TCPClient(self.device2_ip, self.device2_port)
+                self.client.start()
+                self.device2_connected = True
+                # GUI 업데이트 - 연결 상태 변경
+                self.main_window.after(0, lambda: self.main_window.device2_status.configure(text="Connected", text_color="green"))
+                return True
+            except Exception as e:
+                print(f"Device2 연결 오류: {e}")
+                return False
+        return False
+
+    def disconnect_device2(self):
+        if self.device2_connected and self.client:
+            try:
+                self.client.stop()
+                self.client = None
+                self.device2_connected = False
+                # GUI 업데이트 - 연결 상태 변경
+                self.main_window.after(0, lambda: self.main_window.device2_status.configure(text="Disconnected", text_color="red"))
+                return True
+            except Exception as e:
+                print(f"Device2 연결 종료 오류: {e}")
+                return False
+        return False
+
+    def _on_data_received(self, data):
+        # tkinter는 스레드에 안전하지 않으므로, after 메서드를 사용하여 
+        # GUI 업데이트를 메인 스레드에서 실행
+        self.main_window.after(0, lambda: self.main_window.receive_log_grid.insert("end", data))
+        self.log_saver.save(data, "receive")
+    
+    def get_device1_config(self):
+        self.device1_ip, self.device1_port = self.config_manager.get_tcp_receive_config()
+    
+    def get_device2_config(self):
+        self.device2_ip, self.device2_port = self.config_manager.get_tcp_send_config()
+    
+    def send_data(self, data):
+        if self.device2_connected and self.client:
+            success = self.client.send_data(data)
+            if success:
+                # 전송 로그 저장
+                self.main_window.after(0, lambda: self.main_window.send_log_grid.insert("end", data))
+                self.log_saver.save(data, "send")
+                return True
+            else:
+                # 실패 로그 저장
+                self.main_window.after(0, lambda: self.main_window.failed_send_right.insert("end", data))
+                return False
+        return False
+```
+
+아까 구조에 관해 설명할 때 말했듯 TCP 통신의 실행, 종료 등을 다루는 부분이 되겠다
+
+하지만 이제 실제로 서버가 실행되고 종료되는 부분은 이 다음에 나올 코드이다
+
+```py
+# tcp_service.py
+
+import socket
+import threading
+
+class TCPServer:
+    def __init__(self, ip, port, callback):
+        self.ip = ip
+        self.port = port
+        self.callback = callback
+        self.server_socket = None
+
+    def start(self):
+        self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket.bind((self.ip, self.port))
+        self.server_socket.listen(5)
+        self.thread = threading.Thread(target=self._run_server)
+        self.thread.start()
+
+    def stop(self):
+        self.running = False
+        if self.server_socket:
+            # 서버 소켓 종료
+            self.server_socket.close()
+            self.server_socket = None
+
+    def _run_server(self):
+        while self.running:
+            try:
+                # 소켓 타임아웃 설정으로 주기적으로 running 확인 가능
+                self.server_socket.settimeout(1.0)
+                try:
+                    client_socket, addr = self.server_socket.accept()
+                    data = client_socket.recv(1024).decode("utf-8")
+                    self.callback(data)
+                    client_socket.close()
+                except socket.timeout:
+                    continue  # 타임아웃 시 계속 진행
+            except Exception as e:
+                if self.running:
+                    print(f"서버 오류: {e}")
+                break  # 오류 발생시 루프 종료
+
+
+class TCPClient:
+    def __init__(self, ip, port):
+        self.ip = ip
+        self.port = port
+        self.client_socket = None
+
+    def start(self):
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socket.connect((self.ip, self.port))
+
+    def stop(self):
+        if self.client_socket:
+            self.client_socket.close()
+            self.client_socket = None
+    
+    def send_data(self, data):
+        if self.client_socket:
+            try:
+                self.client_socket.send(data.encode("utf-8"))
+                return True
+            except Exception as e:
+                print(f"데이터 전송 오류: {e}")
+                return False
+        return False
+```
+
+위 코드가 드디어 tcp 통신을 위한 코드가 되겠지만 지금은 메인 페이지만이 그나마 원래 구현하고자 했던 `App.py`와 가장 동일한 GUI를 가지고 있고
+
+정확히는 그마저도 popup창이 없고 연결이 되어어도 로그나 저장이 안되는 등 매우 많은 문제가 있다
+
+```py
+# config_manager.py
+
+import configparser
+import os
+
+class ConfigManager:
+    def __init__(self):
+        self.config = configparser.ConfigParser()
+        if not os.path.exists("config/config.ini"):
+            self._create_default_config()
+        self.config.read("config/config.ini")
+
+    def _create_default_config(self):
+        self.config["TCP_Receive"] = {"host": "127.0.0.1", "port": "5000"}
+        self.config["TCP_Send"] = {"host": "127.0.0.1", "port": "5001"}
+        self.config["Test_File_Path"] = {"name": "test_logs.txt"}
+        self.config["Resolution"] = {"resolution": "1080x1090"}
+        self.config["Font"] = {"font": "Helvetica", "size": "20"}
+        self.config["DeviceName"] = {"local_device": "ME", "device1": "PC1", "device2": "PC2"}
+        with open("config/config.ini", "w") as f:
+            self.config.write(f)
+
+    def get_tcp_receive_config(self):
+        return (self.config["TCP_Receive"]["host"], int(self.config["TCP_Receive"]["port"]))
+
+    def get_tcp_send_config(self):
+        return (self.config["TCP_Send"]["host"], int(self.config["TCP_Send"]["port"]))
+
+    def update_config(self, section, key, value):
+        self.config[section][key] = str(value)
+        with open("config/config.ini", "w") as f:
+            self.config.write(f)
+
+    def get_resolution_config(self):
+        return (self.config["Resolution"]["resolution"])
+    
+    def get_font_config(self):
+        return (self.config["Font"]["font"], int(self.config["Font"]["size"]))
+    
+    def get_device_name_config(self):
+        return (self.config["DeviceName"]["local_device"], self.config["DeviceName"]["device1"], self.config["DeviceName"]["device2"])
+```
+
+모든 프로그램에는 `설정`이라는 것이 존재하고 나 또한 그를 위한 코드를 하나 짜두었다
+
+### 소감?
+
+솔직히 처음에 구조를 다시 만들어보자 라고 다짐했을 때에는 가장 처음에 떠오른 생각이 어떻게? 였다
+
+내가 뭐 구조를 깔끔하게 하는 방법을 배운 것도 아니고, 파이썬으로 클래스 객체를 만들어보며 놀아보지 않았기에 이번 도전은 사실상 파이썬을 해봤다고는 하지만 내게 처음 도전하는 거나 마찬가지였다
+
+실제로 코드를 구현하는 중에 구조를 4번 정도 갈아엎었기에 지금 나온 구조는 `ReReReRenew_LTC_Project`가 되겠다
+
+그래도 역시 요즘은 세상이 좋아졌으매 인공지능에게 물어봐가며 코드를 계선하니 확실히 기존 하나의 파일에 모든 코드를 떄려박은 것 보다 훨~씬 보기가 편해졌다
+
+일단 이번 작업부터 끝내고 나면 다음부터는 시작 전에 구조부터 확실히 하고 가야겠다
+
+아참 인공지능 쓸 때에 나는 보통 `chatgpt4o`를 사용했는데 정작 써보니 `claude`요놈이 진짜 효자다 문제가 있다면 유료라는 점이겠지만 그정도의 단점을 상쇠할 만큼 내게 도움을 주고 있다
+
+일단 오늘은 여기까지 하고 잔 뒤에 내일 수업 끝나면 다시 완성을 향해 가야겠다
+
+아 그리고 마지막으로 내 코드 좀 큰 오류(tcp 통신부와 GUI의 연결)가 있어 복사해서 실행해보면 메인 GUI는 진입이 되는데 설정창에서는 막히게 될 것이다
