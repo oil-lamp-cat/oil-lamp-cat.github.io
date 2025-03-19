@@ -2363,3 +2363,303 @@ class ConfigManager:
 일단 오늘은 여기까지 하고 잔 뒤에 내일 수업 끝나면 다시 완성을 향해 가야겠다
 
 아 그리고 마지막으로 내 코드 좀 큰 오류(tcp 통신부와 GUI의 연결)가 있어 복사해서 실행해보면 메인 GUI는 진입이 되는데 설정창에서는 막히게 될 것이다
+
+## 2025-03-19, 21시 38분, 클래스 사이의 변수 공유
+
+사실 내가 이것저것 많이 짜보기는 했지만 정식으로 시작부터 끝까지 강의를 보거나 책을 보며 파이썬 공부를 해보지 않은지라 사실 이번에 구조 리펙토링 과정에서 `class`에 관한 부분이 꽤나 많이 부족한 상황이였다
+
+그리고 이번에 `main_windows.py`와 `settings_window.py`의 UI를 `tcp_controller.py`에 보내서 사용해야하는데.. 보통의 경우에 `def` 함수에 인자를 보내는 방법은 알지만 과연 `class`에서 어떻게 구현을 하는 것이 좋을까 하는 생각이 많아졌다
+
+코드를 통해 예시를 들어보자면
+
+```py
+class MainWindow(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+
+        # 메인 윈도우 GUI
+        self._setup_ui()
+
+    def _setup_ui(self):
+        self.receive_log_grid = CTkListbox
+        (
+            self.log_frame, 
+            font=(f"{self.font}", 
+            self.font_size, "bold"), 
+            multiple_selection=True
+        )
+        self.receive_log_grid.grid
+        (
+            row=0, 
+            column=0, 
+            sticky="nsew", 
+            padx=10, 
+            pady=10
+        )
+```
+
+예시 코드는 내 실제 `main_windows.py`에서 가져온 것이다
+
+설명을 해보자면 이제 앱의 메인 화면의 `UI`에 관한 부분이고 다음으로 가져와야하는 세팅의 `UI` 부분을 가져와보자
+
+```py
+class SettingsWindow(ctk.CTkToplevel):
+    def __init__(self, main_window=None):
+        super().__init__()
+
+         # TCP 컨트롤러 생성
+        self.tcp_controller = TCPController()
+        self.tcp_controller.set_main_window(main_window)
+        self.tcp_controller.set_setting_window(self)
+
+        # 중략
+        self.get_settings_window_config()        
+        self._setup_ui()
+
+    def _setup_ui(self):
+
+        # 중략
+
+        self.settings_menu()
+
+    def settings_menu(self):
+        # Device 1 Connect/Disconnect 버튼
+        self.connect_button1 = ctk.CTkButton
+        (
+            settings_frame, 
+            text="Connect", 
+            command=self.tcp_controller.connect_device1, 
+            font=("Helvetica", 20, "bold")
+        )
+        self.connect_button1.grid
+        (
+            row=3, 
+            column=0, 
+            pady=10
+        )
+
+```
+
+위가 `settings_window.py`에서 가져온 것이고 여기서 드디어 `tcp_controller.py`의 객체(class)를 생성해 주었다
+
+전체적인 설명은 이 다음 `tcp_controller.py` 코드까지 보고 이어가겠다
+
+```py
+class TCPController:
+    def __init__(self):
+        self.config_manager = ConfigManager()
+
+        self.get_device1_config()
+        self.get_device2_config()
+        
+        self.log_saver = LogSaver()
+
+        self.server = None
+        self.client = None
+        
+        # 연결 상태 추적
+        self.device1_connected = False
+        self.device2_connected = False
+
+    def set_main_window(self, main_window):
+        # 메인 윈도우 참조 설정
+        self.main_window = main_window
+    
+    def set_setting_window(self, setting_window):
+        # 세팅 윈도우 참조 설정
+        self.setting_window = setting_window
+```
+
+위가 바로 TCP 통신을 조정하기 위한 부분이 되겠다
+
+따로 서버나 클라이언트를 실행하는 코드는 `tcp_service.py`에 들어있다
+
+만 여기도 또 문제가 있으니 이건 나중에
+
+### class에 self 변수 넘겨주기
+
+나의 문제는 이러했다
+
+`main_window.py`에서 `연결중` 이라던가 `서버 에러 발생` 혹은 로그가 들어오면 로그를 쭉 띄워주는 UI가 구현되어있는데 결국 통신을 하는 부분은 바로 `tcp_controller.py`에 들어있다
+
+그런데 `tcp_controller.py`는 `settings_window.py`에서 처음 객체를 생성하게 된다
+
+그렇다면 변수를 어떻게 옯겨가야하는가?
+
+```
+main_window.py -> settings_window.py -> tcp_controller.py
+```
+
+이렇게 진행되어야한다
+
+근데 나는 여기서 문제가 생겼다
+
+하나씩 직접 인수로 전해주자니 말이 안되게 코드가 길어진다
+
+분명 나는 짧고 효율적이게 만들고 싶었는데!
+
+심지어 만약 나중에 다른 프로젝트에서 이 객체를 쓰고자 한다면 싹 갈아엎어야 한다
+
+그렇게 생각해낸 방법은 다음과 같다
+
+---
+
+> main_window.py -> settings_window.py
+
+```py
+self.settings_button = ctk.CTkButton
+(
+    self.settings_frame, 
+    text="menu", 
+    command=lambda: SettingsWindow(self) ,
+    font=(f"{self.font}", 
+    self.font_size, 
+    "bold")
+)
+```
+
+`command` 부분을 유심히 살펴보자
+
+어제 쓴 코드에 관한 글을 보면 분명
+
+`command=SettingsWindow`
+
+라고 되어있었을 것이다
+
+하지만 이번에는 `main_window.py`의 변수들을 모두 `settings_window.py`의 `SettingWindow` class 객체에 넘겨주기 위해서 `lambda`를 이용하였다
+
+알아보니 그냥 `command`를 이용하면 인수를 넘겨줄 수 없기에 `lambda`를 이용하여 `SettingWindow`객체에 `self` 즉 지금 이 코드는 `main_window.py`에 들어있기에 메인 UI의 버튼들을 넘겨줄 수 있게 되었다
+
+처음에는 여기서 바로 `TCPController`에 넘겨줄까 하였으나 애초에 `TCPController`는 설정 창에서 실행시켜야 하기에 일단 설정으로 옮겨놨다
+
+---
+> settings_window.py -> tcp_controller.py
+
+```py
+class SettingsWindow(ctk.CTkToplevel):
+    def __init__(self, main_window=None):
+        super().__init__()
+        # 설정 값 불러오기
+        self.config_manager = ConfigManager()
+        
+        # main_window.py에서 가져온 변수 끌고오기
+        self.main_window = main_window
+        
+        # TCP 컨트롤러 생성
+        self.tcp_controller = TCPController()
+        self.tcp_controller.set_main_window(main_window)
+        self.tcp_controller.set_setting_window(self)
+```
+
+솔직히 지금 이 글을 쓰면서 변수를 끌고온다고 표현하는 것이 맞는지 모르겠다. 뭔가 다른 단어가 있을 것 같은 기분?
+
+위 코드에 대해 설명하자면 아까 `main_window.py`에서 `self`를 인수로 넘겨주며 객체를 생성하였고 그렇게 생성된 객체에서는 `self.main_window = main_window`를 통해 변수들을 사용할 수 있게 선언하였다
+
+만 이건 생각해보니 `SettingsWindow` 객체에서 사용할 것이 아니라면 쓸 필요가 없다, 일단은 살려두자 혹시 모르니
+
+그 후 드디어 `TCPController` 객체를 생성하도록 하자!
+
+```py
+# TCP 컨트롤러 생성
+self.tcp_controller = TCPController()
+self.tcp_controller.set_main_window(main_window)
+self.tcp_controller.set_setting_window(self)
+```
+
+첫줄에서 객체를 생성하고 
+
+두번째 줄에서는 `set_main_window`를 통해 `main_window`의 변수를 넘겨준 뒤
+
+세번째 줄에서는 `set_setting_window`를 통해 `self` 이번에는 `SettingsWindow`의 변수를 넘겨주게 되었다
+
+그렇다면 어떻게 변수를 넘겨줬다는 말일까?
+
+---
+> tcp_controller.py에서 변수 받기
+
+```py
+def set_main_window(self, main_window):
+    # 메인 윈도우 참조 설정
+    self.main_window = main_window
+
+def set_setting_window(self, setting_window):
+    # 세팅 윈도우 참조 설정
+    self.setting_window = setting_window
+```
+
+이렇게 들여온 변수들을 `self` 이번에는 `settings_window.py`의 변수들을 넘겨주어 `TCPController` 객체에서 `self.main_window`와 `self.setting_window`와 같이 선언하여 사용할 수 있게 하였다
+
+여기서 혹시 문제가 될만한 부분은 GUI가 작동하는 과정에 있어 쓰레딩에서 root의 코드를 조정하게 되었을 때에 충돌이 나지 않을까 하는 생각이 든다
+
+### 오늘의 문제 (TCP 통신과정에 생긴 문제)
+
+GUI의 기본적인 부분을 어느정도 손본 뒤에 정말로 로그가 잘 오가는지 테스트를 해보기로 했다
+
+일단은 로그를 받는 부분을 테스트 해보았는데
+
+이 때 로그를 보내는 코드는 
+
+```py
+import socket
+import time
+
+
+
+# TCP 서버의 IP와 포트 설정
+TCP_IP = '127.0.0.1'  # 서버 IP
+TCP_PORT = 12345      # 서버 포트
+
+# 파일 경로 설정
+file_path = "test.txt"
+
+try:
+    # 소켓 생성
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect((TCP_IP, TCP_PORT))
+    print(f"서버 {TCP_IP}:{TCP_PORT}에 연결되었습니다.")
+
+    # 파일 읽기
+    with open(file_path, 'r', encoding='utf-8') as file:
+        for line in file:
+            line = line.strip()  # 줄 끝의 공백 제거
+            if line:  # 빈 줄 무시
+                client_socket.sendall(line.encode('utf-8'))  # 데이터 전송
+                print(f"보냄: {line}")
+
+                # 서버로부터 응답 받기
+                response = client_socket.recv(1024).decode('utf-8')  # 최대 1024 바이트 수신
+                print(f"서버 응답: {response}")
+
+                time.sleep(1)  # 1초 대기
+
+    print("파일의 모든 줄을 전송했습니다.")
+except FileNotFoundError:
+    print(f"파일을 찾을 수 없습니다: {file_path}")
+except ConnectionError:
+    print("TCP 서버와 연결할 수 없습니다.")
+except Exception as e:
+    print(f"오류 발생: {e}")
+finally:
+    client_socket.close()
+    print("연결이 종료되었습니다.")
+```
+
+전에 만들어둔 코드를 사용하였다
+
+헌데 여기서 문제가 발생!
+
+로그가 들어온 후에 
+
+![Image](https://github.com/user-attachments/assets/0939883e-2d7c-4cc9-bb6b-ab1341f36e9c)
+
+위와 같이 하나를 보내고 받은 뒤 이상하게 더이상 로그를 보내지 않다가 갑자기 연결이 끊겨버린다
+
+![Image](https://github.com/user-attachments/assets/9cff8800-b332-4d03-92fd-54333c20847b)
+
+아무리 생각해도 이상해서 `wireshark`로 로그를 찍어봤다
+
+분명히 연결되고 처음 통신은 되는데 그 이후 랜덤하게 몇번의 로그를 주고받고 앱에서 더이상 아무런 페킷도 보내지 않는다는 것을 확인했다...
+
+오잉? 일단 이 부분은 늦은 시간이니 내일 다시 생각해보기로 하자
+
+22시 56분
