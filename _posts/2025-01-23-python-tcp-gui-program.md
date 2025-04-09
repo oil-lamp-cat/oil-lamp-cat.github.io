@@ -1868,11 +1868,11 @@ command = C:\Users\raen0\AppData\Local\Programs\Python\Python311\python.exe -m v
 
 내가 바꾼 구조는 다음과 같다
 
-![Image](https://github.com/user-attachments/assets/a8ef3624-ef6d-491c-93d2-5ba3703d8674)
+![Image](https://github.com/user-attachments/assets/56637a97-0baa-4baf-947a-24820e75224f)
 
 음.. 하나씩 설명해보자면
 
-![Image](https://github.com/user-attachments/assets/63c25415-b467-4f0f-9552-1cc621678a28)
+![Image](https://github.com/user-attachments/assets/e938da8f-14dc-45ed-b8e0-bd9eee64b860)
 
 이렇게 되시겠다
 
@@ -2650,11 +2650,11 @@ finally:
 
 로그가 들어온 후에 
 
-![Image](https://github.com/user-attachments/assets/0939883e-2d7c-4cc9-bb6b-ab1341f36e9c)
+![Image](https://github.com/user-attachments/assets/664f036f-f079-43f1-9e7d-cc6b198c426c)
 
 위와 같이 하나를 보내고 받은 뒤 이상하게 더이상 로그를 보내지 않다가 갑자기 연결이 끊겨버린다
 
-![Image](https://github.com/user-attachments/assets/9cff8800-b332-4d03-92fd-54333c20847b)
+![Image](https://github.com/user-attachments/assets/51e32b00-777a-4405-b999-504a75ffa082)
 
 아무리 생각해도 이상해서 `wireshark`로 로그를 찍어봤다
 
@@ -2799,7 +2799,7 @@ class MainWindow(ctk.CTk):
 
 아무래도 메인 윈도우에서 세팅 창을 열고 그 창에서 tcp 통신 스레드를 열다보니 그럼 메인 윈도우의 창 닫기를 감지할 수 있으면 되는 것 아닐까? 하는 생각에서 찾아낸 방법이다
 
-![Image](https://github.com/user-attachments/assets/05a5c521-f14a-4176-b533-46c67ae6d52b)
+![Image](https://github.com/user-attachments/assets/2beca32f-5b5d-4470-8cf2-360391fa2e75)
 
 드디어! 굳이 `ctrl_c`를 누르지 않더라도 종료할 수있게 되었다!
 
@@ -2863,3 +2863,140 @@ fin
 지금 내가 하고 있는게 오전에는 동아리 활동 자료를 만들고 오후에는 이거 작업하고 있다
 
 일단 이거부터 빨리 끝내야 될텐데 자꾸 코드를 볼 때마다 이거 추가할까? 이거 바꿀까? 하는 생각에 어려운 부분이 popup 부분을 시작도 못했다..
+
+## 2025-04-09, 20시 6분, 클라이언트 종료 오류 문제
+
+> PC와 Device2가 연결되어있는 상황에서 Disconnect 버튼을 눌러 정상 종료하였음에도 Device2 연결 종료: Error가 뜨는 상황이었다
+
+생각보다 해결 방법은 간단했는데
+
+```py
+def _connect(self):
+    try:
+        self.client_socket.connect((self.ip, self.port))
+        print("서버에 연결되었습니다.")
+        if self.connected_callback:
+            self.connected_callback()  # 연결 성공 콜백 호출
+
+        # 서버와의 연결 유지 상태 확인
+        while self.running:
+            try:
+                if not self.running:  # 루프 종료 조건 확인
+                    break
+                data = self.client_socket.recv(1024)  # 서버로부터 데이터 수신
+                if not data:
+                    print("서버가 연결을 종료했습니다.")
+                    if self.disconnected_callback:
+                        self.disconnected_callback("Server Disconnected")  # 연결 종료 콜백 호출
+                    break
+            except Exception as e:
+                if not self.running:
+                    print("사용자 요청에 의한 연결 종료")
+                    if self.disconnected_callback:
+                        self.disconnected_callback("Disconnected by user")
+                else:
+                    print(f"데이터 수신 오류: {e}")
+                    if self.disconnected_callback:
+                        self.disconnected_callback("Error")
+                break
+    except socket.timeout:
+        print("연결 시도 타임아웃")
+    except Exception as e:
+        print(f"연결 오류: {e}")
+        if self.disconnected_callback:
+            self.disconnected_callback(f"{e}")  # 연결 실패 시에도 콜백 호출
+```
+
+중간의 Exception 부분에서 자꾸 데이터 수신 오류가 발생하던 것을 
+
+```py
+if not self.running:
+    print("사용자 요청에 의한 연결 종료")
+    if self.disconnected_callback:
+        self.disconnected_callback("Disconnected by user")
+```
+
+이 if문 하나 추가한 것 만으로 내가 종료한 것인지 오류에 의해 종료된 것인지 확인할 수 있게 되었다
+
+> 이제 작업해야 하는 것
+
+- 안 보내진 것들, 이미 들어와 있던 것들 우클릭 한 후에 뜨는 작은 팝업창에서 다시 보내기 누를 수 있게 해야함
+- 내부의 로그 들어오고 나가는 부분 GUI 원하는 대로 크기 조절할 수 있게 해야함
+- 로그 들어온거 폰트 조정
+
+일단은 이정도가 가장 중요하지 않을까 한다
+
+## 2025-04-09, 20시 39분
+
+> 로그 표시 부분 폰트 조정 성공
+
+![Image](https://github.com/user-attachments/assets/6253917d-7dc9-40e6-b90e-a25f218305ff)
+
+원래 이전까지는 통신 자체도 잘 되지 않아 몰랐지만 로그가 들어오고 나가고 하는 `CTkListbox`에 들어가는 로그들의 폰트가 전혀 프로그램에서 설정한 폰트와 맞지 않다는 것을 알게 되었다
+
+일단은 이것을 해결하기 위해 모듈을 뜯어봤다
+
+```py
+if not font:
+    self.font = customtkinter.CTkFont(customtkinter.ThemeManager.theme["CTkFont"]["family"],13)
+else:
+    if isinstance(font, customtkinter.CTkFont):
+        print("폰트 1")
+        self.font = font
+    else:
+        print("폰트 2")
+        print(font, "폰트2 의 폰트")
+        self.font = customtkinter.CTkFont(font)
+        print(self.font, "폰트2 의 변경된 폰트") #1
+```
+
+여기저기 `print`를 찍어보며 테스트 해본 결과 아무리 봐도 이곳이 문제였다
+
+특히 `#1` 부분에 폰트의 설정이 들어가면서 계속 이상한
+
+```
+font2
+font6
+font2
+font4
+```
+
+과 같은 형식으로 변경되곤 했다
+
+이것을 고치기 위해 살짝 바꾸기로 했다
+
+```py
+if not font:
+    # 기본 폰트 설정
+    self.font = customtkinter.CTkFont(customtkinter.ThemeManager.theme["CTkFont"]["family"], 13)
+else:
+    if isinstance(font, customtkinter.CTkFont):
+        self.font = font
+    elif isinstance(font, tuple):
+        # 튜플로 전달된 폰트를 CTkFont로 변환
+        self.font = customtkinter.CTkFont(*font)
+    else:
+        raise ValueError(f"Invalid font format: {font}")
+```
+
+이렇게 바꾼 폰트는 드디어 제대로 작동을 하기 시작했다
+
+이정도면 이 모듈은 나도 꽤나 바꿨다고 할 수 있지 않을까?
+
+```py
+"""
+Custom ListBox for customtkinter
+Author: Akash Bora
+Edited by 호롱고양이
+"""
+```
+
+그래서 써놨다 😋
+
+그렇게 제대로 폰트가 적용된 모습은 다음과 같다
+
+![Image](https://github.com/user-attachments/assets/d4284d2e-ae6d-440d-a4af-15e6f6e0af6e)
+
+훨씬 잘 보여서 너무 좋다
+
+그럼 이제 나머지 작업을 하면 되겠다
