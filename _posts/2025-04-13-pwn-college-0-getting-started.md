@@ -178,7 +178,7 @@ pwn.college에 제공되는 챌린지들은 교육용 자료이며, 애리조나
 
 게다가 ssh를 쓴다고 했을 때 bandit처럼 문제마다 접속 계정이 달라지는게 아니라 선택한 문제에 따른 서버가 생겨 같은 위치로 접속하면 되니 편하다
 
-## Using the Dojo _ Challenges
+## Using the Dojo _ Challenges _
 
 ### Using the VSCode Workspace
 
@@ -350,3 +350,16 @@ vm에 파일이 유지된다는 것을 확인하기 위해 `/challenge/solve`에
 
 이번 챌린지는 전에 만들었던 파일을 이용하는 문제라고 한다 일단 설명을 듣기 위해 `/challenge/solve`를 실행하란다
 
+![Image](https://github.com/user-attachments/assets/12687436-862c-4bee-b308-4ba2f4826457)
+
+이전에 정상적으로 파일을 만들어 넘어왔다면 바로 플래그를 얻을 수 있다
+
+### Using the Dojo 끝
+
+![Image](https://github.com/user-attachments/assets/2148a799-1aaa-48e9-b100-e4a7ff76f641)
+
+이렇게 이제 가장 기초적인 모든 챌린지를 끝낼 수 있었다
+
+![Image](https://github.com/user-attachments/assets/27b34069-ddca-4417-a6b8-a78343f5d150)
+
+다음은 `Linux Luminarium`이다
