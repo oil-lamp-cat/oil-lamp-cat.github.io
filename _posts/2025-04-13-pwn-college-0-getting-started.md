@@ -1,7 +1,7 @@
 ---
 title: "[pwn.college] 0. Using the Dojo Getting Started."
 date: 2025-04-13 18:27:15 +09:00
-categories: [Linux, pwn.college]
+categories: [Linux, pwn.college, hacking]
 tags: [pwn.college]
 pin: true
 ---
