@@ -362,4 +362,6 @@ vm에 파일이 유지된다는 것을 확인하기 위해 `/challenge/solve`에
 
 ![Image](https://github.com/user-attachments/assets/27b34069-ddca-4417-a6b8-a78343f5d150)
 
+![Image](https://github.com/user-attachments/assets/c1f18d4e-4241-4c90-9906-5936495d0b4f)
+
 다음은 `Linux Luminarium`이다
