@@ -1072,10 +1072,298 @@ hacker@dojo:~$
 
 이렇게 플래그를 찾을 수 있었다
 
-### 끝!
+### linking files 끝!
 
 ![Image](https://github.com/user-attachments/assets/52857bcc-5998-4ba2-b298-8c3d9422ec1d)
 
 다음은 `Digesting Documentation`이다!
 
-아마 한 줄 마다, 그러니까 총 3번에 걸처 기록할것이다
+## Digesting Documentation
+
+![Image](https://github.com/user-attachments/assets/06de45e0-5cb0-476a-a7c4-a9cfdf505047)
+
+이 모듈은 리눅스에서 가장 중요한 기술 중 하나인 프로그램 사용법을 찾는 방법을 가르쳐 줄 거예요. 이 기술은 앞으로 당신의 여정에 큰 도움이 될 거예요. 아래에서 시작해 봅시다!
+
+## Digesting Documentation _ Challenge _
+
+![Image](https://github.com/user-attachments/assets/36a21025-1f63-4c6c-81b3-7abaaa275d75)
+
+### Learning From Documentation
+
+![Image](https://github.com/user-attachments/assets/ecbcbf8d-7b95-4153-a82a-4d54bea1f6e6)
+
+당신이 문서를 필요로 하는 일반적인 이유는, 이 많은 프로그램들을 **어떻게 사용하는지 알아내는 것**이고, 그중에서도 특히 **명령줄에 어떤 인자(argument)를 입력해야 하는지 알아내는 것**입니다. 이 모듈은 주로 그 개념을 다룰 것이며, 이는 전반적으로 프로그램을 어떻게 사용하는지 이해하는 데에 도움이 되는 방식이에요. 이 모듈의 나머지 부분에서는 다양한 방법으로 프로그램 사용법에 대한 도움말을 환경에 요청하는 방법을 배우게 될 것이지만, 먼저 **문서를 읽는 개념**부터 살펴봅시다.
+
+프로그램을 올바르게 사용하는 방법은 **적절한 인자를 지정하는 것**에 크게 달려 있습니다. Basic Commands 모듈의 숨김 파일 문제에서 사용한 `ls -a` 명령어를 기억해보세요. 여기서 `-a`는 `ls`에게 숨겨진 파일도 함께 보여주라고 지시하는 인자였습니다. 우리가 숨겨진 파일을 보려고 했기 때문에 `ls`에 `-a` 인자를 준 것은 우리의 상황에서 올바른 사용법이었습니다.
+
+이번 챌린지에서 사용할 프로그램은 `/challenge/challenge`이고, 플래그를 얻기 위해서는 **올바르게 실행해야 합니다**. 마치 이 프로그램에 대한 문서가 다음과 같다고 가정해 봅시다:
+
+---
+
+**/challenge/challenge에 대한 문서에 오신 것을 환영합니다! 이 프로그램을 제대로 실행하려면 `--giveflag` 인자를 전달해야 합니다. 행운을 빕니다!**
+
+---
+
+이 내용을 바탕으로, 가서 플래그를 얻으세요!
+
+#### 해결 과정
+
+![Image](https://github.com/user-attachments/assets/00b881cd-24ae-43af-af0e-3f27d9805543)
+
+문제에 답이 있다
+
+### Learning Complex Usage
+
+![Image](https://github.com/user-attachments/assets/23bcf3c2-45c4-435a-ad7e-82940f83ac33)
+
+대부분의 명령어는 사용하는 것이 비교적 간단하지만, 일부 명령어는 사용법이 꽤 복잡해질 수 있습니다. 예를 들어 `sed`와 `awk` 같은 명령어는—지금 당장은 다루지 않을 거지만—**인자로 주어지는 값 자체가 마치 난해한 프로그래밍 언어로 된 하나의 프로그램**인 경우도 있습니다! `cd`와 `awk` 사이 어딘가쯤에는, **자신의 인자에게 또 다른 인자를 요구하는 명령어들**이 있습니다...
+
+이게 이상하게 들릴 수도 있지만, 사실 여러분은 이미 Basic Commands 모듈의 `find` 레벨에서 이걸 경험했습니다. `find`는 `-name`이라는 인자를 갖고 있는데, 이 `-name`이라는 인자 **자체가 또 다른 인자**, 즉 **검색할 파일 이름**을 필요로 하죠. 이와 비슷한 구조를 가진 명령어들이 많습니다.
+
+다음은 이 레벨에서 사용할 `/challenge/challenge` 프로그램의 설명입니다:
+
+---
+
+**/challenge/challenge에 대한 문서에 오신 것을 환영합니다! 이 프로그램은 `--printfile` 인자를 주면 원하는 파일을 터미널에 출력할 수 있습니다. 그리고 `--printfile`이라는 인자에는 출력하고 싶은 파일의 경로를 인자로 넘겨주어야 합니다. 예를 들어, 다음과 같이 실행하면 레벨 설명 파일이 출력됩니다:**
+
+```
+/challenge/challenge --printfile /challenge/DESCRIPTION.md
+```
+
+---
+
+이 문서를 참고해서, 플래그를 얻어보세요!
+
+#### 해결 과정
+
+![Image](https://github.com/user-attachments/assets/6143231e-a9ab-423d-9703-6c07d499d01b)
+
+문제에 나온 그대로 써보면 위와 같은 문서가 나타난다
+
+이제 여기서 플래그를 얻으려면 `/flag`를 읽으면 되겠지?
+
+![Image](https://github.com/user-attachments/assets/8424925c-7e88-4629-bf94-770b73872e82)
+
+정답이다, 다음 문제로!
+
+### Reading Manuals
+
+![Image](https://github.com/user-attachments/assets/1ff20c7f-19d6-4619-bb6f-83f23f6a76eb)
+
+이 단계에서는 `man` 명령어를 소개합니다. `man`은 manual(매뉴얼)의 줄임말이며, 인자로 전달한 명령어의 매뉴얼(가능한 경우)을 표시합니다. 예를 들어, `yes` 명령어에 대해 알고 싶다고 가정해봅시다 (`yes`는 실제로 존재하는 명령어입니다):
+
+```
+hacker@dojo:~$ man yes
+```
+
+이 명령은 `yes`의 매뉴얼 페이지를 출력하며, 대략 다음과 같은 내용이 표시됩니다:
+
+```
+YES(1)                           User Commands                          YES(1)
+
+NAME
+       yes - 문자열을 반복해서 출력함 (kill 될 때까지)
+
+SYNOPSIS
+       yes [STRING]...
+       yes OPTION
+
+DESCRIPTION
+       지정한 문자열들을 반복적으로 출력하거나, 기본값으로 'y'를 출력함.
+
+       --help : 도움말을 출력하고 종료함
+
+       --version : 버전 정보를 출력하고 종료함
+
+AUTHOR
+       David MacKenzie가 작성함.
+
+BUG 제보
+       GNU coreutils 온라인 도움말: <https://www.gnu.org/software/coreutils/>
+       번역 관련 버그는 <https://translationproject.org/team/> 으로 제보
+
+COPYRIGHT
+       Copyright © 2020 Free Software Foundation, Inc.  
+       라이선스 GPLv3+: GNU GPL 버전 3 이상 <https://gnu.org/licenses/gpl.html>.
+       이 소프트웨어는 자유롭게 수정 및 재배포할 수 있습니다. 
+       법적으로 허용되는 범위 내에서 보증은 없습니다.
+
+SEE ALSO
+       전체 문서: <https://www.gnu.org/software/coreutils/yes>
+       또는 로컬에서: info '(coreutils) yes invocation'
+
+GNU coreutils 8.32               2022년 2월                          YES(1)
+```
+
+중요한 섹션은 다음과 같습니다:
+
+```
+NAME(1)                           CATEGORY                          NAME(1)
+
+NAME
+	이 페이지에서 다루는 명령어나 개념의 이름과 간단한 설명을 제공합니다.
+
+SYNOPSIS
+	짧은 사용법 요약을 보여줍니다. 이 요약은 표준 형식을 따릅니다. 
+	일반적으로 각 줄은 명령어의 유효한 사용 방식 중 하나이며 다음과 같이 읽을 수 있습니다:
+
+	COMMAND [선택 인자] 필수 인자
+	COMMAND [선택 인자] 여러 인자...
+
+DESCRIPTION
+	명령어나 개념에 대한 상세 설명과 다양한 옵션에 대한 구체적인 설명이 제공됩니다.
+
+SEE ALSO
+	참고할 만한 다른 매뉴얼 페이지나 온라인 리소스를 나열합니다.
+
+COLLECTION                        DATE                          NAME(1)
+```
+
+man 페이지는 화살표 키 또는 PgUp/PgDn 키를 사용해 스크롤할 수 있습니다. 다 읽었다면 `q` 키를 눌러 종료하세요.
+
+man 페이지는 중앙화된 데이터베이스에 저장되어 있습니다. 참고로 이 데이터베이스는 `/usr/share/man` 디렉토리에 있지만, 직접 이 경로와 상호작용할 필요는 없습니다. 단지 `man` 명령을 통해 조회하기만 하면 됩니다. `man` 명령에 전달하는 인자는 파일 경로가 아니라 항목의 이름입니다. 예를 들어 `man yes`라고 입력하면 `yes`의 매뉴얼을 확인할 수 있지만, `man /usr/bin/yes`라고 입력하면 실제 경로를 참조하는 것이기 때문에 엉뚱한 출력이 나올 수 있습니다.
+
+이 단계의 챌린지에는 **비밀 옵션**이 있으며, 이 옵션을 사용하면 플래그를 출력합니다. 이 옵션은 `challenge` 명령어의 man 페이지를 통해 알아내야 합니다!
+
+#### 해결 과정
+
+![Image](https://github.com/user-attachments/assets/250633a4-5b61-45b1-ab6e-1a04f1c16132)
+
+`man challenge`를 해서 보니 그냥 플래그를 출력한다고 하는데 
+
+딱 보아하니 `--lqiwlm` 부분에서 396을 넣으면 flag를 준다고 한다
+
+![Image](https://github.com/user-attachments/assets/6cbf1341-dfe8-4075-8c97-4a1b38d42a22)
+
+굿
+
+### Searching Manuals
+
+![Image](https://github.com/user-attachments/assets/113c2694-f89f-41a2-bbcf-1edff6fe89c8)
+
+화살표 키(PgUp/PgDn 포함)를 사용하여 man 페이지를 스크롤할 수 있고, `/` 키로 검색할 수 있습니다. 검색 후에는 `n` 키를 눌러 다음 결과로, `N` 키를 눌러 이전 결과로 이동할 수 있습니다. `/` 대신 `?`를 사용하면 반대로(위쪽 방향으로) 검색할 수 있습니다!
+
+`challenge`의 man 페이지를 읽어 플래그를 출력해주는 옵션을 찾아보세요.
+
+#### 해결 과정
+
+![Image](https://github.com/user-attachments/assets/6a58f278-dc5f-45c5-a4bd-b2cb45b76c01)
+
+이번에는 위와 같이 `man challenge`를 했을 때 매~우 긴 설명이 나온다 우리는 여기서 검색 기능을 사용하자
+
+![Image](https://github.com/user-attachments/assets/d4176a01-023d-42be-9d01-e738708692a0)
+
+찾았다! `--audczh`란다
+
+![Image](https://github.com/user-attachments/assets/400e5d70-6c11-4f1d-963e-5d5f5f339c8c)
+
+정답
+
+### Searching For Manuals
+
+![Image](https://github.com/user-attachments/assets/bb0d39b7-6606-4307-9e3c-a85ae9d79dd9)
+
+이 레벨은 조금 까다롭습니다: 챌린지의 man 페이지는 그 이름이 랜덤으로 변경되어 숨겨져 있습니다. 다행히 모든 man 페이지는 검색 가능한 데이터베이스에 모여 있으므로, man 페이지 데이터베이스를 검색하여 숨겨진 챌린지의 man 페이지를 찾을 수 있습니다! 올바른 man 페이지를 검색하는 방법을 알아내려면, `man man` 명령어로 man 페이지의 man 페이지를 읽어보세요!
+
+힌트 1: `man man`은 man 명령어 자체의 고급 사용법을 가르쳐 주며, 이 지식을 사용하여 숨겨진 man 페이지를 검색하는 방법을 알아내야 합니다.
+
+힌트 2: man 페이지 이름은 랜덤으로 변경되었지만, 여전히 `/challenge/challenge`를 사용하여 플래그를 얻을 수 있습니다!
+
+#### 해결 과정
+
+어.. `man`으로 `man`을 읽어보라고 한다
+
+![Image](https://github.com/user-attachments/assets/bd127eda-c58b-483b-b0a5-51c35eb81fcd)
+
+이엑 역시 엄청 긴 설명이 나오고 여기서 이제 숨겨진 챌린지의 man 페이지를 찾아야한다
+
+![Image](https://github.com/user-attachments/assets/b1282fae-3779-4304-9193-e2dc01db7d86)
+
+그냥 flag도 없다..
+
+![Image](https://github.com/user-attachments/assets/93222898-5478-4e17-88e9-91d3c536cc49)
+
+음.. 그러니까 어떤 방법으로 `man`을 이용해서 `challenge`를 읽고 그렇게 파일을 열어봐야한다는 뜻?
+
+아니면 `man`을 이용해서 어떤 숨겨진 것을 열어봐야한다는 걸까?
+
+![Image](https://github.com/user-attachments/assets/61c957f5-dd5f-4701-b071-c59526d67134)
+
+오? 이거 혹시?
+
+사실상 똑같이 페이지에서 검색하는 기능인 것 같은데
+
+`man -k printf`
+```
+주어진 키워드 `printf`에 대해 매뉴얼 페이지의 짧은 설명과 이름을 정규 표현식으로 검색합니다. 일치하는 항목을 출력합니다. `apropos printf`와 동일합니다.
+```
+
+음...
+
+![Image](https://github.com/user-attachments/assets/08bd5bd1-5361-48e4-bc8b-486560856302)
+
+이거 검색해 볼 때는 없었는데!!
+
+![Image](https://github.com/user-attachments/assets/40d7aec8-0dde-4ae9-9877-571b6e2c9068)
+
+게다가 이번에는 이걸 어떻게 쓰라는걸까?
+
+![Image](https://github.com/user-attachments/assets/d2979a06-0b27-4967-a332-2fbcedaac11e)
+
+아! `man ~~`로 찾은게 `man lpjmilrwyz`로 열어볼 수 있는 설명서였다!
+
+그러니까 이제야 문제가 이해가 되는게 원래 `challenge`에 대한 설명서를 열어보기 위해서는 `man challenge`를 써야하는데 여기서 설명서가 변경되어 `man lpjmilrwyz`로 이름이 바뀌었다는 거였다!
+
+![Image](https://github.com/user-attachments/assets/7eaa2eaf-9322-4c35-b689-5bf45c08a561)
+
+그런거였어!!
+
+### Helpful Programs
+
+![Image](https://github.com/user-attachments/assets/57aecb7c-3c3f-4c9f-baaa-f10027a8e2ac)
+
+일부 프로그램은 man 페이지가 없지만, 특별한 인자를 주면 실행 방법을 알려줄 수 있습니다. 보통 이 인자는 `--help`이지만, 종종 `-h`, 드물게는 `-?`, `help`, 또는 `/`로 시작하는 특이한 값들(`/?)` 같은)일 수도 있습니다 (이 마지막 경우는 주로 Windows에서 더 자주 볼 수 있습니다).
+
+이번 단계에서는 `--help`를 사용하여 프로그램의 문서를 읽는 연습을 하게 됩니다. 한번 시도해보세요!
+
+#### 해결 과정
+
+![Image](https://github.com/user-attachments/assets/74bf8eb4-d263-46f9-805f-3ff10376a230)
+
+일단 문제에 나온 대로 `--help`를 이용해서 사용 방법을 찾은 후 우리는 `-g`를 이용해 플래그를 얻어야 하지만 뒤의 `GIVE_THE_FLAG`를 모르니 `-p` 옵션을 이용해 값을 얻어내면 된다
+
+### Help for Builtins
+
+![Image](https://github.com/user-attachments/assets/900806e3-db6c-48b8-9657-134030476dfb)
+
+일부 명령어는 man 페이지나 help 옵션을 가진 프로그램이 아니라, 셸 자체에 내장된 명령어입니다. 이러한 명령어를 **builtins(내장 명령어)** 라고 부릅니다. 내장 명령어는 일반 명령어처럼 실행되지만, 셸이 내부적으로 처리하며 외부 프로그램을 실행하지 않습니다.
+
+내장 명령어 목록을 보려면 `help` 명령어를 실행하면 됩니다:
+
+```
+hacker@dojo:~$ help
+```
+
+특정 내장 명령어에 대한 도움말을 보고 싶다면, `help` 뒤에 그 명령어 이름을 붙이면 됩니다. 우리가 이전에 사용했던 `cd` 명령어를 예로 들어보면:
+
+```
+hacker@dojo:~$ help cd
+cd: cd [-L|[-P [-e]] [-@]] [dir]
+    Change the shell working directory.
+    
+    Change the current directory to DIR.  The default DIR is the value of the
+    HOME shell variable.
+...
+```
+
+꽤 유용한 정보죠! 이번 챌린지에서는 `help` 명령어를 사용하여 내장 명령어의 도움말을 확인하는 연습을 하게 됩니다. 이 단계의 `/challenge/challenge` 명령어는 외부 프로그램이 아니라 셸 내장 명령어입니다. 이전과 마찬가지로, 이 명령어의 도움말을 찾아보고 어떤 값을 넘겨야 플래그를 얻을 수 있는지 알아내야 합니다!
+
+#### 해결 과정
+
+![Image](https://github.com/user-attachments/assets/73a57396-e5f1-4333-b57c-f69bed6deca9)
+
+### Digesting Documentation 끝!
+
+![Image](https://github.com/user-attachments/assets/46036a08-6b03-472a-a435-87c006f9994b)
+
+다음 문제들은 다른 페이지에 추가로 만들기로 하겠다
