@@ -3020,3 +3020,218 @@ Edited by 호롱고양이
 다음에 할 작업은 우클릭 눌러서 다시 보내는 작업하고 마우스 올리면 작은 팝업으로 이게 무슨 창인지 알려주는 거랑 아무 로그도 없을 때 그 창 이름 뜨는거 작업을 하고자 한다
 
 사실상 위에 것만 완성하면 드디어 이번 작업을 끝낼 수 있다는 이야기!
+
+## 2025-04-17, 21시 4분 - 스크롤 조절 feat.마우스
+
+> 마우스가 올라가있는 로그 부분은 scroll down이 안되게 설정
+
+```py
+import customtkinter
+
+class CTkListbox(customtkinter.CTkScrollableFrame):
+    def __init__(self, master: any, **kwargs):
+        super().__init__(master, **kwargs)
+        self.bind("<Enter>", self._on_mouse_enter)
+        self.bind("<Leave>", self._on_mouse_leave)
+        self.mouse_inside = False  # 마우스가 내부에 있는지 여부를 추적
+
+    def _on_mouse_enter(self, event):
+        self.mouse_inside = True
+
+    def _on_mouse_leave(self, event):
+        self.mouse_inside = False
+
+    def scroll_down(self, y_scroll=1000):
+        if not self.mouse_inside:  # 마우스가 내부에 없을 때만 스크롤
+            if self._parent_canvas.yview() != (0.0, 1.0):
+                self._parent_canvas.yview("scroll", y_scroll, "units")
+```
+
+위처럼 원래 만들어진 `CTkListbox`에 마우스 이벤트를 추가하여 마우스가 올려져 있을 때는 스크롤을 내리지 않게 한다
+
+사용자가 마우스를 올리고 로그에 마우스를 올리고 있다는 것은 뭔가 확인하고 있다는 의미인데 갑자기 로그 창이 위로 쭉 올라가버리면 당황하지 않겠는가
+
+심지어 그건 잘못만든게지
+
+> 문제 발견
+
+- main_window에서 settings_window를 열고 tcp 연결을 끝낸 뒤에 세팅창을 닫고 다시 열면 버튼이 모두 리셋되는 문제가 있다
+
+습.. 이게 그냥 gui의 문제이면 좋겠다만...
+
+
+![Image](https://github.com/user-attachments/assets/6c21842c-bbef-4fe3-9651-91b695d46a54)
+
+음 역시 gui에서 버튼 생성에 문제가 생기는 거였다
+
+그럼 코드의 어디가 문제일까?
+
+```py
+class SettingsWindow(ctk.CTkToplevel):
+    def __init__(self, main_window=None):
+        super().__init__()
+        self.config_manager = ConfigManager()  # 설정 파일
+
+        self.main_window = main_window  # 메인 윈도우 참조 추가
+
+        self.tcp_controller = TCPController()  # TCP 컨트롤러 생성
+        self.tcp_controller.set_main_window(main_window)
+        self.tcp_controller.set_setting_window(self)
+
+        self.get_settings_window_config()
+        self._setup_ui()
+
+        # TCP 상태에 따라 버튼 상태 업데이트
+        self.update_button_states()
+```
+
+위가 `settings_window`의 기존 코드
+
+```py
+class SettingsWindow(ctk.CTkToplevel):
+    def __init__(self, main_window=None):
+        super().__init__()
+        self.config_manager = ConfigManager()  # 설정 파일
+        self.main_window = main_window  # 메인 윈도우 참조 추가
+
+        # 메인 윈도우의 TCPController 인스턴스를 사용
+        self.tcp_controller = main_window.tcp_controller
+        self.tcp_controller.set_setting_window(self)
+
+        self.get_settings_window_config()
+        self._setup_ui()
+
+        # TCP 상태에 따라 버튼 상태 업데이트
+        self.update_button_states()
+```
+
+이게 바로 문제를 찾아 바꾼 코드인데
+
+하.. 가장 기초적인 문제였다
+
+`main_window`에도 이미 `TCPController` 인스턴스가 존재하는데 `settings_window`에서 새로운 `TCPController` 인스턴스를 생성했다
+
+이로 인해 기존 연결 상태가 자꾸 초기화되던 것이다..
+
+으악
+
+근데 이랬더니 이젠 다른 문제가 생기네..
+
+> 세팅창을 닫을 때 생기는 오류
+
+`서버 오류: invalid command name ".!settingswindow.!ctktabview.!ctkframe.!ctkframe.!ctkbutton"`
+
+하지만 해결했죠?
+
+```py
+def _update_device1_status(self, text, color, disable_connect):
+    # GUI 상태 업데이트
+    if hasattr(self, 'main_window') and self.main_window.winfo_exists():
+        self.main_window.device1_status.configure(text=text, text_color=color)
+    
+    # 설정 창이 존재하고 유효한 경우에만 버튼 상태 업데이트
+    if hasattr(self, 'setting_window') and self.setting_window.winfo_exists():
+        if hasattr(self.setting_window, 'connect_button1'):
+            self.setting_window.connect_button1.configure(state="disabled" if disable_connect else "normal")
+            self.setting_window.disconnect_button1.configure(state="normal" if disable_connect else "disabled")
+
+def _update_device2_status(self, text, color):
+    # GUI 상태 업데이트
+    if hasattr(self, 'main_window') and self.main_window.winfo_exists():
+        self.main_window.device2_status.configure(text=text, text_color=color)
+    
+    # 설정 창이 존재하고 유효한 경우에만 버튼 상태 업데이트
+    if hasattr(self, 'setting_window') and self.setting_window.winfo_exists():
+        if hasattr(self.setting_window, 'connect_button2'):
+            if text == "Connected":
+                self.setting_window.connect_button2.configure(state="disabled")
+                self.setting_window.disconnect_button2.configure(state="normal")
+            elif text in ["Disconnected", "Error", "Server Disconnected"]:
+                self.setting_window.connect_button2.configure(state="normal")
+                self.setting_window.disconnect_button2.configure(state="disabled")
+```
+
+바로 창이 존재하는지 확인하는 로직!
+
+### 위 두 문제를 해결한 중간 완성본!
+
+![Image](https://github.com/user-attachments/assets/b7c0cf3f-41a5-4973-a86e-aa29e12a2385)
+
+계속 할 수록 뭔가 추가해야하는 것들이 보이는 것 같다
+
+> 다음에 해야하는 것
+
+- **POP UP**
+
+이제 다음으로 가장 중요한 부분이다
+
+팝업이 하게 될 것은
+
+- 우클릭 누르면 그에 맞는 팝업 띄우기
+- 팝업에는 다시 보내기, 선택 해제하기, 전체 선택하기, 전체 보내기 등이 존재해야함
+
+일단은 크게 이정도 이겠다
+
+## 2025-04-17, 22시 48분, 팝업 구현중
+
+습.. 팝업이 구현이 되지는 하는데 내 생각만큼 뭔가 동글동글 하지가 않아서 불만..
+
+```py
+from customtkinter import CTkToplevel, CTkFrame, CTkButton
+import sys
+
+class PopupMenu(CTkToplevel):
+    def __init__(self, master, resend_callback, deselect_callback, select_all_callback, send_all_callback):
+        super().__init__(takefocus=1)
+        self.master_window = master
+        self.hidden = True
+
+        # 팝업 창 기본 설정
+        self.overrideredirect(True)
+        self.attributes("-topmost", True)  # 항상 최상위에 표시
+        self.withdraw()  # 초기에는 숨김 상태
+
+        # 팝업 프레임
+        self.frame = CTkFrame(self, corner_radius=10)
+        self.frame.pack(expand=True, fill="both", padx=5, pady=5)
+
+        # 메뉴 버튼 추가
+        self._add_menu_buttons(resend_callback, deselect_callback, select_all_callback, send_all_callback)
+
+        # 외부 클릭 시 팝업 닫기
+        self.master.bind("<Button-1>", lambda event: self._withdraw_off(), add="+")
+        self.bind("<Button-1>", lambda event: self._withdraw())
+
+    def _add_menu_buttons(self, resend_callback, deselect_callback, select_all_callback, send_all_callback):
+        CTkButton(self.frame, text="다시 보내기", command=resend_callback).pack(fill="x", padx=10, pady=(10, 5))
+        CTkButton(self.frame, text="선택 해제", command=deselect_callback).pack(fill="x", padx=10, pady=5)
+        CTkButton(self.frame, text="전체 선택", command=select_all_callback).pack(fill="x", padx=10, pady=5)
+        CTkButton(self.frame, text="전체 보내기", command=send_all_callback).pack(fill="x", padx=10, pady=(5, 10))
+
+    def popup(self, x, y):
+        """
+        팝업 메뉴를 지정된 위치에 표시합니다.
+        """
+        self.geometry(f"+{x}+{y}")
+        self.deiconify()
+        self.hidden = False
+
+    def _withdraw(self):
+        """
+        팝업 메뉴를 숨깁니다.
+        """
+        self.withdraw()
+        self.hidden = True
+
+    def _withdraw_off(self):
+        """
+        팝업 메뉴를 숨깁니다 (외부 클릭 시).
+        """
+        if not self.hidden:
+            self.withdraw()
+        self.hidden = True
+```
+
+일단 간단하게는 이렇게 구현을 했는데 이거는 쓰게 되면 listbox마다 팝업을 각자 정해주지 못하는 문제가 있다..
+
+오늘 더 진행하지는 못할 것 같고 나중에 추가적으로 해야겠네요
