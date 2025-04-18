@@ -15,7 +15,7 @@ pin: true
 
 ### 1. windows 11 설치 미디어 도구 다운로드
 
-다른 PC에서 [window11 다운로드]()로 들어간다
+다른 PC에서 [window11 다운로드](naver.com)로 들어간다
 
 아래 내리다 보면 `Windows 11 설치 미디어 만들기` 라는 부분이 있고 거기의 **[지금 다운로드]** 부분을 클릭하여 `MediaCreationTool_Win11.exe`를 설치한다
 
