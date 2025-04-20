@@ -3235,3 +3235,198 @@ class PopupMenu(CTkToplevel):
 일단 간단하게는 이렇게 구현을 했는데 이거는 쓰게 되면 listbox마다 팝업을 각자 정해주지 못하는 문제가 있다..
 
 오늘 더 진행하지는 못할 것 같고 나중에 추가적으로 해야겠네요
+
+## 2025-04-20, 23시 10분, 오류나 연결 끊김시 알람창
+
+> 오늘 작업한 것!
+
+- 알람 창 띄우기
+
+원래는 이 전에 팝업창 그러니까 팝업 메뉴를 완벽하게 구현하려 했으나 이건 아직 내가 잘 구현을 못하고 있기도 하고 좀 생각보다 내가 원하는 대로 안 되기에 할 수 있는 것 부터 구현했다
+
+```py
+import customtkinter as ctk
+import threading
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"  # pygame 시작 메시지 숨기기
+import pygame
+
+class AlarmWindow(ctk.CTkToplevel):
+    def __init__(self, message="알람이 울립니다!"):
+        super().__init__()
+        self.title("알람")
+        self.geometry("300x150")
+        self.attributes("-topmost", True)  # 항상 위에 표시
+
+        # pygame 초기화
+        pygame.mixer.init()
+
+        # 알람 메시지
+        label = ctk.CTkLabel(self, text=message, font=("Helvetica", 16, "bold"))
+        label.pack(pady=20)
+
+        # 닫기 버튼
+        close_button = ctk.CTkButton(self, text="닫기", command=self.stop_alarm)
+        close_button.pack(pady=10)
+
+        # 창이 닫힐 때 이벤트 처리
+        self.protocol("WM_DELETE_WINDOW", self.stop_alarm)
+
+    def stop_alarm(self):
+        """알람 소리를 중지하고 창을 닫습니다."""
+        pygame.mixer.music.stop()
+        pygame.mixer.quit()
+        self.destroy()
+
+def play_alarm_sound():
+    """알람 소리를 재생합니다."""
+    try:
+        pygame.mixer.music.load("sounds/aram.mp3")
+        pygame.mixer.music.play(-1)  # -1은 무한 반복
+    except Exception as e:
+        print(f"소리 재생 오류: {e}")
+
+def trigger_alarm(message="알람이 울립니다!"):
+    """알람 창을 띄우고 소리를 재생합니다."""
+    # 알람 창 띄우기
+    alarm_window = AlarmWindow(message)
+    
+    # 소리 재생 (별도 스레드에서 실행)
+    threading.Thread(target=play_alarm_sound, daemon=True).start()
+```
+
+`pygame`으로 구현한 알람창 띄우기 부분으로 사용법은 다음과 같다
+
+```py
+# 예: 특정 이벤트에서 알람 실행
+import customtkinter as ctk
+from app.UI.aram_window import trigger_alarm
+
+# 메인 윈도우 생성
+class TestApp(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("알람 테스트")
+        self.geometry("400x200")
+
+        # 테스트 버튼
+        test_button = ctk.CTkButton(self, text="알람 실행", command=self.run_alarm)
+        test_button.pack(pady=50)
+
+    def run_alarm(self):
+        # 알람 실행
+        trigger_alarm("데이터 수신 오류 발생!")
+
+if __name__ == "__main__":
+    app = TestApp()
+    app.mainloop()
+```
+
+이렇게 하면
+
+![Image](https://github.com/user-attachments/assets/b45f2b87-70bf-4b01-8bb3-3c778426e13b)
+
+이렇게 뜨는데 뭐 필요하면 닫기 버튼을 없애도 될 것 같다
+
+그나저나 저거 폰트 뭔가 이상한데?
+
+`Helvetica` 이 폰트가 저런거였나?
+
+> 몇가지 추가해야 하는 기능
+
+- 설정에서 알람창 크기 조정 가능하게 추가, (해결)
+- 폰트, 글씨체, 크기 모두 설정값 따라가게, (해결)
+- 가장 중요한 팝업...
+
+## 2025-04-20, 23시 45분, 알람창 크기 조절
+
+처음에는 알람창 크기를 조절할 수 있게 설정을 넣을까 했는데 생각해보니 그냥 들어오는 오류 메세지 길이에다가 폰트 크기를 계산해서 넣으면 되는거 아닌가? 싶어서 구현했다
+
+```py
+import customtkinter as ctk
+import threading
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"  # pygame 시작 메시지 숨기기
+import pygame
+from config.config_manager import ConfigManager  # ConfigManager 가져오기
+
+class AlarmWindow(ctk.CTkToplevel):
+    def __init__(self, message="알람이 울립니다!"):
+        super().__init__()
+        # ConfigManager에서 폰트 설정 가져오기
+        config_manager = ConfigManager()
+        font, font_size = config_manager.get_font_config()
+
+        # 글자 수에 따라 창 너비와 높이 조정
+        char_width = int(font_size / 1.5)  # 글자당 픽셀 너비 (대략적인 값)
+        message_width = len(message) * char_width
+
+        # 좌우 최소 너비 설정
+        min_width = 300  # 최소 너비를 500으로 설정
+        message_width = max(message_width, min_width)
+
+        # 메시지 높이 계산 (줄 수에 따라 동적으로 설정)
+        line_height = font_size + 10  # 한 줄의 높이 (폰트 크기 + 여백)
+        max_line_length = 20  # 한 줄에 표시할 최대 글자 수
+        num_lines = (len(message) // max_line_length) + 1  # 메시지의 줄 수 계산
+        message_height = max(150, num_lines * line_height)  # 최소 높이는 150으로 설정
+
+        # 창 크기 설정
+        self.geometry(f"{message_width + 50}x{message_height}")  # 동적으로 계산된 크기 설정
+
+        self.title("알람")
+        self.attributes("-topmost", True)  # 항상 위에 표시
+
+        # pygame 초기화
+        pygame.mixer.init()
+
+        # 알람 메시지
+        label = ctk.CTkLabel(self, text=message, font=(font, font_size, "bold"))
+        label.place(relx=0.5, rely=0.4, anchor="center")  # 창의 중앙에 배치 (위쪽)
+
+        # 닫기 버튼
+        close_button = ctk.CTkButton(self, text="닫기", command=self.stop_alarm, font=(font, font_size))
+        close_button.place(relx=0.5, rely=0.7, anchor="center")  # 창의 중앙에 배치 (아래쪽)
+
+        # 창이 닫힐 때 이벤트 처리
+        self.protocol("WM_DELETE_WINDOW", self.stop_alarm)
+
+    def stop_alarm(self):
+        """알람 소리를 중지하고 창을 닫습니다."""
+        pygame.mixer.music.stop()
+        pygame.mixer.quit()
+        self.destroy()
+
+def play_alarm_sound():
+    """알람 소리를 재생합니다."""
+    try:
+        pygame.mixer.music.load("sounds/aram.mp3")
+        pygame.mixer.music.play(-1)  # -1은 무한 반복
+    except Exception as e:
+        print(f"소리 재생 오류: {e}")
+
+def trigger_alarm(message="알람이 울립니다!"):
+    """알람 창을 띄우고 소리를 재생합니다."""
+    # 알람 창 띄우기
+    alarm_window = AlarmWindow(message)
+    
+    # 소리 재생 (별도 스레드에서 실행)
+    threading.Thread(target=play_alarm_sound, daemon=True).start()
+```
+
+![Image](https://github.com/user-attachments/assets/17b46bee-c712-40b9-9422-f47d8911d5d2)
+
+길 때는 창이 이렇게 커지고
+
+![Image](https://github.com/user-attachments/assets/fb66d0fb-59f4-464b-9fad-a5ef3e3c3ff3)
+
+짧을 때는 이렇게 작아진다만 최소치를 정해뒀다
+
+어우.. 근데 알람을 좀 시끄러운걸로 테스트 하고 했더니 귀가 아프네
+
+일단 오늘은 여기까지!
+
+> 다음에 해야하는 것들
+
+- 팝업 (resend, send, failed_send)
+- 이전 로그 불러오기 (이걸 까먹고 있었네)
