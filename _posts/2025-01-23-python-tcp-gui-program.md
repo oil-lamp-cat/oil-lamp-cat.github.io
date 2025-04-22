@@ -3430,3 +3430,180 @@ def trigger_alarm(message="알람이 울립니다!"):
 
 - 팝업 (resend, send, failed_send)
 - 이전 로그 불러오기 (이걸 까먹고 있었네)
+
+## 2025-04-22, 23시 33분, 로그 불러오기
+
+> 일단 만들기는 했는데 기능이 마음에는 안든다
+
+![Image](https://github.com/user-attachments/assets/4886cf21-29b7-40dd-9d1a-5f91e494e713)
+
+이렇게 로그가 저장되어있는 파일을 자동으로 읽고 날자별로 띄워준 다음 직접 보여주는 식인데 문제가 하나씩 보여준다..
+
+근데 그렇다고 해서 스레딩을 걸면 순식간에 응답없음이 뜨는 문제가 있다..
+
+이 이상은 지금의 나로써는 더 추가해서 고칠 것 같지는 않다
+
+막 중요한 기능은 아닐뿐더러 이제 슬 다른 공부를 하러가고 싶기 때문이다
+
+이만치 GUI 프로그래밍 연습 해봤으면 충분하지 않을까?
+
+그래도 마무리는 지어야 하니까 다음은 팝업 관련 작업을 하자
+
+참고로 이번 로그 다시 불러오는 코드는 아래와 같다
+
+```py
+def Load_logs_menu(self):
+    """
+    logs 폴더의 파일을 읽어와 UI에 표시합니다.
+    """
+    # Load Logs 프레임
+    settings_frame = ctk.CTkFrame(self.menu_bar.tab("Load Logs"))
+    settings_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+    # 프레임 4개 생성
+    failed_send_frame = ctk.CTkFrame(settings_frame, width=200, height=300)
+    failed_send_frame.grid(row=0, column=0, padx=10, pady=10)
+    filtered_frame = ctk.CTkFrame(settings_frame, width=200, height=300)
+    filtered_frame.grid(row=0, column=1, padx=10, pady=10)
+    receive_frame = ctk.CTkFrame(settings_frame, width=200, height=300)
+    receive_frame.grid(row=0, column=2, padx=10, pady=10)
+    send_frame = ctk.CTkFrame(settings_frame, width=200, height=300)
+    send_frame.grid(row=0, column=3, padx=10, pady=10)
+
+    # 각 프레임에 제목 추가
+    failed_send_label = ctk.CTkLabel(failed_send_frame, text="Failed Send Logs", font=(f"{self.font}", self.font_size, "bold"))
+    failed_send_label.pack(pady=5)
+    filtered_label = ctk.CTkLabel(filtered_frame, text="Filtered Logs", font=(f"{self.font}", self.font_size, "bold"))
+    filtered_label.pack(pady=5)
+    receive_label = ctk.CTkLabel(receive_frame, text="Receive Logs", font=(f"{self.font}", self.font_size, "bold"))
+    receive_label.pack(pady=5)
+    send_label = ctk.CTkLabel(send_frame, text="Send Logs", font=(f"{self.font}", self.font_size, "bold"))
+    send_label.pack(pady=5)
+
+    # 각 프레임에 리스트박스 추가
+    self.failed_send_listbox = CTkListbox(failed_send_frame, font=(f"{self.font}", self.font_size, "bold"))
+    self.failed_send_listbox.pack(pady=5, fill="both", expand=True)
+    self.filtered_listbox = CTkListbox(filtered_frame, font=(f"{self.font}", self.font_size, "bold"))
+    self.filtered_listbox.pack(pady=5, fill="both", expand=True)
+    self.receive_listbox = CTkListbox(receive_frame, font=(f"{self.font}", self.font_size, "bold"))
+    self.receive_listbox.pack(pady=5, fill="both", expand=True)
+    self.send_listbox = CTkListbox(send_frame, font=(f"{self.font}", self.font_size, "bold"))
+    self.send_listbox.pack(pady=5, fill="both", expand=True)
+
+    # 체크박스 추가
+    self.include_all_logs_checkbox = ctk.CTkCheckBox(
+        settings_frame,
+        text="Include all logs of the same date",
+        font=(f"{self.font}", self.font_size, "bold")
+    )
+    self.include_all_logs_checkbox.grid(row=1, column=0, columnspan=4, pady=10)
+
+    # Insert 버튼
+    insert_button = ctk.CTkButton(
+        settings_frame,
+        text="Insert",
+        command=self._insert_selected_log,
+        font=(f"{self.font}", self.font_size, "bold")
+    )
+    insert_button.grid(row=2, column=0, columnspan=4, pady=10)
+
+    # logs 폴더에서 파일 목록 읽기
+    self._load_log_files()
+
+def _load_log_files(self):
+    """
+    logs 폴더 내의 파일 목록을 읽어와 각 리스트박스에 표시합니다.
+    """
+    logs_dir = os.path.join(os.getcwd(), "logs")
+    if not os.path.exists(logs_dir):
+        print("logs 폴더가 존재하지 않습니다.")
+        return
+
+    # 각 폴더에서 파일 읽기
+    self._populate_listbox(os.path.join(logs_dir, "failed_send"), self.failed_send_listbox)
+    self._populate_listbox(os.path.join(logs_dir, "filtered"), self.filtered_listbox)
+    self._populate_listbox(os.path.join(logs_dir, "receive"), self.receive_listbox)
+    self._populate_listbox(os.path.join(logs_dir, "send"), self.send_listbox)
+
+def _populate_listbox(self, folder_path, listbox):
+    """
+    주어진 폴더의 파일 목록을 리스트박스에 추가합니다.
+    """
+    if not os.path.exists(folder_path):
+        listbox.insert("No logs found.")
+        return
+
+    for file in os.listdir(folder_path):
+        if file.endswith(".log"):
+            listbox.insert("end", file)  # 파일 이름만 리스트박스에 추가
+
+def _insert_selected_log(self):
+    """
+    선택된 로그 파일을 main_window의 리스트박스에 삽입합니다.
+    체크박스가 활성화된 경우, 동일한 날짜의 다른 로그도 함께 삽입합니다.
+    """
+    # 체크박스 상태 확인
+    include_all_logs = self.include_all_logs_checkbox.get()  # 체크박스 상태 가져오기
+
+    # 선택된 파일과 해당 리스트박스 확인
+    selected_failed_send = self.failed_send_listbox.get()
+    selected_filtered = self.filtered_listbox.get()
+    selected_receive = self.receive_listbox.get()
+    selected_send = self.send_listbox.get()
+
+    # 선택된 파일과 리스트박스를 매핑
+    selected_logs = {
+        "failed_send": selected_failed_send,
+        "filtered": selected_filtered,
+        "receive": selected_receive,
+        "send": selected_send,
+    }
+
+    # 선택된 파일이 없으면 종료
+    if not any(selected_logs.values()):
+        print("선택된 로그 파일이 없습니다.")
+        return
+
+    # 선택된 파일의 날짜 추출
+    selected_date = None
+    for log_type, file_name in selected_logs.items():
+        if file_name:
+            selected_date = file_name.split(".")[0]  # 파일 이름에서 날짜 추출
+            break
+
+    if not selected_date:
+        print("선택된 로그 파일에서 날짜를 추출할 수 없습니다.")
+        return
+
+    # logs 폴더 경로
+    logs_dir = os.path.join(os.getcwd(), "logs")
+
+    # main_window의 기존 로그 삭제 (리스트박스가 비어 있지 않은 경우에만 삭제)
+    if self.main_window.receive_log_grid.size() > 0:
+        self.main_window.receive_log_grid.delete("all")
+    if self.main_window.send_log_grid.size() > 0:
+        self.main_window.send_log_grid.delete("all")
+    if self.main_window.filtered_log_grid.size() > 0:
+        self.main_window.filtered_log_grid.delete("all")
+    if self.main_window.failed_send_log_grid.size() > 0:
+        self.main_window.failed_send_log_grid.delete("all")
+
+    # 동일한 날짜의 로그 삽입
+    log_types = ["failed_send", "filtered", "receive", "send"] if include_all_logs else [log_type]
+    for log_type in log_types:
+        folder_path = os.path.join(logs_dir, log_type)
+        file_path = os.path.join(folder_path, f"{selected_date}.log")
+
+        if os.path.exists(file_path):
+            try:
+                with open(file_path, "r") as log_file:
+                    log_content = log_file.readlines()
+                target_listbox = getattr(self.main_window, f"{log_type}_log_grid", None)
+                if target_listbox:
+                    for line in log_content:
+                        target_listbox.insert("end", line.strip())
+            except Exception as e:
+                print(f"Error loading log file {file_path}: {e}")
+        else:
+            print(f"{log_type} 로그 파일이 존재하지 않습니다: {file_path}")
+```
