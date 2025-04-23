@@ -3607,3 +3607,245 @@ def _insert_selected_log(self):
         else:
             print(f"{log_type} 로그 파일이 존재하지 않습니다: {file_path}")
 ```
+
+## 2025-04-23, 23시 20분, 팝업창
+
+> 드디어 마지막 부품인 팝업창을 구현하는데 성공했다
+
+![Image](https://github.com/user-attachments/assets/d840db65-b882-4c7d-ab64-35eff20e9232)
+
+이제 거의 다 했으니 사용법이라던가 등등을 다 정리해서 영상으로 만들고 끝내도록 하자!
+
+는 내일 하고 일단 이번에 추가된 코드들은 다음과 같다
+
+### main_window.py
+
+`callback`으로 받아서 팝업창이 켜진 listbox에 따른 기능 구현
+
+```py
+def resend_selected(self, listbox_type):
+    """
+    선택된 로그를 다시 전송합니다.
+    """
+    # listbox_type에 따른 로그 그리드 선택
+    log_grid = None
+    if listbox_type == "Receive":
+        log_grid = self.receive_log_grid
+    elif listbox_type == "Send":
+        log_grid = self.send_log_grid
+    elif listbox_type == "Failed":
+        log_grid = self.failed_send_log_grid
+    elif listbox_type == "Filtered":
+        log_grid = self.filtered_log_grid
+    
+    if not log_grid:
+        print(f"Invalid listbox type: {listbox_type}")
+        return
+
+    # 선택된 항목들 가져오기
+    selected_items = log_grid.get()
+    if not selected_items:
+        print("선택된 항목이 없습니다.")
+        return
+
+    # TCP 연결 확인
+    if not self.tcp_controller.device2_started or not self.tcp_controller.client:
+        error_message = "TCP 연결이 되어있지 않습니다."
+        print(error_message)
+        trigger_alarm(error_message)
+        return
+
+    # 선택된 각 항목을 TCP를 통해 전송
+    success_count = 0
+    failed_count = 0
+    
+    for item in selected_items:
+        if self.tcp_controller.send_recieved_data(item):
+            success_count += 1
+        else:
+            failed_count += 1
+
+    # 전송 결과 출력
+    result_message = f"전송 완료: {success_count}개 성공, {failed_count}개 실패"
+    print(result_message)
+    if failed_count > 0:
+        trigger_alarm(result_message)
+
+def deselect_all(self, listbox_type):
+    """
+    해당 리스트박스의 모든 선택을 해제합니다.
+    """
+    # listbox_type에 따른 로그 그리드 선택
+    log_grid = None
+    if listbox_type == "Receive":
+        log_grid = self.receive_log_grid
+    elif listbox_type == "Send":
+        log_grid = self.send_log_grid
+    elif listbox_type == "Failed":
+        log_grid = self.failed_send_log_grid
+    elif listbox_type == "Filtered":
+        log_grid = self.filtered_log_grid
+    
+    if not log_grid:
+        print(f"Invalid listbox type: {listbox_type}")
+        return
+
+    # 모든 선택 해제
+    log_grid.deactivate("all")
+    print(f"{listbox_type} - 모든 선택이 해제되었습니다.")
+
+def select_all(self, listbox_type):
+    """
+    해당 리스트박스의 모든 항목을 선택합니다.
+    """
+    # listbox_type에 따른 로그 그리드 선택
+    log_grid = None
+    if listbox_type == "Receive":
+        log_grid = self.receive_log_grid
+    elif listbox_type == "Send":
+        log_grid = self.send_log_grid
+    elif listbox_type == "Failed":
+        log_grid = self.failed_send_log_grid
+    elif listbox_type == "Filtered":
+        log_grid = self.filtered_log_grid
+    
+    if not log_grid:
+        print(f"Invalid listbox type: {listbox_type}")
+        return
+
+    # 항목이 있는지 확인
+    if log_grid.size() == 0:
+        print(f"{listbox_type} - 선택할 항목이 없습니다.")
+        return
+
+    # 모든 항목 선택
+    log_grid.activate("all")
+    print(f"{listbox_type} - 모든 항목이 선택되었습니다.")
+
+def send_all(self, listbox_type):
+    """
+    해당 리스트박스의 모든 로그를 전송합니다.
+    """
+    # listbox_type에 따른 로그 그리드 선택
+    log_grid = None
+    if listbox_type == "Receive":
+        log_grid = self.receive_log_grid
+    elif listbox_type == "Send":
+        log_grid = self.send_log_grid
+    elif listbox_type == "Failed":
+        log_grid = self.failed_send_log_grid
+    elif listbox_type == "Filtered":
+        log_grid = self.filtered_log_grid
+    
+    if not log_grid:
+        print(f"Invalid listbox type: {listbox_type}")
+        return
+
+    # 모든 항목 가져오기
+    all_items = log_grid.get("all")
+    if not all_items:
+        print(f"{listbox_type} - 전송할 항목이 없습니다.")
+        return
+
+    # TCP 연결 확인
+    if not self.tcp_controller.device2_started or not self.tcp_controller.client:
+        error_message = "TCP 연결이 되어있지 않습니다."
+        print(error_message)
+        trigger_alarm(error_message)
+        return
+
+    # 모든 항목을 TCP를 통해 전송
+    success_count = 0
+    failed_count = 0
+    
+    for item in all_items:
+        if self.tcp_controller.send_recieved_data(item):
+            success_count += 1
+        else:
+            failed_count += 1
+
+    # 전송 결과 출력
+    result_message = f"전체 전송 완료: {success_count}개 성공, {failed_count}개 실패"
+    print(result_message)
+    if failed_count > 0:
+        trigger_alarm(result_message)
+```
+
+### listbox에 로그가 들어와 있을 시에 우클릭 안 눌리는 부분 해결
+
+```py
+def insert(self, index, option, update=True, **args):
+    """add new option in the listbox"""
+    # ...existing code...
+    
+    # 버튼 생성 및 설정
+    self.buttons[index] = customtkinter.CTkButton(
+        self,
+        text=option,
+        fg_color=self.button_fg_color,
+        anchor=self.justify,
+        text_color=self.text_color,
+        font=self.font,
+        hover_color=self.hover_color,
+        **args,
+    )
+    self.buttons[index].configure(command=lambda num=index: self.select(num))
+    
+    # 우클릭 이벤트를 버튼에도 바인딩
+    if hasattr(self, '_right_click_command'):
+        self.buttons[index].bind('<Button-3>', self._right_click_command)
+    
+    # ...existing code...
+
+def bind(self, key, func, add="+"):
+    """
+    이벤트 바인딩을 처리합니다.
+    """
+    # 우클릭 이벤트인 경우 저장
+    if key == "<Button-3>":
+        self._right_click_command = func
+        # 기존 버튼들에도 우클릭 이벤트 바인딩
+        for button in self.buttons.values():
+            button.bind(key, func, add=add)
+    
+    super().bind(key, func, add=add)
+    self._parent_frame.bind(key, func, add=add)
+    self._parent_canvas.bind(key, func, add=add)
+```
+
+이벤트 키를 아예 바인딩 해서 `listbox`든 `log`든 우클릭 했을 시에 팝업창이 뜰 수 있게 했다
+
+### 로그 불러올 때 시간 제거
+
+```py
+# 동일한 날짜의 로그 삽입
+log_types = ["failed_send", "filtered", "receive", "send"] if include_all_logs else [log_type]
+for log_type in log_types:
+    folder_path = os.path.join(logs_dir, log_type)
+    file_path = os.path.join(folder_path, f"{selected_date}.log")
+
+    if os.path.exists(file_path):
+        try:
+            with open(file_path, "r", encoding='utf-8') as log_file:
+                log_content = log_file.readlines()
+            target_listbox = getattr(self.main_window, f"{log_type}_log_grid", None)
+            if target_listbox:
+                for line in log_content:
+                    # 빈 줄 건너뛰기
+                    if not line.strip():
+                        continue
+                    # 시간 정보 제거 ([HH:MM:SS] 형식 제거)
+                    if ']' in line:
+                        message = line.split(']')[1].strip()
+                        target_listbox.insert("end", message)
+                    else:
+                        target_listbox.insert("end", line.strip())
+        except Exception as e:
+            print(f"Error loading log file {file_path}: {e}")
+    else:
+        print(f"{log_type} 로그 파일이 존재하지 않습니다: {file_path}")
+```
+
+이전에 썼던 로그를 불러온다고 했을 때에 시간 정보가 포함될 때가 많아서 제거하였다
+
+또.. 뭔가를 했었는데 기억이..
