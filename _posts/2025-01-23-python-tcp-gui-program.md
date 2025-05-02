@@ -3853,3 +3853,13 @@ for log_type in log_types:
 ## 2025-04-27, 18시 18분, 끝
 
 영상 제작중..
+
+## 2025-05-03, 00시 25분, 영상 소리 없는 버전 제작 끝!
+
+으아 처음하는 영상작업이라 그런지 되게 어렵네요
+
+![Image](https://github.com/user-attachments/assets/0a660e26-9f6d-4f48-a323-97c92a64692b)
+
+[유튜브 링크](https://youtu.be/bTuRKLXPE38)
+
+일단 소리 없는 영상은 끝!
