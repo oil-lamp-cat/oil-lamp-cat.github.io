@@ -2,7 +2,7 @@
 title: "[Reversing] Crackmes.one 문제 풀어보기 - Level 1"
 date: 2025-05-25 21:44:00 +09:00
 categories: [windows, crackmes.one, hacking]
-tags: [crackmes.one]
+tags: [reversing]
 pin: true
 ---
 
