@@ -624,3 +624,11 @@ wget https://mediafilez.forgecdn.net/files/5772/682/Necronomicon-Fabric-1.6.0%2B
 ## 2025-01-24 끝 2차
 
 다듬기까지 끝
+
+## 메우 늦은 백업... (2025-07-29)
+
+![ㅠㅠ](https://github.com/user-attachments/assets/c19ee2d7-e9c1-4d92-b1ab-aeb650bb6f4f)
+
+정말 오랜만에 마인크래프트 서버 토큰 사용일이 지나 중지되었을 것이라 생각해 내용물만 잠깐 켜서 돈 내고 가져올까 하였으나.. 슬프게도 내용물이 통째로 없어졌다.
+
+다들 백업 꼭 해놓으시길 바란다.
