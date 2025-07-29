@@ -1,5 +1,5 @@
 ---
-title: "[아이폰] 백업 복구 실패기"
+title: "[아이폰] 백업 복구 실패기 -> 성공기"
 date: 2025-4-29 12:34:15 +09:00
 categories: [iphone]
 tags: [backup, restore]
