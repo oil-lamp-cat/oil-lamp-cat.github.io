@@ -91,18 +91,33 @@ tail_includes:
         {{ content }}
       </div>
 
-      <script>
-        function unlockPost() {
-          const input = document.getElementById("post-password").value;
-          const correct = "{{ page.password }}"; // Front Matter의 password 값
-          if (input === correct) {
-            document.getElementById("locked-content").style.display = "none";
-            document.getElementById("real-content").style.display = "block";
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const btn = document.getElementById("unlock-btn");
+        const input = document.getElementById("post-password");
+        const locked = document.getElementById("locked-content");
+        const real = document.getElementById("real-content");
+        const wrong = document.getElementById("wrong-pass");
+
+        btn.addEventListener("click", function() {
+          const correct = "{{ page.password }}";
+          if (input.value === correct) {
+            locked.style.display = "none";
+            real.style.display = "block";
+            wrong.style.display = "none";
           } else {
-            document.getElementById("wrong-pass").style.display = "block";
+            wrong.style.display = "block";
           }
-        }
-      </script>
+        });
+
+        // 엔터 눌러도 확인 가능
+        input.addEventListener("keypress", function(e) {
+          if (e.key === "Enter") {
+            btn.click();
+          }
+        });
+      });
+    </script>
     {% else %}
       {{ content }}
     {% endif %}
