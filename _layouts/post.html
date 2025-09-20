@@ -92,32 +92,43 @@ tail_includes:
       </div>
 
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const btn = document.getElementById("unlock-btn");
-        const input = document.getElementById("post-password");
-        const locked = document.getElementById("locked-content");
-        const real = document.getElementById("real-content");
-        const wrong = document.getElementById("wrong-pass");
+  document.addEventListener("turbo:load", function() {
+    // 버튼, 입력창 등 필요한 모든 요소를 변수로 선언합니다.
+    const btn = document.getElementById("unlock-btn");
+    const input = document.getElementById("post-password");
+    const locked = document.getElementById("locked-content");
+    const real = document.getElementById("real-content");
+    const wrong = document.getElementById("wrong-pass");
 
-        btn.addEventListener("click", function() {
-          const correct = "{{ page.password }}";
-          if (input.value === correct) {
-            locked.style.display = "none";
-            real.style.display = "block";
-            wrong.style.display = "none";
-          } else {
-            wrong.style.display = "block";
-          }
-        });
+    // 만약 페이지에 비밀번호 입력창이 없다면(btn이 null), 아무것도 하지 않고 종료합니다.
+    if (!btn) {
+      return;
+    }
 
-        // 엔터 눌러도 확인 가능
-        input.addEventListener("keypress", function(e) {
-          if (e.key === "Enter") {
-            btn.click();
-          }
-        });
-      });
-    </script>
+    // "확인" 버튼을 클릭했을 때 실행될 함수입니다.
+    const unlock = function() {
+      const correct = "{{ page.password }}"; // 포스트의 비밀번호를 가져옵니다.
+      if (input.value === correct) {
+        // 비밀번호가 맞으면
+        locked.style.display = "none";  // 입력창을 숨기고
+        real.style.display = "block";   // 실제 내용을 보여줍니다.
+        wrong.style.display = "none";
+      } else {
+        // 비밀번호가 틀리면
+        wrong.style.display = "block"; // "비밀번호가 틀렸습니다" 메시지를 보여줍니다.
+      }
+    };
+
+    btn.addEventListener("click", unlock);
+
+    // 입력창에서 엔터 키를 눌렀을 때도 확인 버튼을 누른 것과 같이 동작합니다.
+    input.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        unlock();
+      }
+    });
+  });
+</script>
     {% else %}
       {{ content }}
     {% endif %}
