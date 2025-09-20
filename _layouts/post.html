@@ -16,13 +16,11 @@ tail_includes:
     <h1 data-toc-skip>{{ page.title }}</h1>
 
     <div class="post-meta text-muted">
-      <!-- published date -->
       <span>
         {{ site.data.locales[lang].post.posted }}
         {% include datetime.html date=page.date tooltip=true lang=lang %}
       </span>
 
-      <!-- lastmod date -->
       {% if page.last_modified_at and page.last_modified_at != page.date %}
         <span>
           {{ site.data.locales[lang].post.updated }}
@@ -48,7 +46,6 @@ tail_includes:
       {% endif %}
 
       <div class="d-flex justify-content-between">
-        <!-- author(s) -->
         <span>
           {% if page.author %}
             {% assign authors = page.author %}
@@ -70,12 +67,9 @@ tail_includes:
           </em>
         </span>
 
-        <!-- read time -->
         {% include read-time.html content=content prompt=true lang=lang %}
       </div>
-      <!-- .d-flex -->
     </div>
-    <!-- .post-meta -->
   </header>
 
   <div class="content">
@@ -96,7 +90,6 @@ tail_includes:
   </div>
 
   <div class="post-tail-wrapper text-muted">
-    <!-- categories -->
     {% if page.categories.size > 0 %}
       <div class="post-meta mb-3">
         <i class="far fa-folder-open fa-fw me-1"></i>
@@ -107,7 +100,6 @@ tail_includes:
       </div>
     {% endif %}
 
-    <!-- tags -->
     {% if page.tags.size > 0 %}
       <div class="post-tags">
         <i class="fa fa-tags fa-fw me-1"></i>
@@ -142,22 +134,10 @@ tail_includes:
 
       {% include post-sharing.html lang=lang %}
     </div>
-    <!-- .post-tail-bottom -->
   </div>
-  <!-- div.post-tail-wrapper -->
 
-  <script src="https://utteranc.es/client.js"
-        repo="oil-lamp-cat/oil-lamp-cat.github.io"
-        issue-term="pathname"
-        theme="github-dark"
-        crossorigin="anonymous"
-        async>
-  </script>
-</article>
-
-<script>
+  <script>
     document.addEventListener("turbo:load", function() {
-      console.log("Password script running!"); // 디버깅용 메시지
       const btn = document.getElementById("unlock-btn");
       const input = document.getElementById("post-password");
       const locked = document.getElementById("locked-content");
@@ -187,6 +167,14 @@ tail_includes:
         }
       });
     });
+  </script>
+
+  <script src="https://utteranc.es/client.js"
+        repo="oil-lamp-cat/oil-lamp-cat.github.io"
+        issue-term="pathname"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
   </script>
 
 </article>
