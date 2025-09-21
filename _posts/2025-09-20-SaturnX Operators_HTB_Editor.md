@@ -4,7 +4,7 @@ date: 2025-09-20 15:01:15 +09:00
 categories: [hacking, saturnx operators]
 tags: [Hack The Box]
 pin: true
-password: "0000"
+password: "09217320"
 ---
 
 ## 시작에 앞서
