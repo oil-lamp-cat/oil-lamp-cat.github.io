@@ -78,34 +78,44 @@ tail_includes:
     <!-- .post-meta -->
   </header>
 
+  <!-- 비밀번호 보호 기능 시작 -->
+  {% if page.password %}
+    <div id="password-protection" class="mb-4">
+      <div class="card border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px;">
+        <div class="card-body text-center text-white p-4">
+          <i class="fas fa-lock fa-2x mb-3"></i>
+          <h4 class="mb-3">🔐 보호된 게시글</h4>
+          <p class="mb-3">이 게시글을 보려면 비밀번호를 입력해주세요</p>
+          <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+              <input 
+                type="password" 
+                id="password-input" 
+                class="form-control mb-3" 
+                placeholder="비밀번호 입력"
+                style="border-radius: 25px; padding: 12px 20px;"
+              >
+              <button 
+                onclick="checkPassword()" 
+                class="btn btn-light btn-lg"
+                style="border-radius: 25px; padding: 10px 30px; font-weight: bold; color: #667eea;"
+              >
+                <i class="fas fa-key me-2"></i>확인
+              </button>
+            </div>
+          </div>
+          <div id="error-message" class="alert alert-danger mt-3" style="display: none; border-radius: 20px;">
+            <i class="fas fa-exclamation-triangle me-2"></i>비밀번호가 틀렸습니다!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="protected-content" style="display: none;">
+  {% endif %}
+
   <div class="content">
     {{ content }}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   </div>
 
   <div class="post-tail-wrapper text-muted">
@@ -159,11 +169,96 @@ tail_includes:
   </div>
   <!-- div.post-tail-wrapper -->
 
+  {% if page.password %}
+    </div> <!-- protected-content 닫기 -->
+  {% endif %}
+  <!-- 비밀번호 보호 기능 끝 -->
+
   <script src="https://utteranc.es/client.js"
         repo="oil-lamp-cat/oil-lamp-cat.github.io"
         issue-term="pathname"
         theme="github-dark"
         crossorigin="anonymous"
         async>
-</script>
+  </script>
+
+  <!-- 비밀번호 체크 스크립트 -->
+  {% if page.password %}
+  <script>
+    const correctPassword = "{{ page.password }}";
+    
+    function checkPassword() {
+      const input = document.getElementById('password-input').value;
+      const errorMsg = document.getElementById('error-message');
+      const passwordSection = document.getElementById('password-protection');
+      const protectedContent = document.getElementById('protected-content');
+      
+      if (input === correctPassword) {
+        // 성공 시 부드러운 전환 효과
+        passwordSection.style.transition = 'opacity 0.5s ease-out';
+        passwordSection.style.opacity = '0';
+        
+        setTimeout(() => {
+          passwordSection.style.display = 'none';
+          protectedContent.style.display = 'block';
+          protectedContent.style.opacity = '0';
+          protectedContent.style.transition = 'opacity 0.5s ease-in';
+          
+          setTimeout(() => {
+            protectedContent.style.opacity = '1';
+          }, 50);
+        }, 500);
+        
+        errorMsg.style.display = 'none';
+      } else {
+        // 실패 시 에러 메시지 및 애니메이션
+        errorMsg.style.display = 'block';
+        document.getElementById('password-input').value = '';
+        
+        // 입력창 흔들림 효과
+        const inputField = document.getElementById('password-input');
+        inputField.classList.add('shake-animation');
+        setTimeout(() => {
+          inputField.classList.remove('shake-animation');
+        }, 600);
+      }
+    }
+    
+    // 엔터 키 지원
+    document.getElementById('password-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        checkPassword();
+      }
+    });
+    
+    // CSS 애니메이션 추가
+    const style = document.createElement('style');
+    style.textContent = `
+      .shake-animation {
+        animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+        transform: translate3d(0, 0, 0);
+      }
+      
+      @keyframes shake {
+        10%, 90% { transform: translate3d(-1px, 0, 0); }
+        20%, 80% { transform: translate3d(2px, 0, 0); }
+        30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+        40%, 60% { transform: translate3d(4px, 0, 0); }
+      }
+      
+      #password-protection .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        transition: all 0.3s ease;
+      }
+      
+      #password-input:focus {
+        box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+        border-color: rgba(102, 126, 234, 0.5);
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+  {% endif %}
+
 </article>
