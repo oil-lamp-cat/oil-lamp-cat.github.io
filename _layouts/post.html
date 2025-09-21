@@ -96,7 +96,7 @@ tail_includes:
                 style="border-radius: 25px; padding: 12px 20px;"
               >
               <button 
-                onclick="checkPassword()" 
+                id="password-btn"
                 class="btn btn-light btn-lg"
                 style="border-radius: 25px; padding: 10px 30px; font-weight: bold; color: #667eea;"
               >
@@ -154,6 +154,7 @@ tail_includes:
       <div class="license-wrapper">
         {% if site.data.locales[lang].copyright.license.template %}
           {% capture _replacement %}
+        <a href="{{ site.baseurl }}/categories/{{ category | slugify | url_encode }}/">{{ category }}</a>
         <a href="{{ site.data.locales[lang].copyright.license.link }}">
           {{ site.data.locales[lang].copyright.license.name }}
         </a>
@@ -171,8 +172,11 @@ tail_includes:
 
   {% if page.password %}
     </div> <!-- protected-content 닫기 -->
+    
+    <!-- 비밀번호를 data attribute로 전달 -->
+    <script type="application/json" id="password-data">{"password": "{{ page.password }}"}</script>
+    <script src="{{ '/assets/js/password-protection.js' | relative_url }}"></script>
   {% endif %}
-  <!-- 비밀번호 보호 기능 끝 -->
 
   <script src="https://utteranc.es/client.js"
         repo="oil-lamp-cat/oil-lamp-cat.github.io"
@@ -181,84 +185,5 @@ tail_includes:
         crossorigin="anonymous"
         async>
   </script>
-
-  <!-- 비밀번호 체크 스크립트 -->
-  {% if page.password %}
-  <script>
-    const correctPassword = "{{ page.password }}";
-    
-    function checkPassword() {
-      const input = document.getElementById('password-input').value;
-      const errorMsg = document.getElementById('error-message');
-      const passwordSection = document.getElementById('password-protection');
-      const protectedContent = document.getElementById('protected-content');
-      
-      if (input === correctPassword) {
-        // 성공 시 부드러운 전환 효과
-        passwordSection.style.transition = 'opacity 0.5s ease-out';
-        passwordSection.style.opacity = '0';
-        
-        setTimeout(() => {
-          passwordSection.style.display = 'none';
-          protectedContent.style.display = 'block';
-          protectedContent.style.opacity = '0';
-          protectedContent.style.transition = 'opacity 0.5s ease-in';
-          
-          setTimeout(() => {
-            protectedContent.style.opacity = '1';
-          }, 50);
-        }, 500);
-        
-        errorMsg.style.display = 'none';
-      } else {
-        // 실패 시 에러 메시지 및 애니메이션
-        errorMsg.style.display = 'block';
-        document.getElementById('password-input').value = '';
-        
-        // 입력창 흔들림 효과
-        const inputField = document.getElementById('password-input');
-        inputField.classList.add('shake-animation');
-        setTimeout(() => {
-          inputField.classList.remove('shake-animation');
-        }, 600);
-      }
-    }
-    
-    // 엔터 키 지원
-    document.getElementById('password-input').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        checkPassword();
-      }
-    });
-    
-    // CSS 애니메이션 추가
-    const style = document.createElement('style');
-    style.textContent = `
-      .shake-animation {
-        animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
-        transform: translate3d(0, 0, 0);
-      }
-      
-      @keyframes shake {
-        10%, 90% { transform: translate3d(-1px, 0, 0); }
-        20%, 80% { transform: translate3d(2px, 0, 0); }
-        30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-        40%, 60% { transform: translate3d(4px, 0, 0); }
-      }
-      
-      #password-protection .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        transition: all 0.3s ease;
-      }
-      
-      #password-input:focus {
-        box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
-        border-color: rgba(102, 126, 234, 0.5);
-      }
-    `;
-    document.head.appendChild(style);
-  </script>
-  {% endif %}
 
 </article>
