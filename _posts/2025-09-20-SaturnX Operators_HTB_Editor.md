@@ -72,7 +72,7 @@ Easy라고는 하지만.. 내게 쉬울지는...
 
 ### 취약점에 대해
 
-- XWiki에는 관리자가 동적 콘텐츠를 생성할 수 있도록 지원하는 `스크립팅 매크로({{groovy}})`가 존재합니다. 이 기능은 서버 사이드에서 직접 코드를 실행하는 역할을 한다.
+- XWiki에는 관리자가 동적 콘텐츠를 생성할 수 있도록 지원하는 `스크립팅 매크로({{groovy}})`가 존재한다. 이 기능은 서버 사이드에서 직접 코드를 실행하는 역할을 한다.
 - 하지만 이 매크로를 관리자 인증 그런거 없이 게스트 접속 만으로(누구나) 요청을 보낼 수가 있다. `GET /xwiki/bin/view/Main/SolrSearchMacros?search=... (with embedded Groovy code)` 이런식으로 말이다.
 - `def query = "search=${params.search}" def result = evaluate(query)` 이런 식으로 어떤 내용이 들어오든지 검증을 하지 않았다는 것이다.
 
