@@ -1,7 +1,7 @@
 ---
-title: "[HTB] Editor (Easy)"
+title: "[HTB] Editor (Easy_Linux)"
 date: 2025-09-20 15:01:15 +09:00
-categories: [hacking, saturnx operators]
+categories: [hacking, saturnx operators, linux]
 tags: [Hack The Box]
 pin: true
 password: "09217320"
