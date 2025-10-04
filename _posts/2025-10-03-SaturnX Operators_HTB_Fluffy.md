@@ -6,6 +6,8 @@ tags: [Hack The Box]
 pin: true
 ---
 
+[OilLampCat has successfully pwned Fluffy Machine from Hack The Box](https://labs.hackthebox.com/achievement/machine/988787/662)
+
 ## 시작에 앞서
 
 ![Fluffy_windows](https://github.com/user-attachments/assets/6e680621-22c3-4925-af84-6adb58333ddc)
@@ -296,6 +298,284 @@ user는 `p.agila`이고 Hash는 `p.agila::FLUFFY:b6bd89...` 이라고한다.
 
 일단은 찾아보니 `Service Accounts`의 맴버로 속해있다. 근데 그래서?
 
-- 2025-10-04, userflag 못찾고 9시간 지난건 또 처음이네 으엑
+### Task 6 다음날
+
+오늘 시작하기에 앞서 혹시 하는 마음에 `Bloodhound-python`을 다시 실행시켜봤는데 생각지도 못한 문제가 있었다.
+
+![bloodhound for legacy](https://github.com/user-attachments/assets/6a30a5bb-8668-46b3-a136-73161820f1f2)
+
+바로 이번에 스캔을 할 때에 사용했던 `bloodhound-python`은 레거시 버전을 위한 것으로 이번에 내가 설치한 `bloodhound-CE` 버전과는 맞지 않는 스캔 도구였던 것이다.
+
+[BloodHound CE Tutorial: Find Active Directory Attacks Like a Red Teamer](https://www.youtube.com/watch?v=P2SV6bxxA0g)
+
+음.. 정확한 사용법을 위해서 좀 유튜브도 보고 github도 찾아보고 했는데
+
+[dirkjanm/BloodHound.py](https://github.com/dirkjanm/BloodHound.py/tree/bloodhound-ce)
+
+나는 sharphound를 이용하는 방법보다는 `bloodhound-ce`를 이용하는 편이 더 좋을 듯 한다.
+
+[kali/bloodhound-ce-python](https://www.kali.org/tools/bloodhound-ce-python/)
+
+설치방법은 위와 같이 간단하니 apt로 설치하면 된다.
+
+![bloodhound-ce-python](https://github.com/user-attachments/assets/06d042e9-6d14-423a-9c31-413276421c3a)
+
+진행하다보니 오류가 뜨기는 했다만.
+
+![bloodhound-ce](https://github.com/user-attachments/assets/2697d93a-17ee-44d2-9715-0915a5893c1a)
+
+일단 잘 나오기는 한다.
+
+![p.agila](https://github.com/user-attachments/assets/6aa8a16b-6136-40fe-8bb6-1f444c1863d7)
+
+이전 결과와 동일하게 `p.agila`계정은 `SERVICE ACCOUNT MANAGERS` 그룹에 속해있고 `SERVICE ACCOUNTS` 그룹에 모든 권한이 있다.
+
+![service accounts](https://github.com/user-attachments/assets/5f8169f4-6292-4ef0-a129-2a7be7dbecd9)
+
+이제 전과 같은 상황이라는 것을 확인할 수 있었고 그럼 이제 다시 `winrm_svc`를 찾아야 하는 이유에 관한 문제인데
+
+![gemini why](https://github.com/user-attachments/assets/a6553d2e-0441-48c5-9804-0649f0a5f816)
+
+아예 `.zip`파일을 gemini에게 보내주자 공격 경로에 대해 알려준다.
+
+사실 그냥 가이드 모드를 따라가고자 한다면 따라갈 수 있겠다만. 왜 굳이 `WINRM_SVC`냐고 한다면 이것이 원격 관리를 위한 계정이고 이를 얻어 `WinRM`을 통해 서버에 원격으로 접속할 수 있게 해준다고 한다.
+
+![winrm_svc search](https://github.com/user-attachments/assets/14d1eb12-fc31-46cd-987c-3563c7ef9402)
+
+음.. 찾아봐도 딱히 저 이름에 대한 내용은 없는거 같은데.. 그냥 `WinRM`을 사용하는 유저다 해서 이름을 저리 지은듯 하다. 마치 88번 포트면 http 8080이면 https 이런 느낌일까?
+
+![Task 7 clear](https://github.com/user-attachments/assets/9e7f08b7-22ba-4f9d-9c5d-7448d7b8cebd)
+
+### Task 8 _ User Flag
+
+![Task 8](https://github.com/user-attachments/assets/8f2b85e6-b956-426b-8819-8bcb05f6d05a)
+
+자 그럼 이제 실제로 `Winrm_svc` 유저에 접속해야겠지?
+
+![pagila to sa](https://github.com/user-attachments/assets/2d585c85-d111-4c36-9165-3c557684e510)
+
+먼저 `p.agila`를 `SERVICE ACCOUNTS`에 넣자.
+
+그리고 솔직히 이 다음에 어떻게 진행해야할지 전혀 감이 오지 않는다. 그냥 다음으로 진행하면 되는게 아닌가 했는데 아니더라..
+
+![why? how?](https://github.com/user-attachments/assets/f92ca80a-d0aa-4a74-964c-d8ad5d211f3b)
+
+그니까 결국 여러번 풀다보니 아 이 때에는 이렇게 진행해야하는구나! 하고 알게되는건가?
+
+![shadow Credentials](https://github.com/user-attachments/assets/d4aed364-8917-4ad3-8005-324f069e750e)
+
+음.. 난 진짜 인공지능 없었으면 이건 어떻게 풀었을지 몰라.
+
+...? 근데 내가 봤을 때에는 `Generic All` 아녔나?
+
+아! 이건 내가 해깔린게 맞다.
+
+일단 지금 `p.agila`는 원래 `SERVICE ACCOUNT MANAGER`에 속해 있었고 위 과정을 통해 `SERVICE ACCOUNTS`에 이미 들어온거다.
+
+그러니 이제 여기서 `Winrm_SVC`유저에 접근하기 위한 방법을 이용하면 되는 것이다!
+
+머리가 뜨거워지는구나...
+
+![after add sa](https://github.com/user-attachments/assets/626accc7-64b8-42f5-80cb-0a37cbf8a14a)
+
+그래서 아예 `SERVICE ACCOUNTS`에 계정을 추가한 후 다시 Bloodhound를 이용해 다시 정보를 얻어보니 위 사진과 같이 `p.agila`가 `SERVICE ACCOUNTS`의 계정에 추가되어있는 것을 알 수 있다. 그리고 여기서 우리가 찾고자 하는 `WinRM_SVC` 유저가 `GenericWrite`로 권한이 걸려있기에 그에 따른 취득 방법을 이용하면 되는 것이다!
+
+와.. 정말 멀리도 돌아왔다...
+
+자 그럼 이제 `Shadow Credentials`를 이용해 다시 한번 해시를 얻으러 가보자.
+
+![why not working](https://github.com/user-attachments/assets/35db53a2-d833-4dd6-9f75-bd4680b81d0c)
+
+아니 왜 자꾸 hash값이 없다고 이러는건지 모르겠다.. 애초에 `no identities foun in this certificate`가 뜨는 것도 그렇고 도대체 왜지?
+
+![claude](https://github.com/user-attachments/assets/0a7e6b4c-7346-44a4-8d07-613c35877101)
+
+찾아보다 claude가 시간 동기화를 해야한다는 말을 했다. 설마 이걸까..
+
+![not](https://github.com/user-attachments/assets/645b7c49-8362-4482-b272-94d73cb6477d)
+
+음....
+
+![why??????????](https://github.com/user-attachments/assets/f8cf169f-2392-4edb-984d-ebc9fa001149)
+
+진짜로 왜 안되는건데..
+
+![works!?](https://github.com/user-attachments/assets/b5b5d014-8ad2-41c2-94bf-62bb0835ac26)
+
+일단 성공했는데 참... 시간대가 문제였다니...
+
+![reason of works](https://github.com/user-attachments/assets/b75835d0-1c3d-42b5-9f2f-216ca8d19077)
+
+하나는 내 vm 칼리와 DC의 시간이 맞어야지 진행되는 문제였고.
+
+두번째는 자꾸 자동으로 인터넷 표준 시간과 서버가 자동으로 시간을 동기화 해버려서 불가능 했던것...
+
+그럼 다음으로 `evil-winrm`을 이용해 `winrm_svc`에 접속해보자.
+
+![did it...](https://github.com/user-attachments/assets/cd1072a7-f620-43f0-9ce3-040ccaeb4a25)
+
+와... 찾았다..
+
+그리고 이게 신기한것이 원래 PowerShell 명령어에서는 `ls`나 `cat`, `pwd`등을 쓸 수가 없는데 이 `evil-winrm`이라는 쉘이 평소에 사용하던 리눅스 명령어를 쓸 수 있게 만들어놨다.
+
+![Task 8 clear](https://github.com/user-attachments/assets/eb022cf4-41b3-4a63-9deb-74e9ef486e99)
 
 ## 권한 상승 (Privilege Escalation)
+
+이제 다음으론 root 권한 얻기다!
+
+### Task 9
+
+![Task 9](https://github.com/user-attachments/assets/21912be0-03ee-4833-8020-81b0afa0d674)
+
+`Service Accounts 그룹이 GenericWrite 권한으로 수정할 수 있고, 동시에 Cert Publishers 그룹에도 속해 있는 계정은 어떤 계정인가요?`
+
+![Task 9 blood](https://github.com/user-attachments/assets/73733eda-1570-491d-aef1-778ca291cc01)
+
+사실 Task 9 문제 자체는 쉽다 그냥 Path 지정해서 확인해보면 되니 말이다. 하지만 난 여기서 궁금해진게 왜 굳이? 라는거다. 왜 이번에 취득한 `Winrm_svc`가 아니라 `ca_svc`를 찾아야 하는거지?
+
+일단 내가 정확히 이해한 것 같지는 않은데 간단하게 인터넷을 돌아다니며 이해한 것은 지금 우리가 갖고 있는 이 `Winrm_SVC`에서 일단 먼저 정찰을 하며 취약점이 있는지 찾아보는게 먼저다. 그 때에 `커버로스팅(Kerberoasting)`과 같은 공격을 시도해 볼 수 있지만 이번 Fluffy 문제에서는 `AD CS(Active Directory Certificate Services)`의 경로를 통해 권한 상승이 가능하게 문제가 만들어져있다고 한다.
+
+![how to go up](https://github.com/user-attachments/assets/b4b7d5be-66a5-49b8-87ec-902ce6196414)
+
+위와 같은 느낌이라고 제미나이가 알려주던데 그렇다면 나는 이 Task 9번 문제를 풀기 전에 일단 취약점들이 있는지 부터를 찾아보는게 먼저일 듯 싶다.
+
+그리고 `winPEAS`를 이용해보려 했으나 자꾸 실패해서 일단은 밀어두고 다음으로 넘어가고자 한다.
+
+윈도우 쉽지 않네...
+
+[Hack The Box: Fluffy Walkthrough](https://www.youtube.com/watch?v=4_I657Mfk0k)
+
+그나마 위 유튜브를 보면서 왜 하필 CA인가 했는데 잘못 구성된 CA를 관리자 인증서로 바꿔버리는 걸로 진행해야 한단다.
+
+그리고 이를 이용하기 위해서는 ADCS가 있는지 확인해야한다.
+
+![adcs is there](https://github.com/user-attachments/assets/53b0d446-612a-4673-b837-062c2a3411d9)
+
+`nxc`를 이용해 ADCS가 존재하는 것을 확인했기에 우리는 그것을 사용중인 `ca_svc`유저에서 취약점을 찾아보도록 하자.
+
+방법은 위 `Winrm_svc`에서 했던 방식과 동일하다.
+
+![get ca_svc](https://github.com/user-attachments/assets/a9c5faf0-baa4-4e5c-93d4-6beb6e7ae5f4)
+
+이제 이것을 이용해서 다음 Task를 진행하면 된다.
+
+![Task 9 clear](https://github.com/user-attachments/assets/6f55ac5f-30ad-44be-95e5-0ae2c1feb333)
+
+### Task 10
+
+![Task 10](https://github.com/user-attachments/assets/16df082f-ccdd-4ccb-93b1-287416320170)
+
+`Active Directory 환경에서 인증서를 발급하는 인증 기관(CA)의 공통 이름(CN)은 무엇인가요?`
+
+위에서 `ca_svc`의 hash를 얻었으니 `certipy-ad`를 이용해서 취약점을 찾을 수 있다.
+
+![cerad re](https://github.com/user-attachments/assets/85227968-330f-4399-a271-3e0de9697c0f)
+
+실행 커맨드는 위와 같다.
+
+![vuln](https://github.com/user-attachments/assets/7030434f-6339-4a2f-a355-e895d54db135)
+
+결과의 마지막즘에 가면 빨간색으로 표시해 놓은 곳에 `ESC16`이라는 공격에 취약하다는 문구가 들어있다.
+
+[ESC16](https://github.com/ly4k/Certipy/wiki/06-%E2%80%90-Privilege-Escalation#esc16-security-extension-disabled-on-ca-globally)
+
+cve는 아니고 Certipy에서 코드를 붙여놓은듯 하다.
+
+Task 9의 답은 `CA Name`으로 나와있는 `fluffy-DC01-CA`다.
+
+![Task10 Clear](https://github.com/user-attachments/assets/6c2c222f-281f-4d1c-95f0-8a59455568f7)
+
+### Task 11
+
+![Task 11](https://github.com/user-attachments/assets/291a7f40-0e03-4f5a-9eab-d37e4d9188f6)
+
+`Fluffy에서 CA가 전역적으로 보안 확장이 비활성화된 상태로 잘못 구성되어 있습니다. 이것이 나타내는 ESC 취약점의 가짜 이름(별칭)은 무엇인가요?`
+
+이게 바로 우리가 찾았던 `ESC16`이다.
+
+![Task 11 clear](https://github.com/user-attachments/assets/e8a3f3c7-0d2a-43d5-8af8-8b67b860bb5a)
+
+### Task 12 _ Root Flag
+
+![Task 12](https://github.com/user-attachments/assets/5b2d4b70-181d-4e03-9961-dbdd5995f0b1)
+
+마지막은 이제 이 취약점을 이용해 루트 플래그를 따내는 건데..
+
+자 잘 자고 왔으니 다시 맑은 정신으로 진행하자!
+
+#### 1. UPN 스푸핑
+
+> 계정 정보 변경
+
+ESC16 공격은 인증기관(CA)를 속여 우리가 원하는 사용자의 인증서를 발급받는 작업이다.
+
+고로 `Ca_SVC`계정의 사용자 계정 이름(User Principal Name, UPN)을 잠시 `administrator`로 변경하자.
+
+![cant](https://github.com/user-attachments/assets/f8584e75-b4e7-46e0-adb1-5e4d6d5d6222)
+
+아 한번 끊고 시작하니 당연히 `p.agila`의 계정도 다시 연결시켜야 한다.
+
+![UPN spooping](https://github.com/user-attachments/assets/83689783-2464-45aa-87d8-ef9aab9819ee)
+
+자 이름을 바꾸는데 성공했다.
+
+#### 2. 관리자 인증서 요청
+
+이제 `Ca_SVC`의 이름이 잠시 `administrator`가 되었으니 바로 인증서를 발급받자.
+
+![관리자 인증서 요청](https://github.com/user-attachments/assets/dc5dcf08-5c9e-424d-a3c2-ad49b6860f77)
+
+성공이다. 그리고 여기서 생긴 `administrator.pfx`라는 파일이 바로 우리가 필요한 위조 관리자 신분증이다.
+
+#### 3. 관리자 계정의 NTLM 해시 탈취
+
+이제 바꿨던 `Ca_SVC`계정의 이름을 다시 원래대로 돌려놓고 해시를 받으면 되는데...
+
+![관리자 NTLM wrong](https://github.com/user-attachments/assets/e578281f-4e8a-4a68-917d-484239eb18f4)
+
+앵? 파일이 있는데 없다네?
+
+아 당연히 없다 ㅋㅋㅋ `administrator`여야 하는데 `administarator`라고 했으니 ㅋㅋㅋ 뒤 과정을 제대로 된 명령어로 다시 수행하자.
+
+![또 왜..](https://github.com/user-attachments/assets/08599ad8-88cd-4d59-97f8-f9d08f27eaaa)
+
+이번엔 `ciphertext integrity failure`라는데 다시 시도하니 됬다. 뭐였지?
+
+![NTLM 해시 탈취 완료](https://github.com/user-attachments/assets/0af32ec8-d27a-4532-8175-aff042a89470)
+
+진짜 나한테 왜 이래요.. 간떨어지게..
+
+#### 4. Root 플래그 먹으러 가자~
+
+해시도 있겠다 바~로 `evil-winrm`을 이용해 접속을 시도하자.
+
+그리고 참고로 `aad3b435b51404eeaad3b435b51404ee:8da83a3fa618b6e3a00e93f676c92a6e` 난 이거 전부 넣어서 접속을 시도했는데 그게 아니라 `:` 이거 뒤에것만 우리가 필요한 해시다.
+
+앞부분은 `LM(LAN Manager)`로 오래된 보안에 취약한 해시라고 한다.
+
+그리고 뒷부분은 `NT(NTLM)`으로 최신버전의 해시라고 한다.
+
+![Task 12 Clear](https://github.com/user-attachments/assets/d6fa252b-ffcf-485c-98d6-8cd720b74bd3)
+
+## 마치며
+
+![Fluffy has been Pwned!](https://github.com/user-attachments/assets/d240eeef-ddc5-4059-90b0-b756061a8a0f)
+
+와.. 진짜 세삼 그동안 내가 윈도우에 대해서는 너무 공부를 안했다는 생각이 든다. 그동안 wargame이나 ctf에서 나오는 문제들도 사실 다 리눅스다보니 윈도우? 일반인, 혹은 게이머나 쓰는 os 아닌가 하면서 별거 아니지 싶었었는데... 어우.. 이게 Easy라니..
+
+식사 시간 제외하고 어제 9시간 + 오늘 8시간 총 17시간이라..
+
+사실 내일부터 또 추석이라 모든게 세팅되어있는 본 컴퓨터를 못쓰기에 아무래도 조급했던 것도 있었다. 뭔가 시간에 쫒겨 이거 2일 안에 다 공부하고 끝까지 풀어야지 하는? 여유가 없었달까?
+
+그래도 풀다보니 다음번에는 그래도 좀 더 수월하게 풀수 있겠다는 생각이 든다.
+
+이번에 bloodhound 세팅으로 거의 3시간 잡아먹고 새로운 개념들을 하나씩 다 공부해가며 문제를 풀었더니 오래 걸릴 수 밖에 없었기도 하고 말이다.
+
+특히 진짜 다시 한번 느끼는거지만 머리아프고 막힐 때에는 잠시 접어두고 자고 오거나 쉬고 오는건 정말 좋은 선택이다. 애초에 oscp 시험때에 권유하기도 하니 말이다. 루트 플래그 얻기 전까지 최소 3시간씩 앉아서 뚫어져라 쳐다보고 왜 안되냐 하면서 문제풀다보니 지금 다시 기록을 읽어봐도 정리가 안되어있다는게 새삼 느껴진다. 나중에 다시 기록을 정갈하게 해야겠지.
+
+하여튼 Easy라곤 하지만 내겐 정말 어려운 문제였고 솔직히 이제와선 꽤나 재미있는? 혹은 색다른 문제여서 좋았다. 이번건 내가 온전히 이해하지 못한 부분이 한두곳이 아니라 발표를 할 수 있을지는 모르겠지만 이번에도 준비하면서 동시에 공부를 해야겠다.
+
+끝!
+
+![누군가에겐 놀림거리일 script kiddie는 내게는 먼 곳으로 가는 한발이다.](https://github.com/user-attachments/assets/dec12564-edcd-4009-aca4-abb046177ca6)

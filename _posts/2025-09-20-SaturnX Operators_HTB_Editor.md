@@ -232,3 +232,7 @@ chmod로 실행 권한을 주고(안해도 권한이 같더라는 이야기), `e
 ![Editor Pwned](https://github.com/user-attachments/assets/2cfb1e0e-79fe-475e-ac7b-f6d2cd029577)
 
 크~ 드디어 하나 또 해냈다! 근데 이번에는 어떻게 진행해야하는지 가이드가 없다보니 확실히 아침에 시작해서 이젠 밤이 되었다. 그래도 즐거우니 한잔해!
+
+[HTB_Editor_호롱고양이.pptx](https://github.com/user-attachments/files/22699395/HTB_Editor_.pptx)
+
+요건 발표했던 자료!
