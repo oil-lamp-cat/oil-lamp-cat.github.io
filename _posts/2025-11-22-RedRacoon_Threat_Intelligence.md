@@ -6,9 +6,14 @@ tags: [Threat Intelligence]
 pin: true
 ---
 
-(2025-11-24, 아래는 발표 자료. 하지만 뭔가 보고서 작성하면서 더 깊게 공부하게 될 듯한 느낌? 그리고 지금 내용은 뭐랄까... 문제풀이에 치중되어 적은 듯한 느낌이라 좀더 확실히 TI에 대해 알아보고 공부하면서 보고서를 작성해봐야겠다. 그래도 진짜 재밌었으니 한잔해!)
+> 2025-11-24, 아래는 발표 자료. 하지만 뭔가 보고서 작성하면서 더 깊게 공부하게 될 듯한 느낌? 그리고 지금 내용은 뭐랄까... 문제풀이에 치중되어 적은 듯한 느낌이라 좀더 확실히 TI에 대해 알아보고 공부하면서 보고서를 작성해봐야겠다. 그래도 진짜 재밌었으니 한잔해!
 
 [Red Raccoon_Threat Intelligence.pptx](https://github.com/user-attachments/files/23723835/Red.Raccoon_Threat.Intelligence.pptx)
+
+
+> 2025-11-28, 보고서를 완성했다! 내가 만든건 처음이기에 현직자들이 보는 보고서와는 차원이 다르게 미약할 것이다. 하지만 그럼에도 난 처음으로 누구의 도움도 없이 보고서를 만들어봤다. 물론 이번에도 당연히 실제 보고서들을 많이 찾아보며 만들긴 했지만 애시당초 ms word를 쓰는게 첨이기도 해서 꾸미거나 하진 못했다(공대생이라 그렇다는 나쁜 말은 쉿). 다시한번 문제를 만들어주신 redraccoon의 그루트 님께 감사를! 다른 문제들은 어떤게 나올지 기대가 된다!
+
+[RaccoonCoin CEO 사칭 피싱 및 공격자 인프라 역추적 보고서 _ Threat Intelligence Report _ 호롱고양이.pdf](https://github.com/user-attachments/files/23824987/RaccoonCoin.CEO._.Threat.Intelligence.Report._.pdf)
 
 ## 시작에 앞서
 
@@ -209,6 +214,14 @@ PGJyPgogICAgICBDRU8sIFJhY2Nvb25Db2luCiAgICA8L3A+CiAgPC9ib2R5Pgo8L2h0bWw+
 공격자는 추적을 피하기 위해 보안 메일 서비스(Tutanota)를 경유했음.
 
 으음... 일단 메일로 알 수 있는건 이정도인 듯 하고 이제 문제 페이지로 넘어가 진행해보자.
+
+> 2025-11-25
+
+이후에 보고서 작성하다 알아낸 거지만
+
+![emlreader](https://github.com/user-attachments/assets/3507f912-03ac-4553-baa7-fab92b845440)
+
+[emlreader](https://www.emlreader.com/)라는 사이트를 통해 훨씬 편하게 볼 수 있었다. 이런! 훨씬 깔끔하고 보기도 좋네..
 
 ## 문제 풀기 시작
 
@@ -599,6 +612,20 @@ private키가 노출되었다.
 
 ![13 done](https://github.com/user-attachments/assets/0a4328de-5492-444b-bd04-83151d58d915)
 
+> 2025-11-28 / 23:02
+
+![비번 불필요](https://github.com/user-attachments/assets/ec878962-5a4a-4680-bcd4-3513f368ecaf)
+
+이후 보고서 작성할 때 확인할 것이 있어 대시보드에 접근하고 했었는데 이후 그루트 님께서 아예 비밀번호를 없애시고 사실상 고정? 을 시키신 듯 하다.
+
+![next victims list](https://github.com/user-attachments/assets/5dce2634-8175-463d-8747-dd313556619c)
+
+아니 이것도 업데이트 됬네? 전에는 뭔가 css 다 깨진 형태였는데 이번에는 더 정리되어 잘 보인다. 보고서 고치러가야겠구만..
+
+![아무것도 없음](https://github.com/user-attachments/assets/ef33fd9c-e7dc-4c65-a6d2-b7c2e4ae52bd)
+
+그리고 첨 풀 때는 딱히 신경을 안 썼었는데 `redraccon_exfil_2025.zip`에는 아무 내용도 없다는 것.
+
 ### Ransomware Artifact #14
 
 ![Ransomware Artifact 14](https://github.com/user-attachments/assets/83e1f2ab-5503-4e62-9096-722a74d1f451)
@@ -630,3 +657,5 @@ private키가 노출되었다.
 ![next victim](https://github.com/user-attachments/assets/69ff79c1-9d96-41e9-9c0c-44b8e73213ab)
 
 아 참고로 다음 희생자들의 목록은 다음과 같다. 한국에 미국에 일본, 싱가폴까지 ㅋㅋㅋㅋ
+
+> 2025-11-28-11-17-FIN
