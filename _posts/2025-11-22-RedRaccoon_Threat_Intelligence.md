@@ -19,6 +19,8 @@ pin: true
 
 ![Threat Intelligence](https://github.com/user-attachments/assets/d92832d3-23dd-42a5-a33f-849916556fe3)
 
+[Red Raccoon - Threat Intelligence / CEO 사칭 내부 피싱 사건 - 공격자 인프라를 추적하라](https://ctf.redraccoon.kr/challenges#%EC%8B%A4%EC%A0%84%20Threat%20Intelligence%20%EC%B6%94%EC%A0%81%20%EC%B1%8C%EB%A6%B0%EC%A7%80-128)
+
 사실 지금까지 나는 공격하는 입장에서만 문제를 풀어왔었지 추적을 해본다는 것에 대해서는 공부를 해보거나 생각을 해보지 않았었다.
 
 그런데 이번에 시간이 좀 생기기도 했고 `Red Raccoon`커뮤니티에 재밌어보이는 문제가 있기에 한번 풀어보려고 한다. 물론 풀다가 끝가지 가지 못할 수도 있다만 그래도 한번 도전해보는게 어딘가.
