@@ -1,7 +1,7 @@
 ---
 title: "[HTB] Outbound (Easy_Linux)"
 date: 2025-11-02 12:55:43 +09:00
-categories: [hacking, saturnx operators, linux]
+categories: [hacking, saturnx operators, Linux]
 tags: [Hack The Box]
 pin: true
 password: "11021651"
