@@ -126,7 +126,7 @@ static은 403이 뜬다.
 
 [hongchee.log / 도메인 연결 및 서브 도메인이란](https://velog.io/@hongchee/%EB%8F%84%EB%A9%94%EC%9D%B8-%EC%97%B0%EA%B2%B0-%EB%B0%8F-%EC%84%9C%EB%B8%8C-%EB%8F%84%EB%A9%94%EC%9D%B8%EC%9D%B4%EB%9E%80)
 
-내가 도메인이나 서브도메인에 대한 지식이 없다보니 이 기회에 아예 좀 더 찾아보며 공부했다.
+추가적으로 나는 도메인이나 서브도메인에 대한 지식이 없다보니 이 기회에 아예 위 자료들을 참고하며 좀 더 알아보고 진행하였다.
 
 ![gemini 왈](https://github.com/user-attachments/assets/6f670bef-9990-440e-8040-6c3012260012)
 
