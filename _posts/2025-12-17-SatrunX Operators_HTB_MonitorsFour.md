@@ -7,6 +7,14 @@ pin: true
 password: "202512202248"
 ---
 
+![올해 끝](https://github.com/user-attachments/assets/f740c6cd-40ab-4f1e-91ac-61598cd670aa)
+
+올해 Saturnx Operators 끝!
+
+[HTB_MonitorsFour_호롱고양이.pptx](https://github.com/user-attachments/files/24291260/HTB_MonitorsFour_.pptx)
+
+발표도 6번이나!
+
 ![MonitorsFour clear](https://github.com/user-attachments/assets/a679d8fe-6b3d-4a83-a68a-04a20a52c704)
 
 ## 시작에 앞서
@@ -207,6 +215,10 @@ admin / wonderful1
 ```
 
 을 이용해 로그인에 성공했고
+
+![admin](https://github.com/user-attachments/assets/dd01a7db-ce63-45bc-aea3-18bcfe48ea2f)
+
+어드민 페널에서 이름을 발견할 수 있었고 그것을 이용해
 
 ![marcus](https://github.com/user-attachments/assets/ea4aeb23-8868-45da-8eb2-a4ee12077ccb)
 
