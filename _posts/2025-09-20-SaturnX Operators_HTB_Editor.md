@@ -4,12 +4,13 @@ date: 2025-09-20 15:01:15 +09:00
 categories: [hacking, saturnx operators, Linux]
 tags: [Hack The Box]
 pin: true
-password: "09217320"
 ---
 
 ## 시작에 앞서
 
 2025-09-20 시작, Active 머신이라 공개하면 안된다 하여 추후 다시 올릴 예정
+
+2025-12-29 이제 Active 해제!
 
 [Editor has been Pwned](https://labs.hackthebox.com/achievement/machine/988787/684)
 
