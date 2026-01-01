@@ -7,6 +7,8 @@ pin: true
 password: "20251229"
 ---
 
+[Congratulations OilLampCat! You are player #3770 to have solved Previous.](https://labs.hackthebox.com/achievement/machine/988787/701)
+
 ## 시작에 앞서
 
 ![Previous](https://github.com/user-attachments/assets/4d4313c7-aadb-4f71-b762-62d5e423ad7a)
@@ -212,10 +214,102 @@ Examples에서는 뭔가 다운받는게 있네?
 
 ![react2shell](https://github.com/user-attachments/assets/9282bf2a-bbb9-4fa7-9705-6e98531cb7c7)
 
-하지만 이건 실패 라고 한다. 요건 또 좀 알아봐야하려나? 아니면 진짜 너무 유명한거라 안되는 걸지도?
+하지만 이건 실패 라고 한다. 요건 또 좀 알아봐야하려나? 아니면 진짜 너무 유명한거라 요건 안되게 만들어 놓은 걸지도?
 
 일단 오늘은 여기까지!
 
 ## 권한 상승 (Privilege Escalation) 
 
+![sudo-l](https://github.com/user-attachments/assets/c54c7d85-b994-4f7e-b7e3-c8a4fab03f54)
+
+권한을 보아하니 `terraform` 이라는 친구가 루트 권한이 있다고 한다.
+
+`-chdir`로 작업 실행 디렉토리를 `/opt/examples`로 바꾸고 `apply` 한다는데.. 뭔지 함 봅시다.
+
+[테라폼(Terraform)이란? - 개념, 장점, 관리툴 by BTC_Dana](https://btcd.tistory.com/20)
+
+여기 세상 자세히 너무 잘 정리되어있으니 요것을 참고하여 읽어보고 오는 것을 추천한다.
+
+그리고 본인도 읽고 왔는데 와! 알송달송!
+
+[좌충우돌 Terraform 입문기 by 우아한기술블로그](https://techblog.woowahan.com/2646/)
+
+음.. 오케이 이걸 통해서 어느정도 이해 했으니 제미나이에게 물어보자구
+
+![about Terraform](https://github.com/user-attachments/assets/20ffe4cd-d903-4974-8bc4-c380938f71f9)
+
+역시 나라는 사람은 비유가 있어야 이해가 된단 말이야.
+
+그러면 우리는 지금 그 설계도(.tf) 파일을 만들어서 terraform을 통해 실행시키면 된다는 말씀?!
+
+![그냥 실행](https://github.com/user-attachments/assets/0e2ca2ea-47e5-431f-874f-cd3815ad74b2)
+
+그냥 실행해보면 당연히 `examples`파일이 없으니 오류가 날 것이고.
+
+보아하니 `Warning: Provider development overrides are in effect`라면서 다른곳 건들이지 말고 내가 지정한 폴더에 있는 파일 써라 라며 훈수둔다.
+
+그리고 그 위치는 바로 `/usr/local/go/bin`폴더.
+
+![but](https://github.com/user-attachments/assets/58661a06-d565-4b5d-b75a-a2bd70d1816f)
+
+그러나! 권한을 확인해보니 권한이 없다. 우린(jeremy)는 할 수 있는게 없어욥.
+
+그럼 뭘 해야할까? 바로? 설정파일 바꿔버리기.
+
+![폴더는 여기에!](https://github.com/user-attachments/assets/581d2e69-6cc6-4985-912d-cff43a432ddb)
+
+그리고 그 설정 파일은 바로 지금 있는 폴더에 `jeremy` 권한으로 있는 `terraformrc`. 게다가 예상했듯 설정 파일의 위치가 `/usr/local/go/bin`이다. 고로 바꿔치기 해버리자.
+
+![vim](https://github.com/user-attachments/assets/e309d928-1846-4a37-84be-8d0fe3765a2b)
+
+vim으로 바꿔치기 해버리고
+
+![왔다감](https://github.com/user-attachments/assets/324bc50f-978d-4408-87c6-b345d9d71357)
+
+이렇게 왔다감 코드를 생성해서 `/tmp/terraform-provider-examples` 폴더에 넣어버리면 준비 끝!
+
+~~혹시 몰라서 왔다감 코드는 바로 삭제시켰다는 안 비밀~~
+
+![어엇](https://github.com/user-attachments/assets/9d2a6895-cbda-4826-a178-afedbe35581e)
+
+어엇.. 오류 발생..?
+
+![일리가](https://github.com/user-attachments/assets/4b055478-ad28-43eb-b7ec-92396064d545)
+
+일리가 있나! 애초에 제미니 선생께서도 잘 짰다고 칭찬했는걸! (좀 다듬긴 했지만)
+
+코드가 실행되면 그 코드를 통해 `/tmp/rootbash`라는 루트로 우리를 올려줄 바이너리가 생기게 되고 거기에 정작 `terraform`에 대한 코드가 없기에 오류가 발생하는 것이다.
+
+하지만 우린 필요한건 다 얻었죠?
+
+![나 왜](https://github.com/user-attachments/assets/520d03e3-045a-4809-998d-884cb7d95cf2)
+
+나 왜 제레미?
+
+![아하](https://github.com/user-attachments/assets/246980cc-2fd8-4823-ad7f-541590eb18ff)
+
+아하? 근데 왜 -p 옵션이지? 지금 내가 만든 바이너리가 뭐길래? 아니 코드는 이해를 했는데 이해가 안가네.
+
+![아하2](https://github.com/user-attachments/assets/08ae4b83-688c-46cc-b969-1f699d61a89d)
+
+아 그니까 이건 코드의 이슈가 아니라 bash의 이슈였던 거네.
+
+![root](https://github.com/user-attachments/assets/8b25761e-7d56-4f19-85fd-93b37bb2335c)
+
+![flag](https://github.com/user-attachments/assets/7124c6e2-4d7f-46fd-9354-1b4cb2d0e083)
+
+성공!
+
+![점수](https://github.com/user-attachments/assets/1a40b7d3-1d94-45ca-83e8-6e21b56dfef8)
+
+이건 오히려 쉬웠달까?
+
 ## 마치며
+
+이제 Medium 난이도에 돌입했고 (아닌가? 전에 풀었던가?) 일단 이번 문제는 2일에 걸처 푸는데 성공했다.
+
+![Pwned](https://github.com/user-attachments/assets/addb853a-71a3-4fd1-861a-e5d1138eba43)
+
+그리고 날짜를 보면 알 수 있듯 2026년 1월 1일 새로운 해에 푼 첫 문제!
+
+뭔가 이젠 어릴 때와 같이 1월 1일의 벅참이나 기대감 같은건 많이 사라진 듯 하지만 그래도 다음 해에도 즐거운 해가 되어 아프지 않고 계속 이어나갈 수 있기를.
