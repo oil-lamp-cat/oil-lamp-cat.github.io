@@ -16,6 +16,11 @@ pin: true
 
 그리고 이 과정에서 VMware `중첩 가상화`를 이용해 진행하기로 했고 그를 위해 VMware 설정을 하는데 살짝 애를 먹기도 했기에 이후 혹시 다시 이 작업을 하게 된다면 또 찾을 일 없게 좀 정리해두고자 한다.
 
+- vmware (성공)
+- WinKex _ 윈도우 모드 (성공)
+- WinKex _ Seemless 모드 (성공)
+- WinKex _ 향상된 세션 모드 (실패)
+
 ## 중첩 가상화란?
 
 간단하게 중첩 가상화가 무엇인지 설명하자면, 내 PC (windows)에 VMware를 통해 가상환경을 이미 세팅해 두었는데 VM안에서 또 VM을 설치해버리는 것을 중첩 가상화이다.
@@ -238,8 +243,116 @@ sudo apt install -y kali-linux-default
 
 ### Win-Kex 윈도우 모드
 
-오늘은 일단 여기에서 끝 낼 출근해야혀..
+![winkex](https://github.com/user-attachments/assets/b5b04922-06c9-4554-900e-df1e0f8e7734)
+
+Kex의 윈도우 모드로 들어가기 위해서는 정말 간단하다.
+
+`kex --win -s` 
+
+(여기서 참고로 -s는 소리 나오게 해달라는 옵션)
+
+처음에는 비밀번호를 넣으라고 하는데 귀찮아서 kali로 넣었더니 6자리 이상으로 넣어야 했다.
+
+비밀번호 세팅이 끝나면 시작된다고 하는 말이 뜨고, 잠시뒤
+
+![잠시후](https://github.com/user-attachments/assets/c760186d-15e7-4c32-8ac5-30dbd0b74738)
+
+이렇게 검은 화면이 뜨며 윈도우와 kali 화면을 변경하기 위해서는 `F8`을 누르라고 한다.
+
+![Window mode](https://github.com/user-attachments/assets/8eb335e9-6984-4878-89d9-55cdd3993b96)
+
+그럼! 이렇게! 윈도우 모드로 뜨는데 이건 지금 전체화면 상태로 보이는거고
+
+![F8누르면](https://github.com/user-attachments/assets/247bf5c4-379c-4aeb-b4a4-a83f2f36e19b)
+
+이렇게 `F8`을 눌러서 윈도우 모드를 해제할 수 있다. 그리고 이거 진짜 vmware에서 칼리 연 것 처럼 완전 똑같은 GUI를 볼 수 있다.
+
+![게다가](https://github.com/user-attachments/assets/569837f6-efe7-4fe5-8cc9-42d8716f277e)
+
+게다가 `Full screen`을 선택해 해제하면 이렇게 창으로 볼 수도 있으니 vmware보다 이게 더 좋을지도? 하지만 그래도 따로 분리해 사용하려면 VMware가 좋을지도.
 
 ### Win-Kex Seemless 모드
 
+![Winkexseem](https://github.com/user-attachments/assets/d982b05c-ae2d-4534-8d61-ea15239dd201)
+
+이번에는 Win-Kex를 이용한 Seemless 모드로 사실상 이전과 거의 동일한 방식으로 진행한다.
+
+`kex --sl -s`
+
+근데 이상하게도?
+
+![안켜짐](https://github.com/user-attachments/assets/bec8fe2a-424d-489b-9dca-30a0ad25ed15)
+
+timeout이 난다. 그 이유가 뭘까?
+
+![공식](https://github.com/user-attachments/assets/e23a0969-218a-4713-a097-735b0e13e94f)
+
+공식 문서를 보면 알 수 있듯이 Seemless 모드에서는 이전과 다르게 `VCXsrv`가 필요한데 요게 Optional 이라고는 하지만 어째서인지 적어도 내 VM에서는 없으면 켜지지가 않았다.
+
+이것 말고도 방화벽 이슈 등이 있겠다만 일단 난 이 문제였다. 그래서 `VcXsrv`를 설치해주면?
+
+![안되는디](https://github.com/user-attachments/assets/109b11a4-a89d-4f96-84a4-bc78945fbbea)
+
+안된다.
+
+![아! 알았다!](https://github.com/user-attachments/assets/f44b0a44-de97-4e3b-9113-dbe9e7e6ea70)
+
+아! 알았다! 설치 후에 `XLaunch`를 눌러서 한번 세팅(그냥 쭉 Next 누르면 됨)을 진행해줘야 위와 같이 방화벽 관련 내용이 나오게 되고 이번에야말로 다시 시도하면?
+
+결국 이 방법으로도 안되긴 했는데 그게 VMWare의 이슈랄까..?
+
+그 `XLaunch`로 설정을 할 때에
+
+`Multiple windows` -> `start no client` -> `Disable access control`도 선택한 상태로 `kex --sl`을 입력하면
+
+![짜잔](https://github.com/user-attachments/assets/74a98a45-58d8-4197-b0b6-a97a2a9d9793)
+
+이렇게 잘 뜨는 것을 볼 수 있다! 만...
+
+![안 짜잔](https://github.com/user-attachments/assets/892c13f8-95a8-41bd-809b-79035bece1cb)
+
+잠시 뒤 완전히 실행되고 나면 윈도우 모드마냥 갑자기 뭐라뭐라 하면서 칼리 리눅스 전체 화면이 된다.
+
+이 때 `killall xfdesktop`을 입력해서 화면을 꺼버리면?!
+
+![짜잔2트](https://github.com/user-attachments/assets/7b3374fa-755f-4d62-a079-2ad060820699)
+
+짜자잔! 우리가 원하는 Seemless 모드를 실행할 수 있다!
+
+이걸로 우린 윈도우를 쓰면서 칼리의 터미널과 gui앱들을 모두 사용할 수 있게 된것!
+
+![크](https://github.com/user-attachments/assets/f1a4f752-4e84-4729-96e7-35c3ccf24c9e)
+
+크~ 정겨운 칼리 터미널 편안~
+
+좀 오류 있는건 VM문제가 아니라고 한다면 그냥 cron을 걸거나 간단한 스크립트 만들어서 끄면 될지도?
+
 ### Win-Kex 향상된 세션 모드
+
+![향상된 세션 모드](https://github.com/user-attachments/assets/61e0050b-4a01-496f-9690-13e663e3d136)
+
+향상된 세션 모드 같은 경우엔 윈도우 RDP를 이용하게 된다.
+
+![확인 누르면](https://github.com/user-attachments/assets/e71a3757-92e8-408a-95f0-f554f6e9c383)
+
+확인 누르면 위처럼 ID 확인 못하는데 정말 정말로 연결 할거야? 하고 묻는데 당연히 예
+
+![엄..](https://github.com/user-attachments/assets/db0782be-1bf7-420b-aa29-b723566629fe)
+
+엄... 아니죠? 또?
+
+아니 맞다. 이거 오류...
+
+![으음..](https://github.com/user-attachments/assets/9aea5a41-c0ae-4e6d-b099-b646f964b13f)
+
+이건... 어쩔 수 없이 공식을 따라하시길...
+
+진짜 별걸 다 해봤는데도 안되는거 보니까 VMware의 이슈가 맞는거 같은데. IP 설정을 해줘도 이 상태고 이건 모르겠다.
+
+## 마치며
+
+사실 진짜 이 방법 외에도 윈도우에 설치하는게 아니라면 Vbox나 Docker Container(난 안해봤다.), USB 라이브 부팅, 모바일 부팅 등이 있지만 일단 기본적으로는 위 두 방법만으로도 충분하다고 생각한다.
+
+시작이 반이라고 사실 HTB를 진행하기에 앞서 솔직히 Kali 설치하는게 가장 내게는 큰 문제였었는데 그렇기에 다른 사람들이 처음 시작할 때 좀 더 편하고 쉽게 할 수 있도록 이렇게 한번 작성해 보았다.
+
+Happy Hacking! 즐거운 해킹 되길!
