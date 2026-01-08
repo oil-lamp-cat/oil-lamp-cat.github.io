@@ -1,8 +1,9 @@
 ---
-title: "[HTB] Hack The Box를 위한 kali 윈도우 설치에 관하여 (feat. 중첩 가상화)"
+title: "[HTB] Hack The Box를 위한 kali 윈도우 설치에 관하여 (feat. 중첩 가상화, WSL2, Win-kex)"
 date: 2026-1-6 21:50:00 +09:00
 categories: [hacking, Kali Linux]
 tags: [HTB, Kali Linux]
+pin: true
 ---
 
 ## 시작에 앞서
@@ -191,7 +192,7 @@ kali 설치를 할 때에는 굳이 공식 사이트로 가는게 아니라 `윈
 
 ![이렇게](https://github.com/user-attachments/assets/0ff58f05-8a34-449c-a8d3-eda3dbe6b21a)
 
-이렇게 처음 기본 유저 네임과 페스워드를 입력해야한다.
+이렇게 처음 `Default User name`과 `Password`를 입력해야한다.
 
 ![kali 설치](https://github.com/user-attachments/assets/07367c4d-facb-4432-8678-79bd8887c86b)
 
@@ -211,7 +212,7 @@ sudo apt install -y kali-linux-default
 
 을 통해 설치해주면 된다!
 
-아 그리고 요건 오류? 때문인지 모르겠는데 함 설치 다 하고 나면 WSL 껐다 켜주기.
+아 그리고 요건 오류? 때문인지 모르겠는데 바로 설치 후에는 nmap이 안된 적이 있었는데 함 설치 다 하고 나면 WSL 껐다 켜주기.
 
 ## WSL2에 Win-Kex로 GUI이용하기
 
@@ -238,3 +239,7 @@ sudo apt install -y kali-linux-default
 ### Win-Kex 윈도우 모드
 
 오늘은 일단 여기에서 끝 낼 출근해야혀..
+
+### Win-Kex Seemless 모드
+
+### Win-Kex 향상된 세션 모드
