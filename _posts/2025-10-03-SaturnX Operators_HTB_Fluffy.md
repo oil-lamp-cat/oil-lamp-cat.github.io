@@ -3,7 +3,6 @@ title: "[HTB] Fluffy (Easy_Windows)"
 date: 2025-10-03 14:17:43 +09:00
 categories: [hacking, saturnx operators, windows]
 tags: [Hack The Box]
-pin: true
 ---
 
 [OilLampCat has successfully pwned Fluffy Machine from Hack The Box](https://labs.hackthebox.com/achievement/machine/988787/662)

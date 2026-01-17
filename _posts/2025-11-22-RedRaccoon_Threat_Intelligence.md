@@ -3,7 +3,6 @@ title: "[Red Raccoon] Threat Intelligence - CEO 사칭 내부 피싱 사건 • 
 date: 2025-11-22 09:14:43 +09:00
 categories: [hacking, Red Raccoon]
 tags: [Threat Intelligence]
-pin: true
 ---
 
 > 2025-11-24, 아래는 발표 자료. 하지만 뭔가 보고서 작성하면서 더 깊게 공부하게 될 듯한 느낌? 그리고 지금 내용은 뭐랄까... 문제풀이에 치중되어 적은 듯한 느낌이라 좀더 확실히 TI에 대해 알아보고 공부하면서 보고서를 작성해봐야겠다. 그래도 진짜 재밌었으니 한잔해!

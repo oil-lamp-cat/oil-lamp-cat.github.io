@@ -3,7 +3,6 @@ title: "[HTB] TombWatcher (Medium_Windows)"
 date: 2025-10-19 13:26:43 +09:00
 categories: [hacking, saturnx operators, windows]
 tags: [Hack The Box]
-pin: true
 ---
 
 [TombWatcher has been Pwned!](https://labs.hackthebox.com/achievement/machine/988787/664)

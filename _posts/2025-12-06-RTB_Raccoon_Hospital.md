@@ -3,7 +3,6 @@ title: "[Red Raccoon] Raccoon Hospital (Easy)"
 date: 2025-12-06 16:19:43 +09:00
 categories: [hacking, Red Raccoon, Linux]
 tags: [RTB]
-pin: true
 ---
 
 ## 시작에 앞서

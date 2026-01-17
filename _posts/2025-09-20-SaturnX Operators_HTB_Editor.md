@@ -3,7 +3,6 @@ title: "[HTB] Editor (Easy_Linux)"
 date: 2025-09-20 15:01:15 +09:00
 categories: [hacking, saturnx operators, Linux]
 tags: [Hack The Box]
-pin: true
 ---
 
 ## 시작에 앞서
