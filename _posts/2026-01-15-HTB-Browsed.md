@@ -189,15 +189,15 @@ by. 365kim](https://365kim.tistory.com/169)
 
 ![실행](https://github.com/user-attachments/assets/eac4c3a1-5328-4b38-b926-2f4e618541a8)
 
-1. larry의 계정으로 `extention_tool.py`를 한번 실행시키자.
+> 1. larry의 계정으로 `extention_tool.py`를 한번 실행시키자.
 
 ![binbash](https://github.com/user-attachments/assets/fd88de12-bb26-4210-9dba-07874358f8d5)
 
-2. python 권한 상승 파일을 만들어 컴파일해 `.pyc` 파일을 만들자.
+> 2. python 권한 상승 파일을 만들어 컴파일해 `.pyc` 파일을 만들자.
 
 ![헤더 변조](https://github.com/user-attachments/assets/98085d7e-534a-4d7a-963e-fe36460e3eaf)
 
-3. 그 후 정상 헤더를 가져와 내가 만든 악성 코드에 넣으면 된다. 그리고 난 그건 파이썬 코드로 짜서 진행했다.
+> 1. 그 후 정상 헤더를 가져와 내가 만든 악성 코드에 넣으면 된다. 그리고 난 그건 파이썬 코드로 짜서 진행했다.
 
 그리고 다시 sudo를 넣어서 extention_tool.py를 실행 하면?
 
