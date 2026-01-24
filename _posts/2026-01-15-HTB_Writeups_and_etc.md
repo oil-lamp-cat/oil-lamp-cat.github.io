@@ -24,6 +24,7 @@ pin: true
 | 문제명 (Name) | 난이도 (Difficulty) | OS | 활성 상태 | 바로가기 |
 |:---|:---:|:---:|:---|:---:|
 |**Starting Point Tier 0**|Very Easy|Linux, Windows|Free|[Link](https://oil-lamp-cat.github.io/posts/HTB-StartingPoint-Tier-0-Foundations/)|
+|**Starting Point Tier 1**|Very Easy|Linux, Windows|Free|[Link](https://oil-lamp-cat.github.io/posts/HTB-StartingPoint-Tier-1-Fundamental_Exploitation/)|
 | **Cap** | Easy | Linux | Retired / Free | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_CAP/) |
 | **Editor** | Easy | Linux | Retired / VIP | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_Editor/) |
 | **Fluffy** | Easy | Windows | Retired / VIP | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_Fluffy/) |

@@ -1,7 +1,7 @@
 ---
 title: "[HTB] StartingPoint - Foundations 문제 풀이 모음"
 date: 2026-01-17 14:53:00 +09:00
-categories: [hacking, saturnx operators, Linux, Windows, Easy]
+categories: [hacking, saturnx operators, Linux, Windows, Very Easy]
 tags: [Hack The Box]
 ---
 
