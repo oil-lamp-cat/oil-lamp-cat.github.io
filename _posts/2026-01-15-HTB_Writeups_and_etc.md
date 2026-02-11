@@ -34,8 +34,7 @@ pin: true
 | **MonitorsFour** | Easy | Windows | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_MonitorsFour/) |
 | **Previous** | Medium | Linux | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_EscapeTwo/) |
 | **Browsed** | Medium | Linux | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/HTB-Browsed/) |
-
-뭐야 나 medium 좀 풀긴 했네? 처음이 아니였어?
+| **Facts** (작성중)| Easy | Linux | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/HTB-Facts/) |
 
 ## Raccoon The Box
 
