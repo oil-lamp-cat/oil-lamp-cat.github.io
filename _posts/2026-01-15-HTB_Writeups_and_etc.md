@@ -40,5 +40,5 @@ pin: true
 
 | 문제명 (Name) | 분야 (Category) | 난이도 | 핵심 내용 | 바로가기 |
 |:---|:---:|:---:|:---|:---:|
-| **CEO 사칭 내부 피싱 사건 </br> 공격자 인프라를 추적하라**| Threat Intelligence | Medium? | 정리중 | [Link](https://oil-lamp-cat.github.io/posts/RedRaccoon_Threat_Intelligence/)|
+| **CEO 사칭 내부 피싱 사건 - 공격자 인프라를 추적하라**| Threat Intelligence | Medium? | 정리중 | [Link](https://oil-lamp-cat.github.io/posts/RedRaccoon_Threat_Intelligence/)|
 | **Raccoon Hospital** | Linux | Easy | 정리중 | [Link](https://oil-lamp-cat.github.io/posts/RTB_Raccoon_Hospital/) |
