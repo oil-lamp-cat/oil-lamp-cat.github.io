@@ -33,7 +33,6 @@ pin: true
 
 <details><summary>Over The Wire : Bandit 목차 </summary>
 <div markdown = "1">
-</br>
 
 [[wargame] overthewire bandit : 전체 과정](https://oil-lamp-cat.github.io/posts/war-game-bandit/)
 
