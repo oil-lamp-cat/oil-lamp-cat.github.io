@@ -36,6 +36,7 @@ pin: true
 | **Previous** | Medium | Linux | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_EscapeTwo/) |
 | **Browsed** | Medium | Linux | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/HTB-Browsed/) |
 | **Facts** | Easy | Linux | Active / Free | [Link](https://oil-lamp-cat.github.io/posts/HTB-Facts/) |
+| **Principal** | Medium | Linux | Retired | [Link](https://oil-lamp-cat.github.io/posts/HTB-Principal/) |
 
 ## Raccoon The Box
 
