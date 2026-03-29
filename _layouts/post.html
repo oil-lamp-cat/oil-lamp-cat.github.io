@@ -1,19 +1,24 @@
 ---
 layout: default
-refactor: true
 panel_includes:
   - toc
 tail_includes:
   - related-posts
   - post-nav
-  - comments
+script_includes:
+  - comment
 ---
 
 {% include lang.html %}
 
-<article class="px-1">
+{% include toc-status.html %}
+
+<article class="px-1" data-toc="{{ enable_toc }}">
   <header>
     <h1 data-toc-skip>{{ page.title }}</h1>
+    {% if page.description %}
+      <p class="post-desc fw-light mb-4">{{ page.description }}</p>
+    {% endif %}
 
     <div class="post-meta text-muted">
       <!-- published date -->
@@ -61,7 +66,11 @@ tail_includes:
           <em>
             {% if authors %}
               {% for author in authors %}
-                <a href="{{ site.data.authors[author].url }}">{{ site.data.authors[author].name }}</a>
+                {% if site.data.authors[author].url -%}
+                  <a href="{{ site.data.authors[author].url }}">{{ site.data.authors[author].name }}</a>
+                {%- else -%}
+                  {{ site.data.authors[author].name }}
+                {%- endif %}
                 {% unless forloop.last %}{{ '</em>, <em>' }}{% endunless %}
               {% endfor %}
             {% else %}
@@ -70,53 +79,85 @@ tail_includes:
           </em>
         </span>
 
-        <!-- read time -->
-        {% include read-time.html content=content prompt=true lang=lang %}
-      </div>
-      <!-- .d-flex -->
-    </div>
-    <!-- .post-meta -->
-  </header>
+        <div>
+          <!-- pageviews -->
+          {% if site.pageviews.provider and site.analytics[site.pageviews.provider].id %}
+            <span>
+              <em id="pageviews">
+                <i class="fas fa-spinner fa-spin small"></i>
+              </em>
+              {{ site.data.locales[lang].post.pageview_measure }}
+            </span>
+          {% endif %}
 
-  <!-- 비밀번호 보호 기능 시작 -->
-  {% if page.password %}
-    <div id="password-protection" class="mb-4">
-      <div class="card border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 10px;">
-        <div class="card-body text-center text-white p-4">
-          <i class="fas fa-lock fa-2x mb-3"></i>
-          <h4 class="mb-3">🔐 보호된 게시글</h4>
-          <p class="mb-3">이 게시글을 보려면 비밀번호를 입력해주세요</p>
-          <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-4">
-              <input 
-                type="password" 
-                id="password-input" 
-                class="form-control mb-3" 
-                placeholder="비밀번호 입력"
-                style="border-radius: 25px; padding: 12px 20px;"
-              >
-              <button 
-                id="password-btn"
-                class="btn btn-light btn-lg"
-                style="border-radius: 25px; padding: 10px 30px; font-weight: bold; color: #667eea;"
-              >
-                <i class="fas fa-key me-2"></i>확인
-              </button>
-            </div>
-          </div>
-          <div id="error-message" class="alert alert-danger mt-3" style="display: none; border-radius: 20px;">
-            <i class="fas fa-exclamation-triangle me-2"></i>비밀번호가 틀렸습니다!
-          </div>
+          <!-- read time -->
+          {% include read-time.html content=content prompt=true lang=lang %}
         </div>
       </div>
     </div>
+  </header>
 
-    <div id="protected-content" style="display: none;">
+  {% if enable_toc %}
+    <div id="toc-bar" class="d-flex align-items-center justify-content-between invisible">
+      <span class="label text-truncate">{{ page.title }}</span>
+      <button type="button" class="toc-trigger btn me-1">
+        <i class="fa-solid fa-list-ul fa-fw"></i>
+      </button>
+    </div>
+
+    <button id="toc-solo-trigger" type="button" class="toc-trigger btn btn-outline-secondary btn-sm">
+      <span class="label ps-2 pe-1">{{- site.data.locales[lang].panel.toc -}}</span>
+      <i class="fa-solid fa-angle-right fa-fw"></i>
+    </button>
+
+    <dialog id="toc-popup" class="p-0">
+      <div class="header d-flex flex-row align-items-center justify-content-between">
+        <div class="label text-truncate py-2 ms-4">{{- page.title -}}</div>
+        <button id="toc-popup-close" type="button" class="btn mx-1 my-1 opacity-75">
+          <i class="fas fa-close"></i>
+        </button>
+      </div>
+      <div id="toc-popup-content" class="px-4 py-3 pb-4"></div>
+    </dialog>
   {% endif %}
 
-  <div class="content">
+<div class="content">
+  {% if page.password %}
+    <div id="password-container" style="text-align: center; padding: 50px 20px; border-radius: 10px; background-color: var(--main-bg); border: 1px solid var(--border-color);">
+      <h2 style="margin-bottom: 20px;">🔒 보호된 글입니다</h2>
+      <p style="margin-bottom: 30px;">HTB Active 머신 스포일러 방지 등 암호가 걸려있는 포스트입니다.</p>
+      
+      <input type="password" id="post-password" placeholder="비밀번호를 입력하세요" 
+             style="padding: 12px; width: 60%; max-width: 300px; border-radius: 6px; border: 1px solid var(--border-color); background-color: var(--sidebar-bg); color: var(--text-color);"
+             onkeypress="if(event.keyCode==13) checkPassword();">
+      
+      <button onclick="checkPassword()" 
+              style="padding: 12px 20px; margin-left: 10px; border: none; border-radius: 6px; background-color: var(--link-color); color: #fff; cursor: pointer;">확인</button>
+      
+      <p id="password-error" style="color: #e74c3c; display: none; margin-top: 15px; font-weight: bold;">비밀번호가 일치하지 않습니다.</p>
+    </div>
+
+    <div id="secret-content" style="display: none;">
+      {{ content }}
+    </div>
+
+    <script>
+      function checkPassword() {
+        var inputPw = document.getElementById("post-password").value;
+        var actualPw = "{{ page.password }}";
+
+        if (inputPw === actualPw) {
+          document.getElementById("password-container").style.display = "none";
+          document.getElementById("secret-content").style.display = "block";
+        } else {
+          document.getElementById("password-error").style.display = "block";
+        }
+      }
+    </script>
+  {% else %}
     {{ content }}
-  </div>
+  {% endif %}
+</div>
 
   <div class="post-tail-wrapper text-muted">
     <!-- categories -->
@@ -154,7 +195,6 @@ tail_includes:
       <div class="license-wrapper">
         {% if site.data.locales[lang].copyright.license.template %}
           {% capture _replacement %}
-        <a href="{{ site.baseurl }}/categories/{{ category | slugify | url_encode }}/">{{ category }}</a>
         <a href="{{ site.data.locales[lang].copyright.license.link }}">
           {{ site.data.locales[lang].copyright.license.name }}
         </a>
@@ -169,21 +209,4 @@ tail_includes:
     <!-- .post-tail-bottom -->
   </div>
   <!-- div.post-tail-wrapper -->
-
-  {% if page.password %}
-    </div> <!-- protected-content 닫기 -->
-    
-    <!-- 비밀번호를 data attribute로 전달 -->
-    <script type="application/json" id="password-data">{"password": "{{ page.password }}"}</script>
-    <script src="{{ '/assets/js/password-protection.js' | relative_url }}"></script>
-  {% endif %}
-
-  <script src="https://utteranc.es/client.js"
-        repo="oil-lamp-cat/oil-lamp-cat.github.io"
-        issue-term="pathname"
-        theme="github-dark"
-        crossorigin="anonymous"
-        async>
-  </script>
-
 </article>
