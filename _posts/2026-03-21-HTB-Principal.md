@@ -2,7 +2,7 @@
 title: "[HTB] Principal (Medium_Linux)"
 date: 2026-03-21 10:41:00 +09:00
 categories: [hacking, RedLabs, Linux]
-tags: [Hack The Box, Easy]
+tags: [Hack The Box, Medium]
 ---
 
 > [Congratulations OilLampCat! You are player #558 to have solved Principal.](https://labs.hackthebox.com/achievement/machine/988787/853)
