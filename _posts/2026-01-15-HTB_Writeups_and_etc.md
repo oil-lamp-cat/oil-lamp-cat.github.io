@@ -37,7 +37,7 @@ pin: true
 | **Browsed**               |       Medium        |     Linux      | Active / Free  |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-Browsed/)                              |
 | **Facts**                 |        Easy         |     Linux      | Active / Free  |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Facts/)                               |
 | **Principal**             |       Medium        |     Linux      | Retired        |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Principal/)                             |
-| **Kobold**                |        Easy         |     Linux      | Active         |                             [작성중](https://oil-lamp-cat.github.io/posts/HTB-Kobold/)                             |
+| **Kobold**                |        Easy         |     Linux      | Active         |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Kobold/)                              |
 
 ## Raccoon The Box
 
