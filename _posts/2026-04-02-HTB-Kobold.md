@@ -6,6 +6,8 @@ tags: [Hack The Box, Easy]
 password: "20260402"
 ---
 
+[HTB_Kobold_호롱고양이.pptx](https://github.com/user-attachments/files/26508660/HTB_Kobold_.pptx)
+
 > 솔직히 이거 뭔가 맞게 푼건지도 뭔가 내가 못 찾은 것도 있는거 같아서 나중에 retired 되면 다시 봐야할듯
 
 > [Congratulations OilLampCat! You are player #4702 to have solved Kobold.](https://labs.hackthebox.com/achievement/machine/988787/856)
