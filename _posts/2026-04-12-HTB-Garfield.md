@@ -346,6 +346,116 @@ KRB5CCNAME='Administrator@cifs_RODC01...ccache' proxychains impacket-psexec -k -
 
 자 아직 갈 길이 멀다!
 
-### 4-5. Mimikatz 이용하기
+### 4-5. ForceChangePassword를 해도 안되는 이유는?
+
+![bloodhoundwriteaccountrestrictions](https://github.com/user-attachments/assets/df9e3ac9-f842-43dc-a487-48fa562baac4)
+
+그런데 말이다. 분명히 bloodhound에서는 우리의 최종 목적지인 `DC01`을 얻기 위해 `KRBTGT_8245`를 얻기 위해서 RODC01을 통한 `ForceChangePassword`를 진행하라고 했다. 그럼 이 유저를 얻고 나면 끝나는걸까? 라고 생각할 수 있지만 여기서 **매우매우매우** 해깔리면 안되는 부분이 존재한다.
+
+![allusers](https://github.com/user-attachments/assets/cac068f0-6c6c-44ad-b99e-7c91ddc45834)
+
+도메인에 존재하는 모든 유저들을 찍어보았을 때, 이상하게도 `KRBTGT`와 `KRBTGT_8245`가 따로 존재하는 것을 알 수 있다.
+
+즉 우리가 현재 최종 목표로 잡고있는 `KRBTGT_8245`는 DC01(도메인 전체)를 지배하고 있는 진짜 `KRBTGT`가 아니라 `RODC01`에서만 쓸 수 있는 가짜 마스터 키라는 의미다. 게다가 RODC는 읽기 전용이다보니 ForceChangePassword를 진행하려면 [zjorz/Public-AD-Script](https://github.com/zjorz/Public-AD-Scripts/blob/master/Reset-KrbTgt-Password-For-RWDCs-And-RODCs.md)와 같은 스크립트를 사용해 본섭과의 동기화 과정 등을 거쳐서 진행해야한다.
+
+쉽게 이해하려면 다음과 같다.
+
+- **DC01 (본사)** : 도메인 전체를 관리한다. 이 세상의 모든 문을 열 수 있는 `마스터 황금 열쇠(krbtgt)`를 가지고 있다.
+
+- **RODC01 (지점)** : 본사의 허락을 받아 지점을 운영한다. 하지만 도둑이 지점을 털어갈까봐 본사는 지점에게 `마스터 열쇠(krbtgt)`를 주지 않고 `지점 전용 열쇠(krbtgt_8245)`만 줬다.
+
+그렇기에 우린 이 지점 열쇠만으론 본사에 출입할 수가 없는 상황이다.
+
+그럼 도대체 이걸로 뭘 하겠다는걸까?
+
+### 4-6. 이후에 할 작업은?
+
+[커버로스 프로토콜(Kerberos Protocol)이란? [개발자의 길:티스토리]](https://jang8584.tistory.com/309)
+
+[AD(Active Directory) 모의해킹 방법론 [Hack_SMS:Becoming a Hacker]](https://hacksms.tistory.com/346)
+
+[At the Edge of Tier Zero: The Curious Case of the RODC [Elad Shamir]](https://specterops.io/blog/2023/01/25/at-the-edge-of-tier-zero-the-curious-case-of-the-rodc/?source=rss----f05f8696e3cc---4)
+
+[The Hacker Reciepes/kerberos/golden-ticket](https://www.thehacker.recipes/ad/movement/kerberos/forged-tickets/#golden-ticket)
+
+일단은 내가 이해한 내용을 토대로 설명할 것이기에 틀린게 있을 수 있다는 것을 명심하자.
+
+그래도 위 블로그들을 읽고 조사해보니 우리는 다음고 같은 과정을 통해 최종 목적지인 DC01에 도달할 수 있게 된다.
+
+> RODC Golden Ticket (무기 제작)
+
+우리가 훔친 `지점 전용 열쇠 (krbtgt_8245의 AES256 키)`를 이용해서 임의의 유저(Administrator)의 명의로 가짜 TGT(티켓 발급용 티켓)를 만들어내는 행위 자체를 `Golden Ticket`이라고 부르는데...
+
+결국 이 RODC 골든 티켓은 본섭(DC01)에 가져가봤자 **"음, 얘는 지점(RODC01)에서 인증받고 온 애구나"** 정도로만 취급할 뿐이다.
+
+> Key List Attack
+
+그렇기에 위에서 만든 `RODC 골든 티켓`을 들고 본섭(DC01)의 KDC(키 분배 센터)에 찾아가서, **"KERB-KEY-LIST-REQ"** 라는 아주 특수한 프로토콜 요청을 날리는 공격 기법을 통해 **"아, 지점에서 최고 관리자의 비밀번호가 필요하구나!"** 하고 속아 최고 관리자의 진짜 비밀번호 해시를 뱉어내게 해야한다.
+
+### 4-7. 좀 더 쉽게 알아보는 Golden Ticket과 Key List Attack 까지
+
+![mimikatz](https://github.com/user-attachments/assets/0a8341d5-ebfe-4182-8d1a-3d1c391ada1e)
+
+> Mimikatz를 이용해 지점 금고 털기
+
+**해커(RODC01 위장)** : "mimikatz를 이용해서 지점(RODC01)의 마스터 도장인 `krbtgt_8245` 계정의 AES246 키를 복사해줘."
+
+- 이를 통해 RODC01에 내장된 RODC01 admin의 AES246 키를 복제한다.
+
+![rubeus 다운로드](https://github.com/user-attachments/assets/c3572823-dc6e-4eac-8c30-d9f67d1e8142)
+
+참고로 Rubeus의 경우 kali apt로 설치할 수 있는 [GhostPack/Rubeus](https://github.com/GhostPack/Rubeus)은 더이상의 업데이트가 진행되지 않아 goldenticket을 위조할 수 없었으므로 [Flangvik/SharpCollection](https://github.com/Flangvik/SharpCollection/blob/master/NetFramework_4.7_x64/Rubeus.exe)의 최신 rubeus를 다운받아 진행했다.
+
+![Rubeus gt](https://github.com/user-attachments/assets/a2dbfbf6-e23f-4449-ac60-4474c67c39eb)
+
+> Rubeus (Golden Ticket) 가짜 신분증 위조
+
+**해커(RODC01)** : "서류(Golden Ticket)를 만들건데 그 내용엔 **'이 사람은 지사의 최고 관리자이며, 우리 지점(RODC01)이 신분을 보증함'** 이라고 쓰고 아까 훔친 AES246키를 넣어줘!"
+
+**Rubeus** : "RODC Golden Ticket (가짜 VIP 출입증) 생성 완료, 하지만 RODC01용 VIP 출입증입니다."
+
+- 이렇게 아까 찾은 AES246 키를 통해 Golden Ticket 생성.
+
+![rubeus kla](https://github.com/user-attachments/assets/30310235-1aed-4224-9cfe-12f26b030701)
+
+> Rubeus (Key List Attack) 본사에 전화걸기
+
+**해커(RODC01 위장)** : "여보세요 본사(DC01)죠? 나 **RODC01** 서버 인데요. 방금 우리 지점에 본사 회장님(Administrator)이 오셔서 로그인(인증)을 시도하셨거든요? 증명서(RODC Golden Ticket) 첨부합니다. 이분 인증 처리해 드려야 하니까 진짜 비밀번호 해시 좀 빨리 보내주세요!"
+
+**본사 (DC01)** : 음 지점장 도장(krbtgt_8245)가 찍혀있네. 그리고 누가 본사 장부(msDS-RevealOndemandGroup)에 '본사 회장님 비밀번호를 보내줘도 됨' 이라고 결재를 올려놨네? "바로 NTLM 해시 보내드릴게요."
+
+![rubeus kla get password hash](https://github.com/user-attachments/assets/2d8ff650-ba17-402e-ac49-4d5b40e6ce9d)
+
+이렇게 최종적으로 우린 `Administartor@garfield.htb`의 진짜 NTLM 해시를 얻게 되었다!!!!
+
+### 4-8. 최종 접속
+
+이젠 지루한 위장이나 터널링도 필요 없다. 이 해시값 하나면 본사(DC01) 정문을 열고 들어갈 수 있기에.
+
+![got admin](https://github.com/user-attachments/assets/112de783-d0c4-4da6-bc6f-c3bc6c2f147c)
+
+evil-winrm을 통해 최종 서버 관리자의 계정으로 로그인하는데 성공했고.
+
+![get root](https://github.com/user-attachments/assets/25c50dc6-ba59-4d47-a527-6a8192e5fefb)
+
+드디어 root flag를 얻을 수 있었다.
 
 ## 마치며
+
+![garfield pwned](https://github.com/user-attachments/assets/1562152d-1616-47d9-80e5-224914f3cfaa)
+
+그렇게 오랜만에 푼 Windows AD 그것도 Hard 난이도의 문제를 풀어보았다.
+
+지금 이렇게 다 하나씩 예시를 들어가며 정리를 하니 아 그래서 그랬구나 싶고 생각보다 막 어렵지는 않은가? 싶다가도 그저 writeup이 아니라 개념들까지 하나씩 뜯고 씹고 맛보며 진행하니 역시 점점 식견이 넓어져가는 듯 하다.
+
+아쉽게도 이번 문제는 user를 얻는 것만 점수를 받을 수 있었다만, 사실 root를 얻는 과정에서 몇번이나 와 씨 이거 맞음? 하는 생각에 포기할까도 많이 생각했었다. 근데 뭔가 처음 도전하는 Hard 난이도라는 생각과 닿을듯 말듯 알쏭 달쏭한 이 기분을 해결하지 못하면 다음거 못풀겠다 하여 이리 끝까지 푸는데 성공했다.
+
+그리고 난 말 그대로 아직 공부하는 입장이잖는가? 게다가 난 보안 전공생도 아님이니 이렇게 직접 부딪혀가며 문제를 푸는게 어쩌면 가장 빠르게 최신 트렌드와 필수 지식들을 얻는 과정이라고도 생각하니 말이다.
+
+사실 이 문제 바로 다음으로 season에 올라온 문제가 평점 4.3에 리눅스 easy 난이도여서 확 그냥 그걸 풀어버릴까도 생각했었다. 그리고 이걸 풀면 그걸 풀어서 좀 더 내 머리속으로 정리된 내용을 Redlabs에서 발표해야하나 싶었지만 결국 이리 풀고 블로그에 작성하며 정리하니 어? 이거 발표하면 좋겠는데? 싶다.
+
+뭐.. 시험 기간인 24시간을 넘겨 3일이라는 긴 시간동안 풀었지만 그래도 해냈다는 것 그것 만으로도 만족이다.
+
+재능이 있는자를 따라가기 위해선 노력해야하니 말이지.
+
+다들 Happy Hacking이다!
