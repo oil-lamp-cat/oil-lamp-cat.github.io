@@ -38,6 +38,7 @@ pin: true
 | **Facts**                 |        Easy         |     Linux      | Active / Free  |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Facts/)                               |
 | **Principal**             |       Medium        |     Linux      | Retired        |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Principal/)                             |
 | **Kobold**                |        Easy         |     Linux      | Active         |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Kobold/)                              |
+| **Garfield**              |        Hard         |    Windows     | Active         |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-Garfield/)                             |
 
 ## Raccoon The Box
 

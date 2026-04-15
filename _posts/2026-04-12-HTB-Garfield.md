@@ -1,7 +1,7 @@
 ---
-title: "[HTB] Garfield (Hard_Window) _ 작성 중"
+title: "[HTB] Garfield (Hard_Window)"
 date: 2026-04-13 17:29:00 +09:00
-categories: [hacking, RedLabs, Windows]
+categories: [hacking, RedLabs, Windows, Active Directory]
 tags: [Hack The Box, Hard]
 pin: true
 password: "20260413"
