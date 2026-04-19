@@ -7,6 +7,8 @@ pin: true
 password: "20260413"
 ---
 
+> 발표 자료 만들다가 key list attack이 될 수가 없는데 되기에 스크린샷을 다시 확인하니 powerview 부분을 안 썼더라...
+
 [Congratulations OilLampCat! You are player #2312 to have solved Garfield.](https://labs.hackthebox.com/achievement/machine/988787/862)
 
 ## 1. 시작에 앞서
@@ -412,7 +414,7 @@ KRB5CCNAME='Administrator@cifs_RODC01...ccache' proxychains impacket-psexec -k -
 
 참고로 Rubeus의 경우 kali apt로 설치할 수 있는 [GhostPack/Rubeus](https://github.com/GhostPack/Rubeus)은 더이상의 업데이트가 진행되지 않아 goldenticket을 위조할 수 없었으므로 [Flangvik/SharpCollection](https://github.com/Flangvik/SharpCollection/blob/master/NetFramework_4.7_x64/Rubeus.exe)의 최신 rubeus를 다운받아 진행했다.
 
-> 이후 발표자료 준비하다가 찾게 되었는데 아니 이거 Rubeus 본 래포에도 golden 을 쓸 수 있는데? ㅝ지? 그냥 내 칼리에 깔린 버전이 옛날거였던?
+> 이후 발표자료 준비하다가 찾게 되었는데 아니 이거 Rubeus 본 래포에도 golden 을 쓸 수 있는데? 뭐지? 그냥 내 칼리에 깔린 버전이 옛날거였던?
 
 ![Rubeus gt](https://github.com/user-attachments/assets/a2dbfbf6-e23f-4449-ac60-4474c67c39eb)
 
@@ -425,6 +427,28 @@ KRB5CCNAME='Administrator@cifs_RODC01...ccache' proxychains impacket-psexec -k -
 - 이렇게 아까 찾은 AES246 키를 통해 Golden Ticket 생성.
 
 ![rubeus kla](https://github.com/user-attachments/assets/30310235-1aed-4224-9cfe-12f26b030701)
+
+> Rubeus (Key List Attack)을 하기 전 PRP 수정
+
+![PRP1](https://github.com/user-attachments/assets/73951cf2-b7f8-4e37-8ff8-1775807282c8)
+
+그런데 정작 keyList 공격을 날리려고 하니 DC01이 `PRP(복제 정책)` 때문에 Administrator 해시를 보내주지 않았다. 
+
+그렇기에 지금 l.wilson_adm이 RODC01을 다룰 수 있는 Admin 권한을 얻기 위해 `Add-ADGroupMember` 명령어를 이용하였다.
+
+![PRP2](https://github.com/user-attachments/assets/6f0e5b62-1479-4a5b-869c-eaa57f23a16c)
+
+그리고 `powerview.ps1` 모듈을 올려서 **허용 그룹 (RevealOnDemandGroup)** 에 추가해주려 했는데 그룹 권한을 설정해주면 쉘을 한번 껐다가 켜야했다.
+
+![PRP3](https://github.com/user-attachments/assets/95192931-3a59-49bb-936a-3e941b2ad47d)
+
+다시 쉘을 켜준 후 `powerview.ps1`을 다시 메모리에 올리고 
+
+**허용 그룹 (RevealOnDemandGroup)** 에 "본사 장부야, RODC가 Adminitrator 비밀번호 달라고 하면 줘." 
+
+**거부 그룹 (NeverRevealGroup)** 에 "본사 장부야, 막아둔 블랙리스트 명단 싹 지워버려."
+
+라고 조작을 해버리면 드디어 다음 과정을 진행할 수 있게 된다.
 
 > Rubeus (Key List Attack) 본사에 전화걸기
 
