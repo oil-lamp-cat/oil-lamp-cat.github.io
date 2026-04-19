@@ -412,6 +412,8 @@ KRB5CCNAME='Administrator@cifs_RODC01...ccache' proxychains impacket-psexec -k -
 
 참고로 Rubeus의 경우 kali apt로 설치할 수 있는 [GhostPack/Rubeus](https://github.com/GhostPack/Rubeus)은 더이상의 업데이트가 진행되지 않아 goldenticket을 위조할 수 없었으므로 [Flangvik/SharpCollection](https://github.com/Flangvik/SharpCollection/blob/master/NetFramework_4.7_x64/Rubeus.exe)의 최신 rubeus를 다운받아 진행했다.
 
+> 이후 발표자료 준비하다가 찾게 되었는데 아니 이거 Rubeus 본 래포에도 golden 을 쓸 수 있는데? ㅝ지? 그냥 내 칼리에 깔린 버전이 옛날거였던?
+
 ![Rubeus gt](https://github.com/user-attachments/assets/a2dbfbf6-e23f-4449-ac60-4474c67c39eb)
 
 > Rubeus (Golden Ticket) 가짜 신분증 위조
