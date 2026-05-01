@@ -1,11 +1,15 @@
 ---
 title: "[HTB] Logging (Medium_Windows)"
-date: 2026-04-29 20:82:00 +09:00
+date: 2026-04-29 20:02:00 +09:00
 categories: [hacking, RedLabs, Windows, Active Directory]
 tags: [Hack The Box, Medium]
 pin: true
 password: "20260429"
 ---
+
+![Logging](https://github.com/user-attachments/assets/43e7bb4c-dda4-4e81-a837-28310ae5d6c8)
+
+[You have solved Logging! Congratulations OilLampCat best of luck in capturing flags ahead!](https://labs.hackthebox.com/achievement/machine/988787/888)
 
 ## 1. 시작에 앞서
 
