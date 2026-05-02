@@ -275,7 +275,7 @@ bloodhound에 들어가 찾아낸 Id를 그대로 넣으면 위처럼 **JAYLEE_C
 
 ![donwload](https://github.com/user-attachments/assets/3ae743b4-4670-403f-94e7-2561fdb6918b#.png)
 
-그래서 일단 exe 파일을 다운받았다. 뭘 하기 위해? 바로 리버스 쉘을 돌려버리기 위해서!
+그래서 일단 exe 파일을 다운받았다. 뭘 하기 위해? 바로 리버싱을 해버리기 위해서!
 
 ### 3-5. UpdateMonitor.exe (Feat. DLL Hijacking)
 
