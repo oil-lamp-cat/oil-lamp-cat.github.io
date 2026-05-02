@@ -1,0 +1,43 @@
+---
+---
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* append your custom style below */
+
+.gslide-image {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: auto !important;
+}
+
+.gslide-image img {
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  margin: auto !important;
+}
+
+/* Accessibility fix for lightbox modal */
+.glightbox-container {
+  z-index: 1050 !important;
+}
+
+.glightbox-container.glightbox-open {
+  overflow: hidden !important;
+}
+
+.glightbox-container .gslide {
+  display: flex !important;
+  align-items: center !important;
+}
