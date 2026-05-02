@@ -25,4 +25,19 @@
   width: auto !important;
   height: auto !important;
   object-fit: contain !important;
+  margin: auto !important;
+}
+
+/* Accessibility fix for lightbox modal */
+.glightbox-container {
+  z-index: 1050 !important;
+}
+
+.glightbox-container.glightbox-open {
+  overflow: hidden !important;
+}
+
+.glightbox-container .gslide {
+  display: flex !important;
+  align-items: center !important;
 }
