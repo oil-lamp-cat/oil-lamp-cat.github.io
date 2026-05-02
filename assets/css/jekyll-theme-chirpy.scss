@@ -1,8 +1,16 @@
 ---
 ---
 
-@import 'jekyll-theme-chirpy';
+/* prettier-ignore */
+@use 'main'
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+;
 
+/* append your custom style below */
+
+/* GLightbox 팝업 이미지 크기 강제 제한 */
 .gslide-image img {
   max-width: 95vw !important;
   max-height: 95vh !important;
