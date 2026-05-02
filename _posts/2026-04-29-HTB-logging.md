@@ -7,13 +7,13 @@ pin: true
 password: "20260429"
 ---
 
-![Logging](https://github.com/user-attachments/assets/43e7bb4c-dda4-4e81-a837-28310ae5d6c8)
+![Logging](https://github.com/user-attachments/assets/43e7bb4c-dda4-4e81-a837-28310ae5d6c8#.png)
 
 [You have solved Logging! Congratulations OilLampCat best of luck in capturing flags ahead!](https://labs.hackthebox.com/achievement/machine/988787/888)
 
 ## 1. 시작에 앞서
 
-![Logging](https://github.com/user-attachments/assets/7d2eefe5-9959-425b-b9b6-0f7528d80442)
+![Logging](https://github.com/user-attachments/assets/7d2eefe5-9959-425b-b9b6-0f7528d80442#.png)
 
 이번에도 또 다시 season 문제를 둘러보다 풀게된 Windows 머신인 Logging! 분명 지난번에 윈도우는 안 풀겠다 했지만 그게 쉽던가 ㅎ 결국 보이는 것을 풀 수 밖에 없었는걸?
 
@@ -23,15 +23,15 @@ password: "20260429"
 
 ## 2. 정찰 및 정보 수집 (Reconnaissance & Enumeration) 
 
-![계정](https://github.com/user-attachments/assets/6cdec707-858e-465e-becb-28a4401c862b)
+![계정](https://github.com/user-attachments/assets/6cdec707-858e-465e-becb-28a4401c862b#.png)
 
 처음 주어진 계정은 `wallace.everette / Welcome2026@` 이고 역시 기본적인 침투는 되었다고 가정하고 시작된다.
 
 ### 2-1. nmap -Sv -Sc
 
-![nmap1](https://github.com/user-attachments/assets/0ca14ab5-2df3-4f70-a77a-e310d077a73d)
+![nmap1](https://github.com/user-attachments/assets/0ca14ab5-2df3-4f70-a77a-e310d077a73d#.png)
 
-![nmap1](https://github.com/user-attachments/assets/28e11dce-e038-4ccc-bc07-2b76ab683be9)
+![nmap1](https://github.com/user-attachments/assets/28e11dce-e038-4ccc-bc07-2b76ab683be9#.png)
 
 일단 문제를 풀기 위해선 웹이 열려있는지 os가 뭔지 어떤 서비스가 있는지 등을 알아야 하기에 nmap 스캔을 돌려주었고 역시 active directory 답게 많은 서비스가 뒤에 돌고 있었다. 설명은 이전 포스트들에서 많이 다뤘고 음... 딱히 특이사항이 보이지는 않기에 이런 포트들이 존재한다고 염두하고 넘어가자.
 
@@ -39,7 +39,7 @@ password: "20260429"
 
 ### 2-2. smb share, users
 
-![smb file](https://github.com/user-attachments/assets/d490c707-0b98-495e-9e9c-906218d877e7)
+![smb file](https://github.com/user-attachments/assets/d490c707-0b98-495e-9e9c-906218d877e7#.png)
 
 일단 smb가 열려있다 하였고 계정이 있으니 이 계정으로 접근할 수 있는 공유 파일이 있을까 하여 살펴보았다.
 
@@ -47,47 +47,47 @@ password: "20260429"
 
 그리고 사실 난 이게 어쩌피 권한도 없어서 의미 있겠나 싶어 그냥 쭉 진행하다 막혀 다시 진행했던 스크린샷을 보고 그제야 권한상승 부분의 실마리를 잡을 수 있었다. 이래서 **정보 수집**이 중요한거다. 꼭 적어두자. 아니면 적어도 스크린 샷으로라도.
 
-![smb user](https://github.com/user-attachments/assets/f7f21429-c88c-4507-862f-1ebdd44b70c3)
+![smb user](https://github.com/user-attachments/assets/f7f21429-c88c-4507-862f-1ebdd44b70c3#.png)
 
 이후 전체 유저들을 스캔해 보았고 이번에는 저번과 달리 유저는 많아졌지만 `krbtgt`가 하나만 존재하기에 어쩐지 안심했다. ~~정말 끔찍했어~~
 
-![IPC](https://github.com/user-attachments/assets/78555c28-cd3c-4f9f-82ba-3a6a71c12a99)
+![IPC](https://github.com/user-attachments/assets/78555c28-cd3c-4f9f-82ba-3a6a71c12a99#.png)
 
 일단 평소 그렇듯 IPC$는 비어있었다.
 
-![Logs](https://github.com/user-attachments/assets/28ff8294-b683-4574-b607-d3b600dae3f2)
+![Logs](https://github.com/user-attachments/assets/28ff8294-b683-4574-b607-d3b600dae3f2#.png)
 
 여긴 뭔가 로그들이 저장되어있었고 smb로 보기 불편해 통째로 다운받았다.
 
-![Netlogon](https://github.com/user-attachments/assets/3fd8a37a-947e-4699-88cc-79f23639cb51)
+![Netlogon](https://github.com/user-attachments/assets/3fd8a37a-947e-4699-88cc-79f23639cb51#.png)
 
 여기도 비어있기는 마찬가지.
 
-![SYSVOL](https://github.com/user-attachments/assets/7ab7e1b8-1f8d-491e-81b4-8f1fe5ab7392)
+![SYSVOL](https://github.com/user-attachments/assets/7ab7e1b8-1f8d-491e-81b4-8f1fe5ab7392#.png)
 
 여기도 아마 계정들에 대한 정책 같은게 들어있을텐데 통째로 다운받았다.
 
-![WSUSTemp](https://github.com/user-attachments/assets/da3bc729-7327-43f9-8a42-7376328b120d)
+![WSUSTemp](https://github.com/user-attachments/assets/da3bc729-7327-43f9-8a42-7376328b120d#.png)
 
 애초에 권한이 없기에 WSUSTemp엔 접근할 수도 없었다.
 
 ### 2-3. log
 
-![audit_hearbeat](https://github.com/user-attachments/assets/aabc9b19-ad8e-4b7e-a0e2-add43aa5288d)
+![audit_hearbeat](https://github.com/user-attachments/assets/aabc9b19-ad8e-4b7e-a0e2-add43aa5288d#.png)
 
 받은 로그들을 하나씩 살펴보자. 일단 Audit_Heartbeat.log를 보니 이름에서도 그렇고 내용에서도 그렇듯 어째 인공심박동기 로그인지 심장 박동 서비스가 정상인지 체크한다.
 
-![IdentitySync_Trace](https://github.com/user-attachments/assets/7e70a8b3-8f16-42fd-8267-e07c3857a9ce)
+![IdentitySync_Trace](https://github.com/user-attachments/assets/7e70a8b3-8f16-42fd-8267-e07c3857a9ce#.png)
 
 **IdentitySync_Trace_날짜.log**는 딱 봐도 이 장비가 서버에 요청을 보내고 나 누구임 살아있고 내 정보는 뭐야 하고 알려주는 로그인듯 하다. 
 
 하지만! 여기서 Timeout이 난 로그를 보니 `Bind_User`, `Bind_Pass`라며 이 계정이 로그인할 때 사용한 유저(LOGGING\\SVC_recovery)와 비밀번호(E어쩌고$$2025)가 눈에 띄었다. 벌써 정보 수집에서 계정을??!
 
-![Service_State](https://github.com/user-attachments/assets/75a061d6-37a6-4064-ae72-3314bf47a3a8)
+![Service_State](https://github.com/user-attachments/assets/75a061d6-37a6-4064-ae72-3314bf47a3a8#.png)
 
 요건 서비스 시작하는지 멈췄는지 확인하는 로그로 보이고,
 
-![TaskMonitor](https://github.com/user-attachments/assets/145462bd-5094-4e44-a9d0-25d2a76932cc)
+![TaskMonitor](https://github.com/user-attachments/assets/145462bd-5094-4e44-a9d0-25d2a76932cc#.png)
 
 이건 건강 체크? 인듯 하다.
 
@@ -95,7 +95,7 @@ password: "20260429"
 
 ### 2-4. 2차 smb 열거 (feat. 안 되지롱)
 
-![smbnotworking](https://github.com/user-attachments/assets/3d0b13b1-f4f6-4c85-829c-b45f55d8365e)
+![smbnotworking](https://github.com/user-attachments/assets/3d0b13b1-f4f6-4c85-829c-b45f55d8365e#.png)
 
 그런데 말입니다. 아니 이 계정으로 smb로그인을 시도하려 하거나 뭘 하려 해도 막히는게 아니겠어요?
 
@@ -103,33 +103,33 @@ password: "20260429"
 
 ### 2-5. bloodhound
 
-![시간](https://github.com/user-attachments/assets/7ddc47a8-572e-4c7d-af7c-54ac5523f068)
+![시간](https://github.com/user-attachments/assets/7ddc47a8-572e-4c7d-af7c-54ac5523f068#.png)
 
 시간 동기화 문제로 또 커버로스가 막으려 할태니 먼저 동기화를 해주고,
 
-![bloodhoundce](https://github.com/user-attachments/assets/fcb0b333-b9f6-4e3a-93fc-ec0a1bee7536)
+![bloodhoundce](https://github.com/user-attachments/assets/fcb0b333-b9f6-4e3a-93fc-ec0a1bee7536#.png)
 
 초기 계정으로 스캔을 딱 해주면?
 
 ~~사실 무슨 문제인지 처음에 스캔한건 오류가 떠서 다시 했다.~~
 
-![bloodhound result](https://github.com/user-attachments/assets/0cb59b80-ca43-4ee1-8d12-18899e05a464)
+![bloodhound result](https://github.com/user-attachments/assets/0cb59b80-ca43-4ee1-8d12-18899e05a464#.png)
 
 이렇게 파일들이 나올 것이고(난 압축을 안해서 .json 형식의 파일들만 있다.),
 
-![bloodhound](https://github.com/user-attachments/assets/e02de738-a5c4-4661-8899-88bccc66bdd1)
+![bloodhound](https://github.com/user-attachments/assets/e02de738-a5c4-4661-8899-88bccc66bdd1#.png)
 
 bloodhound를 켜주고,
 
-![bloodhound분석](https://github.com/user-attachments/assets/4c835052-2b2f-4b79-ab93-a9b0ae823170)
+![bloodhound분석](https://github.com/user-attachments/assets/4c835052-2b2f-4b79-ab93-a9b0ae823170#.png)
 
 블러드 하운드에 분석을 맞기고 나면 이제 그래프를 보며 정보를 찾으러 갈 수 있다.
 
-![bloodhound1](https://github.com/user-attachments/assets/28d39708-cb1c-495c-bb9e-3ecb6086644c)
+![bloodhound1](https://github.com/user-attachments/assets/28d39708-cb1c-495c-bb9e-3ecb6086644c#.png)
 
 그런데 일단 우리 초기 계정에서 머신을 얻기 위한 연결고리를 찾아봐도 없고
 
-![bloodhound2](https://github.com/user-attachments/assets/2022eaf5-f3e7-4dbd-84db-c5bdedc546b0)
+![bloodhound2](https://github.com/user-attachments/assets/2022eaf5-f3e7-4dbd-84db-c5bdedc546b0#.png)
 
 새로 얻을 녀석(실패한)은 초기 계정에서 연결되는 루트가 없었다.
 
@@ -137,13 +137,13 @@ bloodhound를 켜주고,
 
 ## 3. 초기 침투 (Initial Foothold / Exploitation)
 
-![try](https://github.com/user-attachments/assets/8bb4cf07-337c-4747-9226-612490a62330)
+![try](https://github.com/user-attachments/assets/8bb4cf07-337c-4747-9226-612490a62330#.png)
 
 그래서 진짜 별의 별결 해봤다. 위를 보면 도대체 이걸로 뭘 하라는건가 싶어 tgt 발급도 시도했는데 비밀번호가 틀렸으니 애초에 될리가 만무하지..
 
 ### 3-1. Rule-based Attack? 패스워드 주기적 변경 정책?
 
-![what](https://github.com/user-attachments/assets/b1e76b1f-2ace-4a1b-9bdf-28b28f8c76de)
+![what](https://github.com/user-attachments/assets/b1e76b1f-2ace-4a1b-9bdf-28b28f8c76de#.png)
 
 진짜 별 짓을 다 해보다가 시작부터 길을 못찾고 혹시 WSUS로 뭘 해야하나? 했는데 그것도 아닌지라 머리를 싸매고 있다 진짜 혹시 에이 하는 마음에 svc_recovery 계정의 비밀번호 끝자리인 2025년을 지금 년도이자 로그의 년도인 2026년으로 바꿔주자?
 
@@ -167,7 +167,7 @@ CompanyName01 -> CompanyName02
 
 ### 3-2. bloodhound 2트 (with. svc_recovery)
 
-![Cypher](https://github.com/user-attachments/assets/103e522f-c622-4ae9-b747-a84321e42a04)
+![Cypher](https://github.com/user-attachments/assets/103e522f-c622-4ae9-b747-a84321e42a04#.png)
 
 블러드 하운드에는 정말 간편한 스크립트가 존재한다. 바로 Cypher라는 친구로 우리가 습득한 계정을 통해 어떻게 하면 어디로 공격을 진행할지, 그리고 어떤 계정이 관리자 계정이거나 중요한 자산에 접근 가능한 계정인지를 한번에 검색해주는 기능을 갖고있다.
 
@@ -175,7 +175,7 @@ CompanyName01 -> CompanyName02
 
 적어도 이전엔 svc_recovery 계정이 없었기에 뜨지 않았지만 드디어 획득했다고 체크를 하자 노드가 뜨기 시작했다.
 
-![sptfo](https://github.com/user-attachments/assets/0a88f37c-8d37-4556-baea-12a5c33e63e4)
+![sptfo](https://github.com/user-attachments/assets/0a88f37c-8d37-4556-baea-12a5c33e63e4#.png)
 
 보아하니 역시나 wallance 계정은 따로 떨어져 있었고(하지만 그 덕에 다음 계정에 침투했지) 새로 얻은 **SVC_RECOVERY** 계정은 **MSA_HEALTH**계정에 GenericWrite 권한이 존재했으며 그 계정은 무려! **REMOTE MANAGEMENT USERS** 그룹에 포함되어있었다!!
 
@@ -183,21 +183,21 @@ CompanyName01 -> CompanyName02
 
 ### 3-3. svc_recovery -> msa_health (feat. pywhisker)
 
-![how](https://github.com/user-attachments/assets/c21954d8-36ff-4f95-9024-91fe41056d97)
+![how](https://github.com/user-attachments/assets/c21954d8-36ff-4f95-9024-91fe41056d97#.png)
 
 계정을 얻기 위해 genericwrite를 클릭해보면 bloodhound에서 "이런 툴을 쓰면 얻을 수 있어요!" 하고 알려주는 Abuse 패널이 뜬다.
 
 그리고 이번엔 아래 부분의 `pywhisker.py`라는 친구를 사용해볼 예정이다.
 
-![레드팀 플레이북](https://github.com/user-attachments/assets/1fa8b616-b78b-4edf-8ce4-14a358829ccf)
+![레드팀 플레이북](https://github.com/user-attachments/assets/1fa8b616-b78b-4edf-8ce4-14a358829ccf#.png)
 
 그리고 이것에 대한 내용은 레드팀 플레이북에도 나와있으니 궁금하다면 찾아가보는 것도?
 
-![clone](https://github.com/user-attachments/assets/f90a7282-2f6f-4d29-84c5-0061968fd6f2)
+![clone](https://github.com/user-attachments/assets/f90a7282-2f6f-4d29-84c5-0061968fd6f2#.png)
 
 일단 kali에 설치되어있는 기본 툴이 아닌지라 인터넷에서 다운받아 준비했다.
 
-![pywhisker](https://github.com/user-attachments/assets/2f3e5a9f-430a-451d-a13e-921ad4a2e001)
+![pywhisker](https://github.com/user-attachments/assets/2f3e5a9f-430a-451d-a13e-921ad4a2e001#.png)
 
 `python3 pywhisker.py ... --action "add"`
 
@@ -207,7 +207,7 @@ CompanyName01 -> CompanyName02
 
 그러고 나면 로그인에 사용할 수 있는 **.pfx** 파일과 비밀번호를 칼리에 저장해주고 이제 이걸 이용하면 된다!
 
-![cetipyad](https://github.com/user-attachments/assets/ccdfd4ae-43f5-49dc-81e4-db12df793192)
+![cetipyad](https://github.com/user-attachments/assets/ccdfd4ae-43f5-49dc-81e4-db12df793192#.png)
 
 `certipy-ad auth -pfx msa_health.pfx ...`
 
@@ -215,13 +215,13 @@ CompanyName01 -> CompanyName02
 
 이제 이 해시만 있으면 사실상 비밀번호를 알고 있는거나 다름 없는 샘!
 
-![winrm](https://github.com/user-attachments/assets/059907ac-4fc3-422a-92c7-74b06fcd5155)
+![winrm](https://github.com/user-attachments/assets/059907ac-4fc3-422a-92c7-74b06fcd5155#.png)
 
 그렇게 winrm에 접속이 성공했고! rpc에 접속을 했으니 userflag를 찾아보면?
 
 왜 없지? 
 
-![EH](https://github.com/user-attachments/assets/2611d954-00aa-46de-8963-61b105f4f892)
+![EH](https://github.com/user-attachments/assets/2611d954-00aa-46de-8963-61b105f4f892#.png)
 
 또 나를 속인거니 머신머신아....
 
@@ -229,19 +229,19 @@ CompanyName01 -> CompanyName02
 
 ### 3-4. msa_health 계정으로 둘러보기 -> UpdateMonitor.exe
 
-![winrm](https://github.com/user-attachments/assets/73003f28-6a0f-4a55-8e28-8e11eeb6d82d)
+![winrm](https://github.com/user-attachments/assets/73003f28-6a0f-4a55-8e28-8e11eeb6d82d#.png)
 
 좋아 일단 winrm에는 들어왔는데 유저 플레그가 없으니 다음 계정으로 넘어가야 한다는 의미려나? 싶다.
 
-![insidewinrm2](https://github.com/user-attachments/assets/da9fcac0-c420-401c-ab70-bcde8c78e492)
+![insidewinrm2](https://github.com/user-attachments/assets/da9fcac0-c420-401c-ab70-bcde8c78e492#.png)
 
 혹시 하는 마음에 지나온 Documents에 들어가봐도 monitor.ps1 이라는 스크립트가 보인다.
 
-![monitorps1](https://github.com/user-attachments/assets/75435ce9-1676-4be1-9780-ca95086cdbc4)
+![monitorps1](https://github.com/user-attachments/assets/75435ce9-1676-4be1-9780-ca95086cdbc4#.png)
 
 이게 무언고 싶어 열어보니 이 스크립트는 **UpdateChecker Agent**라는 이름의 윈도우 스케줄러 작업(Scheduled Task)이 잘 돌아가고 있는지 감시하는 역할을 하고 있었다.
 
-![schedule](https://github.com/user-attachments/assets/d480c05d-8cf6-4893-bc2e-4a7498222851)
+![schedule](https://github.com/user-attachments/assets/d480c05d-8cf6-4893-bc2e-4a7498222851#.png)
 
 그렇기에 직접 **UpdateChecker Agent 스케줄러**의 실제 **설정값(XML)** 을 뜯어봤다.
 
@@ -261,37 +261,37 @@ CompanyName01 -> CompanyName02
 
 그럼 이 유저가 누군지 한번 확인을 해봐야겠지?
 
-![siduser](https://github.com/user-attachments/assets/9d08fe4c-46ec-4466-ac82-3522a74cc3d6)
+![siduser](https://github.com/user-attachments/assets/9d08fe4c-46ec-4466-ac82-3522a74cc3d6#.png)
 
 bloodhound에 들어가 찾아낸 Id를 그대로 넣으면 위처럼 **JAYLEE_CLIFTON**이라는 유저라는 것을 확인할 수 있었고 그럼 어떻게든 저 **UpdateMonitor**를 조작만 할 수 있다면 이 계정을 탈취할 수 있을것이다!
 
-![권한 확인](https://github.com/user-attachments/assets/bfb3e7b4-79c6-4ba3-ba90-13a543201681)
+![권한 확인](https://github.com/user-attachments/assets/bfb3e7b4-79c6-4ba3-ba90-13a543201681#.png)
 
 게다가 이 프로그램의 권한을 혹시 하는 마음에 다시 확인해보니 **IT**그룹에 권한이 걸려있었고
 
-![notme](https://github.com/user-attachments/assets/99996102-583c-4f4e-b874-16b0408ddc04)
+![notme](https://github.com/user-attachments/assets/99996102-583c-4f4e-b874-16b0408ddc04#.png)
 
 적어도 지금 계정(msa_health)은 `BUILTIN\Users`에 속해있고 UpdateMonitor.exe 파일은 `BUILTIN\Users:(I)(RX)` 권한을 갖고 있기에 적어도 파일 내용을 다운받거나 들어가거나 실행할 수는 있는 상황이었다. 다만 쓸 수는 없기에 파일을 리버스쉘로 바꿔치기 하는 것은 불가능했다. 
 
-![donwload](https://github.com/user-attachments/assets/3ae743b4-4670-403f-94e7-2561fdb6918b)
+![donwload](https://github.com/user-attachments/assets/3ae743b4-4670-403f-94e7-2561fdb6918b#.png)
 
 그래서 일단 exe 파일을 다운받았다. 뭘 하기 위해? 바로 리버스 쉘을 돌려버리기 위해서!
 
 ### 3-5. UpdateMonitor.exe (Feat. DLL Hijacking)
 
-![file스트링](https://github.com/user-attachments/assets/62cc9269-f982-4ae5-9f30-8fbc36390c84)
+![file스트링](https://github.com/user-attachments/assets/62cc9269-f982-4ae5-9f30-8fbc36390c84#.png)
 
 일단 혹시 일반 텍스트로 뭔가 내용이 써있을까? 싶어 strings 명령어를 사용했으나 어림도 없었다.
 
-![ida](https://github.com/user-attachments/assets/d617862f-7e43-440f-8af2-014b92b8aaa0)
+![ida](https://github.com/user-attachments/assets/d617862f-7e43-440f-8af2-014b92b8aaa0#.png)
 
 첨에 ida를 이용해 돌리려 했더니 위처럼 `Detected file format: Microsoft.Net assembly` 이라며 C, C++가 아니라 .NET(C#)으로 만들어졌으니 안 먹겠다며 오류를 뱉었다.
 
-![dnspy1](https://github.com/user-attachments/assets/90cedaa2-4edf-429a-aead-08a48789c914)
+![dnspy1](https://github.com/user-attachments/assets/90cedaa2-4edf-429a-aead-08a48789c914#.png)
 
 그렇기 때문에 처음 써보는 툴인 **dnspy**를 이용해봤다. 세상 깔끔하고 바로 컴파일해서 보여주니 마음이 편안~
 
-![tex4isthething](https://github.com/user-attachments/assets/3f692512-56aa-4ce8-aef6-4e7f9ab882b0)
+![tex4isthething](https://github.com/user-attachments/assets/3f692512-56aa-4ce8-aef6-4e7f9ab882b0#.png)
 
 코드를 살펴보니 경로 설정 부분에서
 
@@ -315,35 +315,35 @@ bloodhound에 들어가 찾아낸 Id를 그대로 넣으면 위처럼 **JAYLEE_C
 
 ### 3-6. DLL Hijacking (To. Jaylee.clifton)
 
-![msfvenom](https://github.com/user-attachments/assets/7a356790-79ea-405e-be4a-d9e342165d6b)
+![msfvenom](https://github.com/user-attachments/assets/7a356790-79ea-405e-be4a-d9e342165d6b#.png)
 
 그렇기 때문에 하이재킹을 위한 dll은 **msfvenom**을 이용해 만들고 이름을 맞춰 압축을해 준비해주자.
 
-![pd](https://github.com/user-attachments/assets/09b99e2e-1509-4725-9cd8-9345470f1e04)
+![pd](https://github.com/user-attachments/assets/09b99e2e-1509-4725-9cd8-9345470f1e04#.png)
 
 그리고 그냥 ls로 찾았을 땐 ProgramData가 숨겨져있지만 전체로 검색하면 나오니 찾아서 들어가주자.
 
-![uploaddll](https://github.com/user-attachments/assets/3195b523-a468-4ace-94b3-ebe850af3680)
+![uploaddll](https://github.com/user-attachments/assets/3195b523-a468-4ace-94b3-ebe850af3680#.png)
 
 이후 zip 파일을 업로드 하고 기다려주면?
 
 ~~솔직히 이번 문제는 기다리는 것 때문에 잘 됬는지 잘못 했는지 긴장되서 기다리는 시간이 너무 힘들었어...~~
 
-![reversshell](https://github.com/user-attachments/assets/d2ad54cb-6313-4dca-b4d7-bc66fb98c5a0)
+![reversshell](https://github.com/user-attachments/assets/d2ad54cb-6313-4dca-b4d7-bc66fb98c5a0#.png)
 
 짜잔! 리버스쉘을 얻을 수 있다!
 
-![jaylee](https://github.com/user-attachments/assets/8c475e51-3498-49ad-832b-ac409aa78102)
+![jaylee](https://github.com/user-attachments/assets/8c475e51-3498-49ad-832b-ac409aa78102#.png)
 
 그리고 드디어 마참내 **jaylee.clifton**의 계정을 얻고 유저 플래그를 획득할 수 있었다.
 
 ## 4. 권한 상승 (Privilege Escalation) 
 
-![jayleebloodhound](https://github.com/user-attachments/assets/757a1f49-fd65-4f1b-a997-6b699b0306ba)
+![jayleebloodhound](https://github.com/user-attachments/assets/757a1f49-fd65-4f1b-a997-6b699b0306ba#.png)
 
 아니 그래서 jaylee 계정을 얻으면 내가 뭘 할 수 있죠? 하는 생각에 bloodhound를 탐방해봤다만
 
-![bloodhoundall](https://github.com/user-attachments/assets/d35d8640-0a11-4816-880f-b49c382e2a75)
+![bloodhoundall](https://github.com/user-attachments/assets/d35d8640-0a11-4816-880f-b49c382e2a75#.png)
 
 일단 지금까지 얻은 것들을 보아도 결국 지금 얻은 고가치 표적은 `Jaylee_clifton`이라 여기서 뭔가 더 찾을 부분은 보이지 않았다.
 
@@ -351,11 +351,11 @@ bloodhound에 들어가 찾아낸 Id를 그대로 넣으면 위처럼 **JAYLEE_C
 
 ### 4-1. Certify
 
-![certify](https://github.com/user-attachments/assets/84e2673d-2288-41c9-ab2e-2ed62e74fb8e)
+![certify](https://github.com/user-attachments/assets/84e2673d-2288-41c9-ab2e-2ed62e74fb8e#.png)
 
 그 첫번째론 jaylee 계정이 있고 쉘이 있으니 wget 명령어로 certify 템플릿 스캐너를 옮겨와 취약점을 스캔했다.
 
-![certifyresult](https://github.com/user-attachments/assets/4ff824ba-ece6-4139-a637-4449d01e70fc)
+![certifyresult](https://github.com/user-attachments/assets/4ff824ba-ece6-4139-a637-4449d01e70fc#.png)
 
 만... 취약점이 없어용? 그러면 안 되는데...
 
@@ -365,27 +365,27 @@ bloodhound에 들어가 찾아낸 Id를 그대로 넣으면 위처럼 **JAYLEE_C
 
 ### 4-2. Certipy-ad
 
-![certipy-ad](https://github.com/user-attachments/assets/97c81a6c-c127-47f3-ad03-93ddc137b1a6)
+![certipy-ad](https://github.com/user-attachments/assets/97c81a6c-c127-47f3-ad03-93ddc137b1a6#.png)
 
 이 친구도 똑같이 자동으로 스캔을 해주기도 하지만 스캔 정보를 저장해주기도 하기에 스캔을 돌려보고 이 결과를 통째로 인공지능에게 넣어 분석을 돌렸다.
 
 물론 직접 볼 수도 있진 한데 평소처럼 `vuln 어쩌고` 하면서 취약한 내용이 있다! 라고 나오지도 않았고 도구는 있으면 써야하니 말이다.
 
-![updateSrv](https://github.com/user-attachments/assets/3ba1eb5c-bd1a-4d03-864d-b732fbb0d3d0)
+![updateSrv](https://github.com/user-attachments/assets/3ba1eb5c-bd1a-4d03-864d-b732fbb0d3d0#.png)
 
 그리고! 우리의 사랑스러운 깡통이가 찾아준 취약 템플릿은 바로 **UpdateSrv**라는 녀석이였다.
 
 그런데 말입니다. 분명 Certify는 취약점이 없다고 했었죠? 심지어 제가 결과를 읽어보니 딱히 취약하다 하는 내용은 없었습니다. 그래서 이번엔 제미니 선생한테 물어봤죠.
 
-![gemini Updatesrv](https://github.com/user-attachments/assets/d5fb0172-abaf-470d-9b53-daa04dbe5105)
+![gemini Updatesrv](https://github.com/user-attachments/assets/d5fb0172-abaf-470d-9b53-daa04dbe5105#.png)
 
 아 그니까 이 템플릿이 본래 ESC1로 쓰이는 용도의 것과는 살짝쿵 다르게 되어있어서? 게다가 지금 스캔을 뜬 계정이 jaylee가 아닌 msa_health이고 이 템플릿은 IT 그룹에서 쓸 수 있기에?
 
-![템플릿](https://github.com/user-attachments/assets/7a54cf79-f122-4b3a-9521-dac20b887b92)
+![템플릿](https://github.com/user-attachments/assets/7a54cf79-f122-4b3a-9521-dac20b887b92#.png)
 
 씁... 진짜 다시 봐도 난 아마 못찾지 않았을까..
 
-![스캔 결과 vuln](https://github.com/user-attachments/assets/2c8b3703-bf52-4334-88a7-c284769253cc)
+![스캔 결과 vuln](https://github.com/user-attachments/assets/2c8b3703-bf52-4334-88a7-c284769253cc#.png)
 
 심지어 스캔 결과 맨 아래로 내려가보면 ESC1은 고사하고 ESC2나 ESC3에 대한 내용이 있어 난 사실 첨엔 이걸 시도해봐야 하는건가? 싶었었다.
 
@@ -421,7 +421,7 @@ bloodhound에 들어가 찾아낸 Id를 그대로 넣으면 위처럼 **JAYLEE_C
 
 그럼 일단은 WSUS가 기본 링크가 어디로 되어있는지 알아봐야겠지?
 
-![WindowUpdate](https://github.com/user-attachments/assets/ef18219e-4af5-440a-804a-10e7553d50e5)
+![WindowUpdate](https://github.com/user-attachments/assets/ef18219e-4af5-440a-804a-10e7553d50e5#.png)
 
 위처럼 Jaylee의 계정을 통해 `Get-ItemProperty -Path "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate"` 명령어를 쳐보면 윈도우 업데이트에 쓸 WSUS 서버의 주소를 확인할 수 있다.
 
@@ -437,11 +437,11 @@ bloodhound에 들어가 찾아낸 Id를 그대로 넣으면 위처럼 **JAYLEE_C
 
 일단은 인증서 부터 준비해보자.
 
-![openssl](https://github.com/user-attachments/assets/206b9d30-5f1b-4367-bc20-4f4653b6a518)
+![openssl](https://github.com/user-attachments/assets/206b9d30-5f1b-4367-bc20-4f4653b6a518#.png)
 
 우리가 사용할 취약점은 인증서를 신청할 때 `내 맘대로 이름을 적어낼 수 있는 취약점(Enrollee Supplies Subject)`이 있는 `UpdateSrv 템플릿`을 이용할거고 일단은 `openssl` 명령어를 이용해서 **내가 만든 비밀번호(개인 키)** 와 **내 이름은 wsus.logging.htb**야 라고 하는 **가짜 신청서(wsus.cer)** 을 만들어냈다.
 
-![msfvenompayload](https://github.com/user-attachments/assets/d138d6b1-e274-48d2-a689-d8ef6f1a7ad9)
+![msfvenompayload](https://github.com/user-attachments/assets/d138d6b1-e274-48d2-a689-d8ef6f1a7ad9#.png)
 
 그리고 업데이트가 진행되면서 내 컴에 들어와 리버스 쉘을 따가게 될테니 **msfvenom**을 이용해 만들어줬다. 사실 이것도 맞는건지 모르겠는데 일단 내가 처음 안될 때(진짜 원인을 몰라서)는 암호화를 안하고 했었다. 근데 일단 성공했을 때는 암호화를 했었기에 위처럼 기록한다.
 
@@ -451,29 +451,29 @@ bloodhound에 들어가 찾아낸 Id를 그대로 넣으면 위처럼 **JAYLEE_C
 
 그래도 이즘 와서 정리해보니 어째 툴이 잘못됬던게 아닌 듯 하다.
 
-![PsExec64](https://github.com/user-attachments/assets/c4044d97-98ec-4b93-8905-51680313769b)
+![PsExec64](https://github.com/user-attachments/assets/c4044d97-98ec-4b93-8905-51680313769b#.png)
 
 일단 내가 시도하면서 [EliteLoser/Invoke-PsExec](https://github.com/EliteLoser/Invoke-PsExec)이거였나? 싶은 github에서 설치해 사용했었는데 첫날 안되다가 진짜 뭐가 문제지 싶어 혹시 하는 마음에 [windows 공식 PsExec v2.43](https://learn.microsoft.com/en-us/sysinternals/downloads/psexec)를 설치해 용량을 비교하니 좀 많이 차이가 났다... 씁..
 
 이게 첫번째 문제였고 사실 이걸 해도 안 되었기에 그럼 pywsus의 문제인가? 했는데
 
-![pywsus](https://github.com/user-attachments/assets/f9d69591-1aab-45a7-a7b1-41d55e92ceb2)
+![pywsus](https://github.com/user-attachments/assets/f9d69591-1aab-45a7-a7b1-41d55e92ceb2#.png)
 
 사실 뭔가 요청이 가고 하는건 보이기에 그럼 또 인증서 문제? 했지만 아니였고 그냥 다른 툴을 쓰자 싶어서 **pywsus**에서 **wsuks**라는 툴을 써보기로 했다.
 
 뭐 결론부터 말하자면 도구 문제가 맞았지만 wsuks도 안될 운명이였다는거.
 
-![wsuksucks](https://github.com/user-attachments/assets/10454f92-6e72-4630-9fe7-cd3a54814a75)
+![wsuksucks](https://github.com/user-attachments/assets/10454f92-6e72-4630-9fe7-cd3a54814a75#.png)
 
 WSUKS도 동일하게 요청이 오가는건 보이고 PsExec을 가져가기도 했는데 가져만 가고 업데이트를 실행도 했는데 리버스 쉘이 오지 않았다.
 
 그래서 진짜 이것저것 할 수 있는걸 다 해보다 마지막으로 그럼 도구가 문제인가? 싶어 아예 뜯어보기로 했다. 
 
-![sysc-updates](https://github.com/user-attachments/assets/c323f298-a198-43e9-86d4-d533529e9bae)
+![sysc-updates](https://github.com/user-attachments/assets/c323f298-a198-43e9-86d4-d533529e9bae#.png)
 
 그리고 발견한 사실... wsuks에 업데이트 관련 파일인 `sync-updates.xml` 파일이 있는데 이 녀석이 내 윈도우 서버 업데이트 관련 정보가 없었기에 안됬다는 이야기가...
 
-![what](https://github.com/user-attachments/assets/3d070256-94eb-4311-a8de-0bf0cddc65f2)
+![what](https://github.com/user-attachments/assets/3d070256-94eb-4311-a8de-0bf0cddc65f2#.png)
 
 그래서 파일은 잘 넘어가도 그냥 서버쪽에서 **"음 우리 서버에 맞는 업데이트가 없구나!"** 하고 넘겨버렸다는 거였다...
 
@@ -481,35 +481,35 @@ WSUKS도 동일하게 요청이 오가는건 보이고 PsExec을 가져가기도
 
 하도 시도를 많이 하다보니 바꾼게 너무 많아서 말이지...
 
-![pysus](https://github.com/user-attachments/assets/8326ed5a-9d1f-4341-b731-a217844af4a3)
+![pysus](https://github.com/user-attachments/assets/8326ed5a-9d1f-4341-b731-a217844af4a3#.png)
 
 게다가 **pysus**나 **Wsuks** 모두 살펴보니 동일하게 이 파일이 있었기에
 
-![wsuks](https://github.com/user-attachments/assets/9c05979e-817c-47a5-a298-d38924481c3e)
+![wsuks](https://github.com/user-attachments/assets/9c05979e-817c-47a5-a298-d38924481c3e#.png)
 
 아마 **sync-updates.xml**고 **Psexec** 둘다 문제였을 것이라 생각한다.
 
 ### 4-7. WSUS Spoofing 성공!
 
-![runwsuks](https://github.com/user-attachments/assets/c3befd2f-c43b-4ec8-b915-9af1e27894e7)
+![runwsuks](https://github.com/user-attachments/assets/c3befd2f-c43b-4ec8-b915-9af1e27894e7#.png)
 
 그렇기에 claude를 통해 만든 wsuks 변형 코드를 실행했고 사실 로그 자체는 지난번과 동일하게 떴지만 이번엔 혹시 외부에서 리버스 쉘이 넘어오는게 문제인가? 싶어 그냥 아예 내가 지금 winrm으로 접근 가능한 **msa_health** 계정을 admin에 넣어버릴 수 있게 코드를 짰다.
 
 ~~코드는 지금 노트북에서 볼 수가 없어 집에 돌아가면 넣겠다.~~
 
-![msa_health](https://github.com/user-attachments/assets/77fe4453-80ee-473a-a56a-58c707c77421)
+![msa_health](https://github.com/user-attachments/assets/77fe4453-80ee-473a-a56a-58c707c77421#.png)
 
 그리고 wsus를 통한 업데이트를 돌려줬고 위처럼 admin 그룹에 msa_health를 넣을 수 있었다.
 
-![파일 없음](https://github.com/user-attachments/assets/0f4df1fc-ae91-44c1-9dfb-adb638c19687)
+![파일 없음](https://github.com/user-attachments/assets/0f4df1fc-ae91-44c1-9dfb-adb638c19687#.png)
 
 그리고 바로 플래그를 찾으러 갔는데 Administrator에 없더라...
 
-![bloodhound](https://github.com/user-attachments/assets/da959c83-a83b-4fcf-89ea-51d4ed9598f3)
+![bloodhound](https://github.com/user-attachments/assets/da959c83-a83b-4fcf-89ea-51d4ed9598f3#.png)
 
 많이 당황그럽긴 했지만 그래도 이전에 bloodhound를 둘러보다 tier 0 계정 중 **Toby_Brynleigh** 이라는 계정을 발경했었기에 한번 들어가보니
 
-![rootflag](https://github.com/user-attachments/assets/9facaf59-307a-4c60-bc00-0014ec2a1bb3)
+![rootflag](https://github.com/user-attachments/assets/9facaf59-307a-4c60-bc00-0014ec2a1bb3#.png)
 
 여기서 드디어 루트 플래그를 발견할 수 있었다!!! 아오 진짜...
 
@@ -517,11 +517,11 @@ WSUKS도 동일하게 요청이 오가는건 보이고 PsExec을 가져가기도
 
 ## 마치며
 
-![점수주기](https://github.com/user-attachments/assets/6cd7a8d9-1ee7-441b-94a8-e8981667a017)
+![점수주기](https://github.com/user-attachments/assets/6cd7a8d9-1ee7-441b-94a8-e8981667a017#.png)
 
 뭐.. 개인적으론 루트 플래그 얻는 과정이 많이.. 너무 많은걸 시도해보고 했다보니 이리 채크했다만 지금 다시 생각해보면 준비를 잘 하고 개념만 알았다면 딱 medium 난이도의 문제였을 것이라 생각한다.
 
-![logging pwned](https://github.com/user-attachments/assets/f51d487f-8326-44ff-b52e-d5c6d67a7a3e)
+![logging pwned](https://github.com/user-attachments/assets/f51d487f-8326-44ff-b52e-d5c6d67a7a3e#.png)
 
 이번 문제로 **wsus**라는게 있다는 것과 역시 **enumeration은 중요**하다는거, 그리고 가능하면 **공식 도구**를 쓰자는 것, 그리고 **툴을 너무 맹신하는 것은 좋지 못하다**라는 것을 느꼈다...
 
