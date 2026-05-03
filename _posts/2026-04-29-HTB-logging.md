@@ -441,6 +441,22 @@ bloodhound에 들어가 찾아낸 Id를 그대로 넣으면 위처럼 **JAYLEE_C
 
 우리가 사용할 취약점은 인증서를 신청할 때 `내 맘대로 이름을 적어낼 수 있는 취약점(Enrollee Supplies Subject)`이 있는 `UpdateSrv 템플릿`을 이용할거고 일단은 `openssl` 명령어를 이용해서 **내가 만든 비밀번호(개인 키)** 와 **내 이름은 wsus.logging.htb**야 라고 하는 **가짜 신청서(wsus.cer)** 을 만들어냈다.
 
+> 발표자료 만들고 있는데 이거 나 왜 인증서 만드는거 뒷 부분 안 썼니 ㅋㅋㅋㅋㅋ
+
+![cer서명](https://github.com/user-attachments/assets/4c28cd42-3ffe-420b-946e-748182c11d69#.png)
+
+이후 jaylee 계정으로 돌아가 만들어 놓은 아직은 인증이 안된 **wsus.csr**을 다운받은 후 서명 과정을 거쳐 **wsus.cer**을 만들어주자.
+
+이 때 **Issued**가 뜨면 된 것이다.
+
+![cer](https://github.com/user-attachments/assets/a7a82ed4-f2e7-412c-b47d-8518eb0d131b#.png)
+
+읽어보면 위처럼 긴 문자열이 나올텐데 이거 복사해서 kali로 옮기면 된다.
+
+![vimcer](https://github.com/user-attachments/assets/2e93ef76-a15b-462d-95ae-363b7b6d2bda#.png)
+
+이렇게 **.cer**, **.csr**, **.key** 를 만들면 성공!
+
 ![msfvenompayload](https://github.com/user-attachments/assets/d138d6b1-e274-48d2-a689-d8ef6f1a7ad9#.png)
 
 그리고 업데이트가 진행되면서 내 컴에 들어와 리버스 쉘을 따가게 될테니 **msfvenom**을 이용해 만들어줬다. 사실 이것도 맞는건지 모르겠는데 일단 내가 처음 안될 때(진짜 원인을 몰라서)는 암호화를 안하고 했었다. 근데 일단 성공했을 때는 암호화를 했었기에 위처럼 기록한다.
@@ -496,6 +512,10 @@ WSUKS도 동일하게 요청이 오가는건 보이고 PsExec을 가져가기도
 그렇기에 claude를 통해 만든 wsuks 변형 코드를 실행했고 사실 로그 자체는 지난번과 동일하게 떴지만 이번엔 혹시 외부에서 리버스 쉘이 넘어오는게 문제인가? 싶어 그냥 아예 내가 지금 winrm으로 접근 가능한 **msa_health** 계정을 admin에 넣어버릴 수 있게 코드를 짰다.
 
 ~~코드는 지금 노트북에서 볼 수가 없어 집에 돌아가면 넣겠다.~~
+
+![claude](https://github.com/user-attachments/assets/31e0e74f-f76d-4e9a-a457-6e83001fddc1#.png)
+
+claude 선생께서 wsuks나 pysus를 보고 만들어준 공격 코드
 
 ![msa_health](https://github.com/user-attachments/assets/77fe4453-80ee-473a-a56a-58c707c77421#.png)
 
