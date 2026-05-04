@@ -2,7 +2,7 @@
 title: "[HTB, RTB, Pwn.college, Bandit] Writeups 모음"
 date: 2026-05-03 14:28:00 +09:00
 categories: [hacking, Linux, Windows]
-tags: [Hack The Box, Raccoon The BOx]
+tags: [Hack The Box, Raccoon The Box]
 pin: true
 ---
 
