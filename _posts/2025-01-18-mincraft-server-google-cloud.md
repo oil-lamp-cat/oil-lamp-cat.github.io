@@ -1,8 +1,8 @@
 ---
 title: "[Google Cloud] 마인크래프트 서버 만들기"
 date: 2025-1-18 18:50:15 +09:00
-categories: [google cloud, 마인크래프트]
-tags: [서버]
+categories: [Projects]
+tags: [클라우드, 서버, 프로젝트, google cloud]
 pin: true
 ---
 

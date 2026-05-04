@@ -1,8 +1,8 @@
 ---
 title: kali linux virtualbox 가상환경 다운로드
 date: 2023-11-28 14:52:15 +09:00
-categories: [kalilinux, virtualbox]
-tags: [download, 설치]
+categories: [Tools & Environment]
+tags: [VirtualBox, Kali-Linux, 설치]
 pin: true
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: "[Ubuntu] login screen scale"
 date: 2024-06-19 18:00:15 +09:00
-categories: [Linux]
-tags: [ubuntu]
+categories: [System & Linux]
+tags: [Linux, Ubuntu, 오류해결]
 pin: true
 ---
 

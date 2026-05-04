@@ -1,8 +1,8 @@
 ---
 title: windows hello 지문과 호환되는 지문 스캐너를 찾을 수 없습니다
 date: 2023-12-02 20:50:15 +09:00
-categories: [windows]
-tags: [오류]
+categories: [Tools & Environment]
+tags: [Windows, 팁, 오류]
 pin: true
 ---
 

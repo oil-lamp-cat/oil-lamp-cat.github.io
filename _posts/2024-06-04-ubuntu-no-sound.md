@@ -1,8 +1,8 @@
 ---
 title: "Galaxy Book 3 Pro 360 소리 안나옴 문제"
 date: 2024-06-04 14:43:15 +09:00
-categories: [Linux]
-tags: [ubuntu, error, 오류, 우분투, 소리]
+categories: [System & Linux]
+tags: [Linux, Ubuntu, 오류해결, sound issue]
 pin: true
 ---
 

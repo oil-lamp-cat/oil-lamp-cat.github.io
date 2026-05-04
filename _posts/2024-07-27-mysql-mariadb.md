@@ -1,8 +1,8 @@
 ---
 title: "mariaDB, mysql on 라즈베리파이"
 date: 2024-07-27 22:27:15 +09:00
-categories: [raspberry pi, mariaDB, mysql]
-tags: [command]
+categories: [Network & Infrastructure]
+tags: [MySQL, Raspberry-Pi, 데이터베이스]
 pin: true
 ---
 

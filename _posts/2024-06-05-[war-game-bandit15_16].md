@@ -1,9 +1,8 @@
 ---
 title: "[wargame] overthewire bandit 15 -> 16"
 date: 2024-06-05 13:52:15 +09:00
-categories: [war game, Linux, bandit]
-tags: [bandit, overtherwire]
-pin: true
+categories: [Security & Hacking]
+tags: [Bandit, CTF, Linux, OverTheWire]
 ---
 
 ## Bandit Level 15 -> Level 16

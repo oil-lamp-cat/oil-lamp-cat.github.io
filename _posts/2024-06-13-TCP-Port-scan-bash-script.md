@@ -1,8 +1,8 @@
 ---
 title: "[shell script] 포트 스캐닝"
 date: 2024-06-13 20:27:15 +09:00
-categories: [Linux, shell script, Port scanning]
-tags: [Bash]
+categories: [Security & Hacking]
+tags: [Linux, Shell-Script, 포트스캔, Bash]
 pin: true
 ---
 

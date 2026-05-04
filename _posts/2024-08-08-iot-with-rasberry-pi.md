@@ -1,8 +1,8 @@
 ---
 title: "라즈베리파이로 iot를 만들어보자"
 date: 2024-08-08 15:57:15 +09:00
-categories: [raspberry pi, mariaDB, mysql, php]
-tags: [command, iot]
+categories: [Network & Infrastructure]
+tags: [Raspberry-Pi, IoT, MySQL]
 pin: true
 ---
 

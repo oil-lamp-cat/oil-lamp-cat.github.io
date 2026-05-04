@@ -1,8 +1,8 @@
 ---
 title: "[Red Racoon Academy] 일단 따라하는 모의해킹 2 - Robots"
 date: 2024-06-04 14:43:15 +09:00
-categories: [Linux, Red Racoon, 레드라쿤]
-tags: [모의해킹 기초]
+categories: [Security & Hacking]
+tags: [CTF, 모의해킹, Linux, Red Raccoon]
 pin: true
 ---
 

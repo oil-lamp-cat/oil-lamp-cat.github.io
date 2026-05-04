@@ -1,8 +1,8 @@
 ---
 title: windows checksum 확인법
 date: 2023-11-28 09:50:15 +09:00
-categories: [windows]
-tags: [cmd, checksum]
+categories: [Tools & Environment]
+tags: [Windows, 팁]
 pin: true
 ---
 

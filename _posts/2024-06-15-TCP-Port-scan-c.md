@@ -1,8 +1,8 @@
 ---
 title: "[C,C++] 포트 스캐닝 (Synscan, full-open-scan)"
 date: 2024-06-15 23:56:15 +09:00
-categories: [Linux, C, C++, Port scanning]
-tags: [C, C++]
+categories: [Security & Hacking]
+tags: [C, C++, 포트스캔, 보안도구]
 pin: true
 ---
 

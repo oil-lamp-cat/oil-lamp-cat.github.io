@@ -1,8 +1,8 @@
 ---
 title: "[Shell Sciprt]로 구현한 로그 생성 및 로그에서 에러 잡기 스크립트 아직 끝이 아니다!"
 date: 2024-07-08 19:57:15 +09:00
-categories: [Linux, shell script]
-tags: [Bash]
+categories: [System & Linux]
+tags: [Linux, Shell-Script, Bash]
 pin: true
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: "[wargame] overthewire bandit Full"
 date: 2024-08-31 19:22:15 +09:00
-categories: [war game, Linux, bandit]
-tags: [bandit, overtherwire]
+categories: [Security & Hacking]
+tags: [Bandit, CTF, Linux, OverTheWire]
 pin: true
 ---
 

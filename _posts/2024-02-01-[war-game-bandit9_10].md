@@ -1,8 +1,8 @@
 ---
 title: "[wargame] overthewire bandit 9 -> 10"
 date: 2024-02-01 00:25:25 +09:00
-categories: [war game, Linux, bandit]
-tags: [bandit, overtherwire]
+categories: [Security & Hacking]
+tags: [Bandit, CTF, Linux, OverTheWire]
 ---
 
 ## Bandit Level 9 -> Level 10

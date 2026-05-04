@@ -1,8 +1,8 @@
 ---
 title: Typescript 이야기
 date: 2024-01-09 01:55:15 +09:00
-categories: [Typescript, 공부중]
-tags: [부트캠프, 프론트엔드]
+categories: [Learning]
+tags: [TypeScript, Frontend, 부트캠프]
 pin: true
 ---
 

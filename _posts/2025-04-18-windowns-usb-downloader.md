@@ -2,7 +2,7 @@
 title: "[windows] 윈도우 설치용 usb 만들기"
 date: 2025-04-18 21:29:00 +09:00
 categories: [window]
-tags: [window11, usb, 설치]
+tags: [windows11, usb, 설치]
 pin: true
 ---
 

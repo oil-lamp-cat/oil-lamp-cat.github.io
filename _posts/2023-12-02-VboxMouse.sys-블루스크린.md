@@ -1,8 +1,8 @@
 ---
 title: VboxMouse.sys 블루스크린(중지코드 Driver_IRQL_NOT_LESS_OR_EQUAL)
 date: 2023-12-02 20:50:15 +09:00
-categories: [windows]
-tags: [오류]
+categories: [Tools & Environment]
+tags: [Windows, 오류해결]
 pin: true
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: ubuntu grub에 테마를 적용하기
 date: 2023-12-05 15:24:15 +09:00
-categories: [ubuntu, grub]
-tags: [linux, theme]
+categories: [System & Linux]
+tags: [Linux, Ubuntu, 커스터마이징]
 pin: true
 ---
 

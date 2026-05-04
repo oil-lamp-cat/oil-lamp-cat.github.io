@@ -1,8 +1,8 @@
 ---
 title: "[Ubuntu] terminal에 pfetch 실행하기"
 date: 2024-06-19 18:28:15 +09:00
-categories: [Linux]
-tags: [ubuntu]
+categories: [Tools & Environment]
+tags: [Linux, Terminal, 커스터마이징]
 pin: true
 ---
 
