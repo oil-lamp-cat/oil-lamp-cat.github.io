@@ -7,6 +7,10 @@ pin: true
 password: "20260429"
 ---
 
+> 발표자료 업로드 완료!
+
+[HTB_Logging_호롱고양이.pptx](https://github.com/user-attachments/files/27359895/HTB_Logging_.pptx)
+
 ![Logging](https://github.com/user-attachments/assets/43e7bb4c-dda4-4e81-a837-28310ae5d6c8#.png)
 
 [You have solved Logging! Congratulations OilLampCat best of luck in capturing flags ahead!](https://labs.hackthebox.com/achievement/machine/988787/888)
