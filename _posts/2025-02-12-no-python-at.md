@@ -1,8 +1,8 @@
 ---
 title: "[Python][venv] No python at 문제"
 date: 2025-2-12 09:26:15 +09:00
-categories: [python]
-tags: [작업, venv]
+categories: [Tools & Environment]
+tags: [작업, venv, python]
 pin: true
 ---
 

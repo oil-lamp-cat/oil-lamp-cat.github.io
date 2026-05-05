@@ -1,8 +1,8 @@
 ---
 title: "[wargame] overthewire bandit 16 -> 17"
 date: 2024-08-29 18:04:15 +09:00
-categories: [Security & Hacking]
-tags: [Bandit, CTF, Linux, OverTheWire]
+categories: [Security & Hacking, Bandit]
+tags: [Linux, OverTheWire]
 ---
 
 오랜만에 다시 왔더니 모든 비밀번호가 변경되어있었다 허허.. 일단 0_15까지 전부 변경하였다

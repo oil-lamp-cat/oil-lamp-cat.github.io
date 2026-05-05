@@ -1,8 +1,8 @@
 ---
 title: "[HTB] Previous (Medium_Linux)"
 date: 2025-12-29 15:20:00 +09:00
-categories: [hacking, saturnx operators, Linux]
-tags: [Hack The Box]
+categories: [Security & Hacking, HTB]
+tags: [Hack The Box, hacking, saturnx operators, Windows]
 password: "20251229"
 ---
 

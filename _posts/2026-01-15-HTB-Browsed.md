@@ -1,8 +1,8 @@
 ---
 title: "[HTB] Browsed (Medium_Linux)"
 date: 2026-01-15 11:46:00 +09:00
-categories: [hacking, saturnx operators, Linux]
-tags: [Hack The Box, Medium]
+categories: [Security & Hacking, HTB]
+tags: [Hack The Box, hacking, saturnx operators, Linux]
 password: "20260115"
 ---
 
@@ -16,12 +16,12 @@ password: "20260115"
 
 ~~아니 근데 이걸 작성하고 있는 지금은 또 Arena에서 Live로 바뀌었다.~~
 
-|구분|Arena (지난주 토 ~ 어제)|Live (오늘 ~)|
-|:--:|:--:|:--:|
-|상태|따끈따끈한 신상 (Seasons 경쟁 중)|일반 Active 머신 (안정화 단계)|
-서버|Release Arena (신규 전용 서버)|Standard / Free (일반 공용 서버)|
-|접속 권한|누구나 (Free 포함)|누구나 (Free 포함)|
-|바뀐 이유|출시 후 5일이 지나 신규 기간이 종료됨|이제 일반 서버로 이관됨|
+|   구분    |       Arena (지난주 토 ~ 어제)        |          Live (오늘 ~)           |
+| :-------: | :-----------------------------------: | :------------------------------: |
+|   상태    |   따끈따끈한 신상 (Seasons 경쟁 중)   |  일반 Active 머신 (안정화 단계)  |
+|   서버    |    Release Arena (신규 전용 서버)     | Standard / Free (일반 공용 서버) |
+| 접속 권한 |          누구나 (Free 포함)           |        누구나 (Free 포함)        |
+| 바뀐 이유 | 출시 후 5일이 지나 신규 기간이 종료됨 |     이제 일반 서버로 이관됨      |
 
 **Live**와 **Arena**는 위와 같은 차이가 있다고 한다.
 

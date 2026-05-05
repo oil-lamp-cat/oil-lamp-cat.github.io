@@ -1,8 +1,8 @@
 ---
 title: "[pwn.college] 1-2. Linux Luminarium."
 date: 2025-04-15 22:14:00 +09:00
-categories: [Linux, pwn.college, hacking]
-tags: [pwn.college]
+categories: [Security & Hacking, pwn.college]
+tags: [Linux, pwn.college, hacking]
 pin: true
 ---
 

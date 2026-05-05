@@ -1,8 +1,8 @@
 ---
 title: "[wargame] overthewire bandit 32 -> 33"
 date: 2024-08-31 18:02:15 +09:00
-categories: [Security & Hacking]
-tags: [Bandit, CTF, Linux, OverTheWire]
+categories: [Security & Hacking, Bandit]
+tags: [Linux, OverTheWire]
 ---
 
 ## Bandit Level 32 -> Level 33

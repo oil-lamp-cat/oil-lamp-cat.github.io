@@ -1,8 +1,8 @@
 ---
 title: "[HTB] MonitorsFour (Easy_Windows)"
 date: 2025-12-17 19:25:43 +09:00
-categories: [hacking, saturnx operators, Windows]
-tags: [Hack The Box]
+categories: [Security & Hacking, HTB]
+tags: [Hack The Box, hacking, saturnx operators, Windows]
 password: "202512202248"
 ---
 

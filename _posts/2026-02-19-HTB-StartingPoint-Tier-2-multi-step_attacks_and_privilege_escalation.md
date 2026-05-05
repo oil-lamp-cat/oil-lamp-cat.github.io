@@ -1,8 +1,8 @@
 ---
 title: "[HTB] StartingPoint Tier 2- Multi Step Attacks and Privilege Escalation 문제 풀이 모음"
 date: 2026-02-19 13:53:00 +09:00
-categories: [hacking, Linux, Windows, Very Easy]
-tags: [Hack The Box]
+categories: [Security & Hacking, HTB]
+tags: [Hack The Box, hacking, saturnx operators, Windows, Linux]
 ---
 
 
@@ -10,13 +10,13 @@ tags: [Hack The Box]
 
 이젠 확실하게 권한상승까지 있는 Tier 2 문제를 풀어보자. 근데 어째 권한상승은 할만한데 초기 침투가 좀 많이 어려운...
 
-|이름|난이도|OS|Link|
-|:--:|:--:|:--:|:--:|
-|**Archetype**|Very Easy|Windows|[Link](https://app.hackthebox.com/machines/Archetype)|
-|**Oopsie**|Very Easy|Linux|[Link](https://app.hackthebox.com/machines/Oopsie)|
-|**Vaccine**|Very Easy|Linux|[Link](https://app.hackthebox.com/machines/Vaccine)|
-|**Responder**|Very Easy|Windows|[Link](https://app.hackthebox.com/machines/Responder)|
-|**Unified**|Very Easy|Linux|[Link](https://app.hackthebox.com/machines/Unified)|
+|     이름      |  난이도   |   OS    |                         Link                          |
+| :-----------: | :-------: | :-----: | :---------------------------------------------------: |
+| **Archetype** | Very Easy | Windows | [Link](https://app.hackthebox.com/machines/Archetype) |
+|  **Oopsie**   | Very Easy |  Linux  |  [Link](https://app.hackthebox.com/machines/Oopsie)   |
+|  **Vaccine**  | Very Easy |  Linux  |  [Link](https://app.hackthebox.com/machines/Vaccine)  |
+| **Responder** | Very Easy | Windows | [Link](https://app.hackthebox.com/machines/Responder) |
+|  **Unified**  | Very Easy |  Linux  |  [Link](https://app.hackthebox.com/machines/Unified)  |
 
 아 그리고 이번 문제들을 풀 때에는 설에 내려가서 풀다보니 노트북의 듀얼부팅되어있는 우분투를 이용해 풀었기에 평소랑 좀 달라보이거나 추가적으로 설치해줘야 하는 것들이 많았다.
 

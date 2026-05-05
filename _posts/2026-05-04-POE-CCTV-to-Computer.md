@@ -1,5 +1,5 @@
 ---
-title: T31N + GC2053 기반 CCTV 하드웨어 개조: PoE에서 독립형 비전 AI 센서로
+title: "T31N + GC2053 기반 CCTV 하드웨어 개조: PoE에서 독립형 비전 AI 센서로"
 date: 2026-05-04 13:13:00 +09:00
 categories: [Hardware, Reverse Engineering]
 tags: [T31N, GC2053, Injenic, UART, PoE]

@@ -1,8 +1,8 @@
 ---
 title: "[HTB] Outbound (Easy_Linux)"
 date: 2025-11-02 12:55:43 +09:00
-categories: [hacking, saturnx operators, Linux]
-tags: [Hack The Box]
+categories: [Security & Hacking, HTB]
+tags: [Hack The Box, hacking, saturnx operators, Linux]
 ---
 
 2025-12-29 이것도 이제 Active 해제! 인데 VIP 용이 됬네? 이제 못푸는 문제가 되어버린...

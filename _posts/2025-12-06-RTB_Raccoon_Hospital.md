@@ -1,8 +1,8 @@
 ---
 title: "[Red Raccoon] Raccoon Hospital (Easy)"
 date: 2025-12-06 16:19:43 +09:00
-categories: [hacking, Red Raccoon, Linux]
-tags: [RTB]
+categories: [Security & Hacking, RTB]
+tags: [Threat Intelligence, hacking, Red Raccoon]
 ---
 
 ## 시작에 앞서

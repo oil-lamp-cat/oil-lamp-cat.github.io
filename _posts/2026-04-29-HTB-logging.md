@@ -1,8 +1,8 @@
 ---
 title: "[HTB] Logging (Medium_Windows)"
 date: 2026-04-29 20:02:00 +09:00
-categories: [hacking, RedLabs, Windows, Active Directory]
-tags: [Hack The Box, Medium]
+categories: [Security & Hacking, HTB]
+tags: [Hack The Box, hacking, RedLabs, Windows, Active Directory]
 pin: true
 password: "20260429"
 ---

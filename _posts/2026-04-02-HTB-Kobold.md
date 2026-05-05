@@ -1,8 +1,8 @@
 ---
 title: "[HTB] Kobold (Easy_Linux)"
 date: 2026-04-02 15:16:00 +09:00
-categories: [hacking, RedLabs, Linux]
-tags: [Hack The Box, Easy]
+categories: [Security & Hacking, HTB]
+tags: [Hack The Box, hacking, RedLabs, Linux]
 password: "20260402"
 ---
 

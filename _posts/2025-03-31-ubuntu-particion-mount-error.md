@@ -1,8 +1,8 @@
 ---
 title: "[Ubuntu] 디스크 마운트 안되는 문제, (wrong fs type, bad option, bad superblock on /dev/nvme0n1p*, missing codepage or helper program, or other error)"
 date: 2025-3-31 10:31:15 +09:00
-categories: [Ubuntu]
-tags: [error]
+categories: [System & Linux]
+tags: [Linux, Ubuntu, 오류해결]
 pin: true
 ---
 

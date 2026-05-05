@@ -1,8 +1,8 @@
 ---
 title: "[HTB] StartingPoint Tier 0 - Foundations 문제 풀이 모음"
 date: 2026-01-17 14:53:00 +09:00
-categories: [hacking, Linux, Windows, Very Easy]
-tags: [Hack The Box]
+categories: [Security & Hacking, HTB]
+tags: [Hack The Box, hacking, saturnx operators, Windows, Linux]
 ---
 
 ## 시작에 앞서
@@ -11,12 +11,12 @@ tags: [Hack The Box]
 
 근데 여기도 VIP 머신들이 있어 일단은 Free 머신들만 푸는걸로.
 
-|이름|난이도|OS|Link|
-|:--:|:--:|:--:|:--:|
-|Meow|Very Easy|Linux|[Link](https://app.hackthebox.com/machines/Meow)|
-|Fawn|Very Easy|Linux|[Link](https://app.hackthebox.com/machines/Fawn)|
-|Dancing|Very Easy|Window|[Link](https://app.hackthebox.com/machines/Dancing)|
-|Redeemer|Very Easy|Linux|[Link](https://app.hackthebox.com/machines/Redeemer)|
+|   이름   |  난이도   |   OS   |                         Link                         |
+| :------: | :-------: | :----: | :--------------------------------------------------: |
+|   Meow   | Very Easy | Linux  |   [Link](https://app.hackthebox.com/machines/Meow)   |
+|   Fawn   | Very Easy | Linux  |   [Link](https://app.hackthebox.com/machines/Fawn)   |
+| Dancing  | Very Easy | Window | [Link](https://app.hackthebox.com/machines/Dancing)  |
+| Redeemer | Very Easy | Linux  | [Link](https://app.hackthebox.com/machines/Redeemer) |
 
 
 ## Meow (Linux)

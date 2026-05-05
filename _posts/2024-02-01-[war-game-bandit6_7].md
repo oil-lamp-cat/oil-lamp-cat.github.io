@@ -1,8 +1,8 @@
 ---
 title: "[wargame] overthewire bandit 6 -> 7"
 date: 2024-02-01 00:25:22 +09:00
-categories: [Security & Hacking]
-tags: [Bandit, CTF, Linux, OverTheWire]
+categories: [Security & Hacking, Bandit]
+tags: [Linux, OverTheWire]
 ---
 
 ## Bandit Level 6 -> Level 7

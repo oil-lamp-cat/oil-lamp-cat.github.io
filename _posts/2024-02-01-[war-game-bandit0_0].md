@@ -1,8 +1,8 @@
 ---
 title: "[wargame] overthewire bandit0"
 date: 2024-02-01 00:25:15 +09:00
-categories: [Security & Hacking]
-tags: [Bandit, CTF, Linux, OverTheWire]
+categories: [Security & Hacking, Bandit]
+tags: [Linux, OverTheWire]
 ---
 
 ![overthewire](https://github.com/oil-lamp-cat/oil-lamp-cat.github.io/assets/103806022/d20228f5-ee18-43c4-834b-464c5215f6b3)

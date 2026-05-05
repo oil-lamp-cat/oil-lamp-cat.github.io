@@ -1,8 +1,8 @@
 ---
 title: "[HTB] Hack The Box의 시작과 CAP (Easy_Linux)"
 date: 2025-09-06 10:40:15 +09:00
-categories: [hacking, saturnx operators, Linux]
-tags: [Hack The Box]
+categories: [Security & Hacking, HTB]
+tags: [Hack The Box, hacking, saturnx operators, Linux]
 ---
 
 ## Hack The Box 시작

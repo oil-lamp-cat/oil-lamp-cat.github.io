@@ -1,8 +1,8 @@
 ---
 title: "[HTB] Hack The Box를 위한 kali 윈도우 설치에 관하여 (feat. 중첩 가상화, WSL2, Win-kex)"
 date: 2026-1-6 21:50:00 +09:00
-categories: [hacking, Kali Linux]
-tags: [HTB, Kali Linux]
+categories: [Security & Hacking]
+tags: [HTB, Kali Linux, hacking]
 pin: true
 ---
 

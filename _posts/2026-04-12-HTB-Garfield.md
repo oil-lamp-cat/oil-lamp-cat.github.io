@@ -1,8 +1,8 @@
 ---
 title: "[HTB] Garfield (Hard_Windows)"
 date: 2026-04-13 17:29:00 +09:00
-categories: [hacking, RedLabs, Windows, Active Directory]
-tags: [Hack The Box, Hard]
+categories: [Security & Hacking, HTB]
+tags: [Hack The Box, hacking, RedLabs, Windows, Active Directory]
 password: "20260413"
 ---
 

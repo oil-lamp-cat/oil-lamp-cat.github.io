@@ -1,8 +1,8 @@
 ---
 title: "[Ubuntu] 한영 변환 alt+r 대신 한글로"
 date: 2026-04-27 12:01:00 +09:00
-categories: [ubuntu]
-tags: [편의성 개선]
+categories: [System & Linux]
+tags: [Linux, Ubuntu, 편의성]
 pin: true
 ---
 

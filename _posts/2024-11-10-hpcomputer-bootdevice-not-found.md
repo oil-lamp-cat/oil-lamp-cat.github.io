@@ -1,8 +1,8 @@
 ---
 title: "[HP 컴퓨터] BootDevice Not Found"
 date: 2024-11-10 18:18:15 +09:00
-categories: [hp]
-tags: [windows11]
+categories: [Tools & Environment]
+tags: [Windows, hp]
 pin: true
 ---
 
