@@ -1,6 +1,6 @@
 ---
 title: "[HTB, RTB, Pwn.college, Bandit] Writeups 모음"
-date: 2026-05-03 14:28:00 +09:00
+date: 2026-05-10 14:28:00 +09:00
 categories: [Security & Hacking, HTB]
 tags: [Hack The Box, Raccoon The Box, hacking, Linux, Windows, Bandit, Pwn.college]
 pin: true
@@ -40,6 +40,7 @@ pin: true
 | **Kobold**                |        Easy         |     Linux      | Active         |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Kobold/)                              |
 | **Garfield**              |        Hard         |    Windows     | Active         |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-Garfield/)                             |
 | **Logging**               |       Medium        |    Windows     | Active         |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-logging/)                              |
+| **Interpreter**           |       Medium        |     Linux      | Active         |                           [Link](https://oil-lamp-cat.github.io/posts/HTB-Interpreter/)                            |
 
 ## Raccoon The Box
 
