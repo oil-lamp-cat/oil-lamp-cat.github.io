@@ -41,6 +41,7 @@ pin: true
 | **Garfield**              |        Hard         |    Windows     | Active         |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-Garfield/)                             |
 | **Logging**               |       Medium        |    Windows     | Active         |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-logging/)                              |
 | **Interpreter**           |       Medium        |     Linux      | Active         |                           [Link](https://oil-lamp-cat.github.io/posts/HTB-Interpreter/)                            |
+| **Smarthire**             |       Medium        |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-SmartHire/)                             |
 
 ## Raccoon The Box
 
