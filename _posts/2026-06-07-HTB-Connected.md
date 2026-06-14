@@ -7,6 +7,8 @@ password: "20260607"
 pin: true
 ---
 
+[HTB_Connected_호롱고양이.pptx](https://github.com/user-attachments/files/28923605/HTB_Connected_.pptx)
+
 ![Connected solved](https://github.com/user-attachments/assets/c470096b-87d6-4e1a-be49-29f10caa8b0c#.png)
 
 [Congratulations OilLampCat! You are player #1173 to have solved Connected.](https://labs.hackthebox.com/achievement/machine/988787/906#.png)
@@ -17,9 +19,11 @@ pin: true
 
 오랜만에 여행 다녀와서 다시 풀어본 리눅스 문제.
 
-easy 난이도이기도 하고 초기 침투 부분이 딸깍으로 풀려버려서 점수가 2.7 대가 나온듯 하다.
+~~easy 난이도이기도 하고 초기 침투 부분이 딸깍으로 풀려버려서 점수가 2.7 대가 나온듯 하다.~~
 
-이번엔 복잡한 부분이 그다지 없었기에 세부 목록을 나누지는 않겠다.
+~~이번엔 복잡한 부분이 그다지 없었기에 세부 목록을 나누지는 않겠다.~~
+
+발표 자료를 만들며 풀었던 문제를 다시 보고 했는데, 이거 왜 점수가 낮았던거지? 지금에 와서지만 더 알게되니 오히려 난 점수를 높게 주고 싶은데?
 
 ## 2. 정찰 및 정보 수집 (Reconnaissance & Enumeration) 
 
@@ -109,6 +113,16 @@ crond는 시간마다 감시하고 그런거라면 이녀석은 리눅스에서 
 
 게다가 권한을 확인해보니 **incron.d**는 root 권한으로 실행은 되는데 그게 실행시키는 스크립트들이 **asterisk** 즉 내가 갖고있는 유저의 소유인데다가 수정이 가능했다.
 
+> 여기서 잠깐, 이 문제에 쓰인 FreePBX라는 서비스 자체가 본래 incron 에 지금처럼 `/var/spool/asterisk/sysadmin`이 존재하여 이것 자체로 취약점이다! 라고 할 수는 없다.
+>
+> 아무래도 이번 문제의 경우엔 이 블로그보단 발표 자료를 더 자세하게 작성했던지라 그거 보는걸 추천한다.
+>
+> ![이거](https://github.com/user-attachments/assets/4461021e-f06e-42d7-a025-35e986f3406c#.png)
+>
+> ![이거2](https://github.com/user-attachments/assets/8b349494-00af-4d26-a80f-9b3e1f374dc6#.png)
+>
+> 이런 내용들이 있으니 참고해라.
+
 ![sysadmindahdirestart](https://github.com/user-attachments/assets/6aa22d52-ce40-41f4-a5b9-5b2b0f1d1461#.png)
 
 근데 지금 보면 다른 것들은 incron 뒤에 나오는 명령어부분을 다 열어보며 둘러봤을 때 딱히 취약한 부분을 찾지 못했는데 `/usr/sbin/sysadmin_dahdi_restart`를 열어보니 `/etc/init.d/dahdi`로 명령어를 실행시키고 이걸 또 들어가보니
@@ -172,4 +186,8 @@ touch /var/spool/asterisk/sysadmin/dahdi_restart
 
 리눅스 문제 하나 끝!
 
-이번 문제는 그래도 하루안에 끝내버려서 다음 문제를 또 풀어야 할지도?
+~~이번 문제는 그래도 하루안에 끝내버려서 다음 문제를 또 풀어야 할지도?~~
+
+라고 했으나 정작 발표 자료를 만들며 보니 이거 나 어떻게 풀었던거지? 싶은 문제였다.
+
+첨엔 이걸 굳이 발표할 정도의 문제인가? 싶었는데, 음... 할만 할거 같다.
