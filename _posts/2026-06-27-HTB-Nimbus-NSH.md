@@ -506,6 +506,8 @@ print("Exploit reverse started. Build ID:", resp["build"]["id"], f"Listener의 {
 
 > Attack Chain
 
+~~참고로 아래 이미지는 클로드가 만들어준건데 왜 STEP2에서 yaml.load(취약) 이라고 쓰여있는건지는 모르겠음. 분명 사이트엔 safe_load() 함수 쓴다고 했는데?~~
+
 ![attack chain](https://github.com/user-attachments/assets/f71b0f01-744f-4be5-bf08-c45756ee6329#.png)
 
 1. **정찰 및 필터링 우회 (SSRF):** 외부에 노출된 `Job Submitter`에서 SSRF 취약점을 발견했다. 내부망(`127.0.0.1`, `169.254...`)을 막아둔 블랙리스트 필터링을 **IP 8진수 난독화(Octal Encoding)** 기법으로 우회하여 내부망과 통신할 수 있는 통로를 열었다.
