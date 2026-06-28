@@ -4,7 +4,6 @@ date: 2026-06-07 14:32:00 +09:00
 categories: [Security & Hacking, HTB]
 tags: [Hack The Box, hacking, RedLabs, Linux]
 password: "20260607"
-pin: true
 ---
 
 [HTB_Connected_호롱고양이.pptx](https://github.com/user-attachments/files/28923605/HTB_Connected_.pptx)
