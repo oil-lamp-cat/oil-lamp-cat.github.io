@@ -185,7 +185,7 @@ YAML넣는 부분은 직접 적어서 내는 부분이였고.
 
 위에서 `health`에 들어갔을 때 `queue`, `scheduler`, `storage`를 봤었기에 **SQS (Simple Queue Service)** 가 돌고 있을 것이라 생각해 리스트를 뽑아보니
 
-**|http://floci:4566/{번호}/nimbus-jobs**를 찾아낼 수 있었다.
+**http://floci:4566/{번호}/nimbus-jobs** 를 찾아낼 수 있었다.
 
 잠시 어디까지 왔나 정리를 해보자면
 
