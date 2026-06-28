@@ -380,12 +380,10 @@ aws --endpoint-url http://aws.nimbus.htb sqs send-message \
 
 보안 용어로는 **Living off the Land** 라고 불리는 서버에 이미 깔려있는 합법적인 도구를 악용하는 기법이라고도 부르긴 한다더라.
 
-<details>
+<details markdown="1">
 <summary>nimbus_revers_exploit.py (클릭해서 보기)</summary>
 
-code block
-
-```py
+```python
 
 # 혹시 buildspec에 `#`으로 인해 오류가 발생하거나 안된다면 #과 그 위 엔터를 지우고 시도해보세요.
 
