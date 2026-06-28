@@ -368,7 +368,9 @@ aws --endpoint-url http://aws.nimbus.htb sqs send-message \
 
 우리가 위에서 **worker**의 계정으로 읽을 수 있는 파일을 찾아보았을 때 **requirements.txt**파일을 발견했었다.
 
-그리고 이미지는 내가 찍어놓지 않았는데 거긴 **boto3**라는 라이브러리가 다운되어있다는 걸 알 수 있었고. 같은 `/app`에 들어있는 worker.py 의 경우에도 이 boto3라는걸 사용했다.
+![requirementtxt](https://github.com/user-attachments/assets/1c37203a-dc2e-4261-b789-7aa929476ce1#.png)
+
+여기서 **boto3**라는 라이브러리가 기본적으로 설치되어있다는 걸 알 수 있었고. 같은 `/app`에 들어있는 worker.py 의 경우에도 이 boto3라는걸 사용했다.
 
 여기서 잠깐 **Boto3**가 뭘까? 이건 클라우드 해킹이나 AWS 개발을 처음 접해보는 사람이라면 생소할 수 있다. (내가 그랬다.)
 
