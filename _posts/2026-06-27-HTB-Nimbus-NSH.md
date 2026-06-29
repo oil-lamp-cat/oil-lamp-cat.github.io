@@ -7,6 +7,10 @@ password: "20260627"
 pin: true
 ---
 
+> 발표까지 완료!
+
+[HTB_Nimbus_호롱고양이.pptx](https://github.com/user-attachments/files/29465776/HTB_Nimbus_.pptx)
+
 ![Nimbus Solved](https://github.com/user-attachments/assets/0972cfcb-504f-4b21-81a6-d0d075edd605#.png)
 
 [Congratulations OilLampCat! You are player #2585 to have solved Nimbus.](https://labs.hackthebox.com/achievement/machine/988787/912)
