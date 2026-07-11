@@ -43,7 +43,8 @@ pin: true
 | **Interpreter**           |       Medium        |     Linux      | Active         |                           [Link](https://oil-lamp-cat.github.io/posts/HTB-Interpreter/)                            |
 | **Smarthire**             |       Medium        |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-SmartHire/)                             |
 | **Connected**             |        Easy         |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Connected/)                             |
-| **Nimbus**                |        Hard         |     Linux      | Active         |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Nimbus/)                              |
+| **Nimbus**                |        Hard         |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Nimbus-NSH/)                            |
+| **Enigma**                |        Easy         |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Enigma-NSH/)                            |
 
 ## Raccoon The Box
 

@@ -4,7 +4,6 @@ date: 2026-06-27 19:35:00 +09:00
 categories: [Security & Hacking, HTB]
 tags: [Hack The Box, hacking, RedLabs, Linux, aws, cloud]
 password: "20260627"
-pin: true
 ---
 
 > 발표까지 완료!
