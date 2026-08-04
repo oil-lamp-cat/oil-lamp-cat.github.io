@@ -3,7 +3,6 @@ title: "[HTB] Orion (Easy_Linux)"
 date: 2026-07-27 18:25:00 +09:00
 categories: [Security & Hacking, HTB]
 tags: [Hack The Box, hacking, RedLabs, Linux]
-pin: true
 ---
 
 ![Orion](https://github.com/user-attachments/assets/df097b87-f449-43c1-a71d-e923fb9860bb#.png)

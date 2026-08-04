@@ -4,7 +4,6 @@ date: 2026-07-11 22:16:00 +09:00
 categories: [Security & Hacking, HTB]
 tags: [Hack The Box, hacking, RedLabs, Linux]
 password: "20260711"
-pin: true
 ---
 
 ![EnigmaSolved](https://github.com/user-attachments/assets/4b3077e6-4337-46b9-b0d7-a067daff2ab8#.png)
