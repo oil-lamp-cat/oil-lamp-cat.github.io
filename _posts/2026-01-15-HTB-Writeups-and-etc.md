@@ -47,6 +47,7 @@ pin: true
 | **Enigma**                |        Easy         |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Enigma-NSH/)                            |
 | **Orion**                 |        Easy         |     Linux      | Retired/free   |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Orion-NSH/)                             |
 | **Cohort**                |        Easy         |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Cohort-NSH/)                            |
+| **Paperwork**             |    Easy(medium)     |     Linux      | Active         |                          [Link](https://oil-lamp-cat.github.io/posts/HTB-Paperwork-NSH/)                           |
 
 ## Raccoon The Box
 
