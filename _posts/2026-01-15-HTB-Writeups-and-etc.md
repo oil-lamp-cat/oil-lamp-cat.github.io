@@ -21,34 +21,35 @@ pin: true
 
 ## Hack The Box
 
-| 문제명 (Name)             | 난이도 (Difficulty) |       OS       | 활성 상태      |                                                      바로가기                                                      |
-| :------------------------ | :-----------------: | :------------: | :------------- | :----------------------------------------------------------------------------------------------------------------: |
-| **Starting Point Tier 0** |      Very Easy      | Linux, Windows | Free           |                 [Link](https://oil-lamp-cat.github.io/posts/HTB-StartingPoint-Tier-0-Foundations/)                 |
-| **Starting Point Tier 1** |      Very Easy      | Linux, Windows | Free           |          [Link](https://oil-lamp-cat.github.io/posts/HTB-StartingPoint-Tier-1-Fundamental_Exploitation/)           |
-| **Starting Point Tier 2** |    Very Easy(?)     | Linux, Windows | Free           | [Link](https://oil-lamp-cat.github.io/posts/HTB-StartingPoint-Tier-2-multi-step_attacks_and_privilege_escalation/) |
-| **Cap**                   |        Easy         |     Linux      | Retired / Free |                      [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_CAP/)                       |
-| **Editor**                |        Easy         |     Linux      | Retired / VIP  |                     [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_Editor/)                     |
-| **Fluffy**                |        Easy         |    Windows     | Retired / VIP  |                     [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_Fluffy/)                     |
-| **TombWatcher**           |       Medium        |    Windows     | Retired / VIP  |                  [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_-TombWatcher/)                  |
-| **Outbound**              |        Easy         |     Linux      | Retired / VIP  |                    [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_Outbound/)                    |
-| **Conversor**             |        Easy         |     Linux      | Active / Free  |                   [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_Conversor/)                    |
-| **MonitorsFour**          |        Easy         |    Windows     | Active / Free  |                  [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_MonitorsFour/)                  |
-| **Previous**              |       Medium        |     Linux      | Active / Free  |                   [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_EscapeTwo/)                    |
-| **Browsed**               |       Medium        |     Linux      | Active / Free  |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-Browsed/)                              |
-| **Facts**                 |        Easy         |     Linux      | Active / Free  |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Facts/)                               |
-| **Principal**             |       Medium        |     Linux      | Retired        |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Principal/)                             |
-| **Kobold**                |        Easy         |     Linux      | Active         |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Kobold/)                              |
-| **Garfield**              |        Hard         |    Windows     | Active         |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-Garfield/)                             |
-| **Logging**               |       Medium        |    Windows     | Active         |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-logging/)                              |
-| **Interpreter**           |       Medium        |     Linux      | Active         |                           [Link](https://oil-lamp-cat.github.io/posts/HTB-Interpreter/)                            |
-| **Smarthire**             |       Medium        |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-SmartHire/)                             |
-| **Connected**             |        Easy         |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Connected/)                             |
-| **Nimbus**                |        Hard         |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Nimbus-NSH/)                            |
-| **Enigma**                |        Easy         |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Enigma-NSH/)                            |
-| **Orion**                 |        Easy         |     Linux      | Retired/free   |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Orion-NSH/)                             |
-| **Cohort**                |        Easy         |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Cohort-NSH/)                            |
-| **Paperwork**             |    Easy(medium)     |     Linux      | Active         |                          [Link](https://oil-lamp-cat.github.io/posts/HTB-Paperwork-NSH/)                           |
-| **Reactor**               |        Easy         |     Linux      | Active         |                           [Link](https://oil-lamp-cat.github.io/posts/HTB-Reactor-NSH/)                            |
+| 문제명 (Name)             |      난이도 (Difficulty)      |       OS       | 활성 상태      |                                                      바로가기                                                      |
+| :------------------------ | :---------------------------: | :------------: | :------------- | :----------------------------------------------------------------------------------------------------------------: |
+| **Starting Point Tier 0** |           Very Easy           | Linux, Windows | Free           |                 [Link](https://oil-lamp-cat.github.io/posts/HTB-StartingPoint-Tier-0-Foundations/)                 |
+| **Starting Point Tier 1** |           Very Easy           | Linux, Windows | Free           |          [Link](https://oil-lamp-cat.github.io/posts/HTB-StartingPoint-Tier-1-Fundamental_Exploitation/)           |
+| **Starting Point Tier 2** |         Very Easy(?)          | Linux, Windows | Free           | [Link](https://oil-lamp-cat.github.io/posts/HTB-StartingPoint-Tier-2-multi-step_attacks_and_privilege_escalation/) |
+| **Cap**                   |             Easy              |     Linux      | Retired / Free |                      [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_CAP/)                       |
+| **Editor**                |             Easy              |     Linux      | Retired / VIP  |                     [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_Editor/)                     |
+| **Fluffy**                |             Easy              |    Windows     | Retired / VIP  |                     [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_Fluffy/)                     |
+| **TombWatcher**           |            Medium             |    Windows     | Retired / VIP  |                  [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_-TombWatcher/)                  |
+| **Outbound**              |             Easy              |     Linux      | Retired / VIP  |                    [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_Outbound/)                    |
+| **Conversor**             |             Easy              |     Linux      | Active / Free  |                   [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_Conversor/)                    |
+| **MonitorsFour**          |             Easy              |    Windows     | Active / Free  |                  [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_MonitorsFour/)                  |
+| **Previous**              |            Medium             |     Linux      | Active / Free  |                   [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_EscapeTwo/)                    |
+| **Browsed**               |            Medium             |     Linux      | Active / Free  |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-Browsed/)                              |
+| **Facts**                 |             Easy              |     Linux      | Active / Free  |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Facts/)                               |
+| **Principal**             |            Medium             |     Linux      | Retired        |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Principal/)                             |
+| **Kobold**                |             Easy              |     Linux      | Active         |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Kobold/)                              |
+| **Garfield**              |             Hard              |    Windows     | Active         |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-Garfield/)                             |
+| **Logging**               |            Medium             |    Windows     | Active         |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-logging/)                              |
+| **Interpreter**           |            Medium             |     Linux      | Active         |                           [Link](https://oil-lamp-cat.github.io/posts/HTB-Interpreter/)                            |
+| **Smarthire**             |            Medium             |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-SmartHire/)                             |
+| **Connected**             |             Easy              |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Connected/)                             |
+| **Nimbus**                |             Hard              |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Nimbus-NSH/)                            |
+| **Enigma**                |             Easy              |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Enigma-NSH/)                            |
+| **Orion**                 |             Easy              |     Linux      | Retired/free   |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Orion-NSH/)                             |
+| **Cohort**                |             Easy              |     Linux      | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Cohort-NSH/)                            |
+| **Paperwork**             |         Easy(medium)          |     Linux      | Active         |                          [Link](https://oil-lamp-cat.github.io/posts/HTB-Paperwork-NSH/)                           |
+| **Reactor**               |             Easy              |     Linux      | Active         |                           [Link](https://oil-lamp-cat.github.io/posts/HTB-Reactor-NSH/)                            |
+| **Nexus**                 | Easy(권한 상승은 Hard로 할래) |     Linux      | retired        |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Nexus-NSH/)                             |
 
 ## Raccoon The Box
 
