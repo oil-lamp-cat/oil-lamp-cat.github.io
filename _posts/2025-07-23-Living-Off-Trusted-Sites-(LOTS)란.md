@@ -2,7 +2,7 @@
 title: "[Malware] Living Off Trusted Sites (LOTS)란?"
 date: 2025-07-23 22:06:00 +09:00
 categories: [Security & Hacking]
-tags: [malware, LOTS, python, hacking]
+tags: [malware, LOTS, Python, hacking]
 pin: true
 ---
 

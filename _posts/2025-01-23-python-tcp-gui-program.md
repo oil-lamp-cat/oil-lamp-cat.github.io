@@ -2,7 +2,7 @@
 title: "[Python] TCP 서버 통신 & 로그 분석 프로젝트"
 date: 2025-1-23 20:58:15 +09:00
 categories: [Tools & Environment]
-tags: [작업, GUI, python, 서버]
+tags: [작업, GUI, Python, 서버]
 pin: true
 ---
 
