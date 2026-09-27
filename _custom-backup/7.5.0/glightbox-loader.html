@@ -1,0 +1,56 @@
+<!-- Glightbox loader with proper image type detection -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Ensure glightbox is loaded
+    if (window.GLightbox) {
+      const lightbox = GLightbox({
+        selector: ".popup",
+        touchNavigation: true,
+        loop: true,
+        autoplayVideos: true,
+        infobar: true,
+        descPosition: "bottom",
+        plyr: {
+          css: "https://cdn.plyr.io/3.7.8/plyr.css",
+          js: "https://cdn.plyr.io/3.7.8/plyr.js",
+          config: {
+            ratio: "16:9",
+            fullscreen: { enabled: true, iosNative: true },
+            youtube: { noCookie: true },
+            vimeo: {},
+            html5: { quality: { default: 720, options: [360, 720] } },
+          },
+        },
+      });
+
+      // Fix: Ensure image links are properly recognized
+      const imgLinks = document.querySelectorAll("a.popup.img-link");
+      imgLinks.forEach((link) => {
+        // Add explicit type for glightbox to recognize as image
+        const href = link.getAttribute("href");
+        if (
+          href &&
+          (href.endsWith(".jpg") ||
+            href.endsWith(".jpeg") ||
+            href.endsWith(".png") ||
+            href.endsWith(".gif") ||
+            href.endsWith(".webp") ||
+            href.includes("github.com/user-attachments"))
+        ) {
+          link.setAttribute("data-type", "image");
+          link.setAttribute("data-glightbox", "gallery");
+        }
+      });
+
+      // Reinitialize glightbox after adding attributes
+      GLightbox({
+        selector: ".popup",
+        touchNavigation: true,
+        loop: true,
+        autoplayVideos: true,
+        infobar: true,
+        descPosition: "bottom",
+      });
+    }
+  });
+</script>
