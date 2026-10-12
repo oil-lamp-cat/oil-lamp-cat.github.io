@@ -33,7 +33,7 @@ pin: true
 | **Outbound**              |             Easy              |     Linux      | Retired / VIP  |                    [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_Outbound/)                    |
 | **Conversor**             |             Easy              |     Linux      | Active / Free  |                   [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_Conversor/)                    |
 | **MonitorsFour**          |             Easy              |    Windows     | Active / Free  |                  [Link](https://oil-lamp-cat.github.io/posts/SatrunX-Operators_HTB_MonitorsFour/)                  |
-| **Previous**              |            Medium             |     Linux      | Active / Free  |                   [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_EscapeTwo/)                    |
+| **Previous**              |            Medium             |     Linux      | Active / Free  |                    [Link](https://oil-lamp-cat.github.io/posts/SaturnX-Operators_HTB_Previous/)                    |
 | **Browsed**               |            Medium             |     Linux      | Active / Free  |                             [Link](https://oil-lamp-cat.github.io/posts/HTB-Browsed/)                              |
 | **Facts**                 |             Easy              |     Linux      | Active / Free  |                              [Link](https://oil-lamp-cat.github.io/posts/HTB-Facts/)                               |
 | **Principal**             |            Medium             |     Linux      | Retired        |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Principal/)                             |
@@ -50,6 +50,7 @@ pin: true
 | **Paperwork**             |         Easy(medium)          |     Linux      | Active         |                          [Link](https://oil-lamp-cat.github.io/posts/HTB-Paperwork-NSH/)                           |
 | **Reactor**               |             Easy              |     Linux      | Active         |                           [Link](https://oil-lamp-cat.github.io/posts/HTB-Reactor-NSH/)                            |
 | **Nexus**                 | Easy(권한 상승은 Hard로 할래) |     Linux      | retired        |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Nexus-NSH/)                             |
+| **Touch**                 | Easy(권한 상승은 Hard로 할래) |    Windows     | Active         |                            [Link](https://oil-lamp-cat.github.io/posts/HTB-Touch-NSH/)                             |
 
 ## Raccoon The Box
 
