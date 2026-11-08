@@ -58,7 +58,8 @@ pin: true
 
 |  문제명 (Name)  | 난이도 (Difficulty) |  OS   | 활성 상태 |                             바로가기                              |
 | :-------------: | :-----------------: | :---: | :-------: | :---------------------------------------------------------------: |
-| **ColdBoxEasy** |        Easy         | Linux |   free    | [Link](https://oil-lamp-cat.github.io/posts/PG-Play-ColdBoxEasy/) |
+| **ColdBoxEasy** |     Fundamental     | Linux |   free    | [Link](https://oil-lamp-cat.github.io/posts/PG-Play-ColdBoxEasy/) |
+|  **Amaterasu**  |     Fundamental     | Linux |   free    |  [Link](https://oil-lamp-cat.github.io/posts/PG-Play-Amaterasu/)  |
 
 ## Raccoon The Box
 

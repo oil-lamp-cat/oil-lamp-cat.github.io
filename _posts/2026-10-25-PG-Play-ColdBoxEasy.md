@@ -2,8 +2,7 @@
 title: "[PG Play] ColdBoxEasy (Linux_Fundamental)"
 date: 2026-10-25 16:13:00 +09:00
 categories: [Security & Hacking, HTB]
-tags: [Proving Grounds Play, hacking, RedLabs, Linux]
-pin: true
+tags: [Proving Grounds Play, hacking, RedLabs, Linu]
 ---
 
 ## 1. 시작에 앞서
