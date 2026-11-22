@@ -1,7 +1,7 @@
 ---
 title: "[PG Play] Amaterasu (Linux_Fundamental)"
 date: 2026-11-08 10:48:00 +09:00
-categories: [Security & Hacking, HTB]
+categories: [Security & Hacking, PGP]
 tags: [Proving Grounds Play, hacking, RedLabs, Linux]
 pin: true
 ---

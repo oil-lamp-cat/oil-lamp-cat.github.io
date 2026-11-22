@@ -1,7 +1,7 @@
 ---
 title: "[PG Play] ColdBoxEasy (Linux_Fundamental)"
 date: 2026-10-25 16:13:00 +09:00
-categories: [Security & Hacking, HTB]
+categories: [Security & Hacking, PGP]
 tags: [Proving Grounds Play, hacking, RedLabs, Linu]
 ---
 
